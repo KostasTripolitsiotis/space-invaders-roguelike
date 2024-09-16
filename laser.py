@@ -2,10 +2,11 @@ import pygame
 from func import collide
 
 class Laser:
-    def __init__(self, x, y, img) -> None:
+    def __init__(self, x, y, img, vel = 3) -> None:
         self.x = x
         self.y = y
         self.img = img
+        self.vel = vel
         self.mask = pygame.mask.from_surface(self.img)
         
     def draw(self, window:pygame.surface.Surface):

@@ -5,10 +5,13 @@ from const import HEIGHT
 class Ship:
     COOLDOWN = 60
     
-    def __init__(self, x, y, health=100) -> None:
+    def __init__(self, x, y, vel = 1, laser_vel = 3, health=100) -> None:
         self.x = x
         self.y = y
         self.health = health
+        self.vel = vel
+        self.laser_vel = laser_vel
+        # self.firerate = firerate
         self.ship_img = None
         self.laser_img = None
         self.lasers:list[Laser] = []

@@ -3,12 +3,12 @@ from ship import Ship
 from const import *
 
 class Player(Ship):    
-    def __init__(self, x, y, health=100) -> None:
-        super().__init__(x, y, health)
+    def __init__(self, x, y, vel) -> None:
+        super().__init__(x, y, vel)
         self.ship_img = YELLOW_SPACE_SHIP
         self.laser_img = YELLOW_LASER
         self.mask = pygame.mask.from_surface(self.ship_img)
-        self.max_health = health
+        self.max_health = self.health
         
     def move_lasers(self, vel, objs:list[Ship]):
         self.cooldown()

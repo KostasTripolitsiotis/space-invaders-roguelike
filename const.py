@@ -1,7 +1,7 @@
 import pygame
 import os
 
-WIDTH, HEIGHT = 750, 750
+WIDTH, HEIGHT = 1000, 1000
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 FPS = 120
@@ -22,3 +22,9 @@ YELLOW_LASER = pygame.image.load(os.path.join("assets", "pixel_laser_yellow.png"
 
 # Backround
 BG = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background-black.png")), (WIDTH, HEIGHT))
+
+COLOR_MAP = {
+                "red": (RED_SPACE_SHIP, RED_LASER),
+                "green": (GREEN_SPACE_SHIP, GREEEN_LASER),
+                "blue": (BLUE_SPACE_SHIP, BLUE_LASER)
+    }

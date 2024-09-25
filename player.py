@@ -1,17 +1,18 @@
 import pygame
 from ship import Ship
 from const import *
+from stats import player
 
 class Player(Ship):    
-    def __init__(self, x, y, vel) -> None:
-        super().__init__(x, y, vel)
-        self.ship_img = YELLOW_SPACE_SHIP
-        self.laser_img = YELLOW_LASER
+    def __init__(self, x, y) -> None:
+        super().__init__(x, y, player["vel"], player["laser_vel"], player["health"], player["cooldown"], player["dmg"])
+        self.ship_img = player["spaceship_img"]
+        self.laser_img = player["laser_img"]
         self.mask = pygame.mask.from_surface(self.ship_img)
-        self.max_health = self.health
+        self.cash = player["cash"]
         
     def move_lasers(self, vel, objs:list[Ship]):
-        self.cooldown()
+        self.cooldown_counter()
         for laser in self.lasers[:]:
             laser.move(vel)
             if laser.off_screen(HEIGHT):
@@ -19,13 +20,15 @@ class Player(Ship):
             else:
                 for obj in objs:
                     if laser.collision(obj):
-                        objs.remove(obj)
-                        self.lasers.remove(laser)
+                        obj.health -= self.dmg
+                        if obj.health <= 0:
+                            self.cash += obj.worth
+                            if obj in objs:
+                                objs.remove(obj)
+                        if laser in self.lasers:
+                            self.lasers.remove(laser)
                         
     def draw(self, window:pygame.surface.Surface):
         super().draw(window)
         self.healthbar(window)
                         
-    def healthbar(self, window):
-        pygame.draw.rect(window, (255, 0, 0), (self.x, self.y + self.ship_img.get_height() + 10, self.ship_img.get_width(), 10))
-        pygame.draw.rect(window, (0, 255, 0), (self.x, self.y + self.ship_img.get_height() + 10, self.ship_img.get_width() * (self.health/self.max_health), 10))

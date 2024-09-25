@@ -1,0 +1,15 @@
++enemy healthbar
++enemy hp calc
++enemy personalisation
++player attributes
++enemy attributes
++savefile
++handle quit exceptions
+-menu
++cash
++flip enemies
+-more space ships
+-sounds
+-waves
+-spawn in groups, not all together
++level up screen

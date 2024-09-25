@@ -32,7 +32,8 @@ def levelupscreen(player):
     choice3_btn_rect = pygame.Rect((WIN.get_width()/2 - choice3_surface.get_width()/2) + 200, WIN.get_height()/2 - choice3_surface.get_height()/2, 100, 100)
     
     while(run):
-        WIN.blit(BG, (0, 0))
+        draw_static_bg()
+        WIN.blit(BG, (0+OFFSET, 0))
         
         keys = pygame.key.get_pressed()
         for event in pygame.event.get():

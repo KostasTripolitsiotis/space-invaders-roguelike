@@ -4,7 +4,7 @@ import shelve
 
 pcolor = "yellow"
 pvel = 20
-plaser_vel = 8
+plaser_vel = 15
 pdmg = 10
 phealth = 100
 pcooldown = 60

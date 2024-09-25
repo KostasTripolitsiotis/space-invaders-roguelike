@@ -2,10 +2,9 @@ import pygame
 import os
 from win32api import GetSystemMetrics
 
-# SWIDTH = GetSystemMetrics(0)
-# OFFSET = int(SWIDTH/6)
-# WIDTH, HEIGHT = int(2*SWIDTH/3), GetSystemMetrics(1)
-WIDTH, HEIGHT = GetSystemMetrics(0), GetSystemMetrics(1)
+SWIDTH = GetSystemMetrics(0)
+OFFSET = int(SWIDTH/6)
+WIDTH, HEIGHT = int(2*SWIDTH/3), GetSystemMetrics(1)
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 FPS = 120
@@ -26,6 +25,7 @@ YELLOW_LASER = pygame.image.load(os.path.join("assets", "pixel_laser_yellow.png"
 
 # Backround
 BG = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background-black.png")), (WIDTH, HEIGHT))
+#BG_STATIC = pygame.Rect((0, 0, SWIDTH, HEIGHT), )
 
 COLOR_MAP = {
                 "red": (RED_SPACE_SHIP, RED_LASER),
@@ -33,7 +33,7 @@ COLOR_MAP = {
                 "blue": (BLUE_SPACE_SHIP, BLUE_LASER)
     }
 
-LEVELUP_CHOICES = ['+5 Speed', '-10% Cooldown', '+5 Damage', '+10 Health']
+LEVELUP_CHOICES = ['+5 Speed', '-10% Cooldown', '+5 Damage', '+10 Health', '+1 Life']
 
 LEVELS = {
     1: [["red", 5]],

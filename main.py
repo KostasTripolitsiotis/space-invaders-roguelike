@@ -10,13 +10,13 @@ def main():
     pygame.display.set_caption("Space Shooter")
     run = True
     level = 0
-    lives = 5
     main_font = pygame.font.SysFont("lucidaconsole", 30)
     lost_font = pygame.font.SysFont("comicsans", 100)
     
     enemies:list[Enemy] = []
+    enemies_counter = 0
     
-    player = Player(WIDTH/2 - YELLOW_SPACE_SHIP.get_width()/2, HEIGHT - YELLOW_SPACE_SHIP.get_height()-20)
+    player = Player(SWIDTH/2 - YELLOW_SPACE_SHIP.get_width()/2, HEIGHT - YELLOW_SPACE_SHIP.get_height()-20)
     
     clock = pygame.time.Clock()
     
@@ -24,14 +24,15 @@ def main():
     lost_count = 0
     
     def redraw_win():
-        WIN.blit(BG, (0,0))
+        draw_static_bg()
+        WIN.blit(BG, (0+OFFSET,0))
         # draw text
-        lives_label = main_font.render(f"Lives: {lives}", 1, (255,255,255))
+        lives_label = main_font.render(f"Lives: {player.lives}", 1, (255,255,255))
         level_label = main_font.render(f"Level: {level}", 1, (255, 255, 255))
         cash_label = main_font.render(f"Cash: {player.cash}", 1, (255, 255, 255))
         
         WIN.blit(lives_label, (10, 10))
-        WIN.blit(level_label, (WIDTH - level_label.get_width() - 10, 10))
+        WIN.blit(level_label, (SWIDTH - level_label.get_width() - 10, 10))
         WIN.blit(cash_label, (10, lives_label.get_height()+12))
         
         for enemy in enemies:
@@ -50,7 +51,7 @@ def main():
         try:
             redraw_win()  
             
-            if lives <= 0 or player.health <= 0:
+            if player.lives <= 0 or player.health <= 0:
                 lost = True 
                 lost_count += 1
                 
@@ -62,11 +63,11 @@ def main():
                     continue 
             
             if len(enemies) == 0:
-                if level != 0:
-                    levelupscreen(player)
-                level += 1
-                player.vel += 5   
-                enemies = spawn_enemies(level)
+                if enemies_counter == 0:
+                    level +1
+                    if level != 0:
+                        levelupscreen(player)
+                enemies, enemy_counter = spawn_enemies(level, enemies_counter)
             
             keys = pygame.key.get_pressed()   
             for event in pygame.event.get():
@@ -74,9 +75,9 @@ def main():
                     save(player.cash)
                     pygame.quit()
                      
-            if keys[pygame.K_a] and player.x - (player.vel/10) >= 0: # left
+            if keys[pygame.K_a] and player.x - (player.vel/10) >= 0+OFFSET: # left
                 player.move_x(-player.vel)
-            if keys[pygame.K_d] and player.x + (player.vel/10) + player.get_width() <= WIDTH: # right
+            if keys[pygame.K_d] and player.x + (player.vel/10) + player.get_width() <= WIDTH+OFFSET: # right
                 player.move_x(player.vel)
             if keys[pygame.K_w] and player.y - (player.vel/10) > 0: # up
                 player.move_y(-player.vel)
@@ -93,13 +94,15 @@ def main():
                 enemy.shoot()
                 
                 if collide(enemy, player):
-                    player.health -= 10
+                    player.health -= enemy.health
                     enemies.remove(enemy)
+                    enemy_counter -= 1
                 elif enemy.y + enemy.get_height() > HEIGHT:
-                    lives -= 1
+                    player.lives -= 1
                     enemies.remove(enemy)
+                    enemy_counter -= 1
                     
-            player.move_lasers(-player.laser_vel, enemies)
+            enemy_counter -= player.move_lasers(-player.laser_vel, enemies)
         except pygame.error as error:
             save(player.cash)
             print(error)
@@ -110,9 +113,10 @@ def main_menu():
     title_font = pygame.font.SysFont("lucidaconsole", 50)
     pygame.display.set_mode((0,0), pygame.FULLSCREEN)
     while run:
-        WIN.blit(BG, (0, 0))
+        draw_static_bg()
+        WIN.blit(BG, (0+OFFSET, 0))
         title_label = title_font.render("Press SPACE to begin...", 1, (255, 255, 255))
-        WIN.blit(title_label, (WIDTH/2 - title_label.get_width()/2, HEIGHT/2 - title_label.get_height()/2))
+        WIN.blit(title_label, (WIDTH/2 - title_label.get_width()/2 + +OFFSET, HEIGHT/2 - title_label.get_height()/2))
         pygame.display.update()
         keys = pygame.key.get_pressed()
         for event in pygame.event.get():

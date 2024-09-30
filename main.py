@@ -14,7 +14,9 @@ def main():
     lost_font = pygame.font.SysFont("comicsans", 100)
     
     enemies:list[Enemy] = []
-    enemies_counter = 0
+    wave:list[str] = []
+    timers:list[int] = []
+    enemy_timer = 0
     
     player = Player(SWIDTH/2 - YELLOW_SPACE_SHIP.get_width()/2, HEIGHT - YELLOW_SPACE_SHIP.get_height()-20)
     
@@ -62,12 +64,26 @@ def main():
                 else:
                     continue 
             
-            if len(enemies) == 0:
-                if enemies_counter == 0:
-                    level +1
+            if enemy_timer == 0:
+                if len(timers) == 0 and len(enemies) == 0:
                     if level != 0:
                         levelupscreen(player)
-                enemies, enemy_counter = spawn_enemies(level, enemies_counter)
+                    level += 1
+                    wave, timers = getEnemyWave(level)
+                    enemy_timer = timers[0]
+                elif len(timers) != 0:
+                    enemy_timer = timers.pop(0)
+                    enemies.append(choose_enemy(wave.pop(0)))
+            else: enemy_timer -= 1
+                    
+                    
+            
+            # if len(enemies) == 0:
+            #     if enemies_counter == 0:
+            #         level +1
+            #         if level != 0:
+            #             levelupscreen(player)
+            #     enemies, enemy_counter = spawn_enemies(level, enemies_counter)
             
             keys = pygame.key.get_pressed()   
             for event in pygame.event.get():
@@ -96,13 +112,11 @@ def main():
                 if collide(enemy, player):
                     player.health -= enemy.health
                     enemies.remove(enemy)
-                    enemy_counter -= 1
                 elif enemy.y + enemy.get_height() > HEIGHT:
                     player.lives -= 1
                     enemies.remove(enemy)
-                    enemy_counter -= 1
                     
-            enemy_counter -= player.move_lasers(-player.laser_vel, enemies)
+            player.move_lasers(-player.laser_vel, enemies)
         except pygame.error as error:
             save(player.cash)
             print(error)

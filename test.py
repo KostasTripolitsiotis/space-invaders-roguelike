@@ -18,15 +18,5 @@
 # 
 # 
 
-import shelve
-def open() -> list:
-    with shelve.open('savefile/savefile') as f:
-        color = f['player_color']
-        vel = f['vel']
-        laser_vel = f['laser_vel']
-        health = f['health']
-        cooldown = f['cooldown']
-        cash = f['cash']
-    return color, vel, laser_vel, health, cooldown, cash
-
-print(open())
+from func import spawn_enemies
+spawn_enemies(1, 0)

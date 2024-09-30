@@ -1,10 +1,12 @@
 import pygame
 import os
-from win32api import GetSystemMetrics
+#from win32api import GetSystemMetrics
+import ctypes
 
-SWIDTH = GetSystemMetrics(0)
+user = ctypes.windll.user32
+SWIDTH = user.GetSystemMetrics(0)
 OFFSET = int(SWIDTH/6)
-WIDTH, HEIGHT = int(2*SWIDTH/3), GetSystemMetrics(1)
+WIDTH, HEIGHT = int(2*SWIDTH/3), user.GetSystemMetrics(1)
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 FPS = 120

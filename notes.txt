@@ -19,3 +19,6 @@
 +dmg clouds
 +crit
 -choices have crit and crit chance
+
+###Create .exe
+pyinstaller --onefile -w --clean --distpath ".\spacerogue" 'main.py'

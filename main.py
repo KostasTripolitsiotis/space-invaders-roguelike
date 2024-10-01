@@ -90,7 +90,8 @@ def main():
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or keys[pygame.K_ESCAPE]:
                     save(player.cash)
-                    pygame.quit()
+                    run = False
+                    return "quit"
                      
             if keys[pygame.K_a] and player.x - (player.vel/10) >= 0+OFFSET: # left
                 player.move_x(-player.vel)
@@ -135,7 +136,7 @@ def main_menu():
     pygame.display.set_mode((0,0), pygame.FULLSCREEN)
     while run:
         draw_static_bg()
-        bgMenu  = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background-black.png")), (SWIDTH, HEIGHT))
+        bgMenu  = pygame.transform.scale(pygame.image.load(os.path.join("spacerogue", "assets", "background-black.png")), (SWIDTH, HEIGHT))
         WIN.blit(bgMenu, (0, 0))
         title_label = title_font.render("Press SPACE to begin...", 1, (255, 255, 255))
         WIN.blit(title_label, (WIDTH/2 - title_label.get_width()/2 + +OFFSET, HEIGHT/2 - title_label.get_height()/2))
@@ -145,7 +146,8 @@ def main_menu():
             if event.type == pygame.QUIT or keys[pygame.K_ESCAPE]:
                 run = False
             if keys[pygame.K_SPACE]:
-                main()
+                if main() == "quit":
+                    pygame.quit()
                 
     pygame.quit()
 

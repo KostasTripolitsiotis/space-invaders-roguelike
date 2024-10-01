@@ -12,21 +12,21 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 FPS = 120
 
 # Load images
-RED_SPACE_SHIP = pygame.transform.flip(pygame.image.load(os.path.join("assets", "pixel_ship_red_small.png")), 0, 1)
-GREEN_SPACE_SHIP = pygame.transform.flip(pygame.image.load(os.path.join("assets", "pixel_ship_green_small.png")), 0, 1)
-BLUE_SPACE_SHIP = pygame.transform.flip(pygame.image.load(os.path.join("assets", "pixel_ship_blue_small.png")), 0, 1)
+RED_SPACE_SHIP = pygame.transform.flip(pygame.image.load(os.path.join("spacerogue", "assets", "pixel_ship_red_small.png")), 0, 1)
+GREEN_SPACE_SHIP = pygame.transform.flip(pygame.image.load(os.path.join("spacerogue", "assets", "pixel_ship_green_small.png")), 0, 1)
+BLUE_SPACE_SHIP = pygame.transform.flip(pygame.image.load(os.path.join("spacerogue", "assets", "pixel_ship_blue_small.png")), 0, 1)
 
 # Player ship
-YELLOW_SPACE_SHIP = pygame.image.load(os.path.join("assets", "pixel_ship_yellow.png"))
+YELLOW_SPACE_SHIP = pygame.image.load(os.path.join("spacerogue", "assets", "pixel_ship_yellow.png"))
 
 # Lasers
-RED_LASER = pygame.image.load(os.path.join("assets", "pixel_laser_red.png"))
-GREEEN_LASER = pygame.image.load(os.path.join("assets", "pixel_laser_green.png"))
-BLUE_LASER = pygame.image.load(os.path.join("assets", "pixel_laser_blue.png"))
-YELLOW_LASER = pygame.image.load(os.path.join("assets", "pixel_laser_yellow.png"))
+RED_LASER = pygame.image.load(os.path.join("spacerogue", "assets", "pixel_laser_red.png"))
+GREEEN_LASER = pygame.image.load(os.path.join("spacerogue", "assets", "pixel_laser_green.png"))
+BLUE_LASER = pygame.image.load(os.path.join("spacerogue", "assets", "pixel_laser_blue.png"))
+YELLOW_LASER = pygame.image.load(os.path.join("spacerogue", "assets", "pixel_laser_yellow.png"))
 
 # Backround
-BG = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background-black.png")), (WIDTH, HEIGHT))
+BG = pygame.transform.scale(pygame.image.load(os.path.join("spacerogue", "assets", "background-black.png")), (WIDTH, HEIGHT))
 #BG_STATIC = pygame.Rect((0, 0, SWIDTH, HEIGHT), )
 
 COLOR_MAP = {

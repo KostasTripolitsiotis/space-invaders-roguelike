@@ -36,10 +36,10 @@ def getEnemyWave(level:int):
     return enemytype, dtime
 
 def save(cash: int) -> None:
-    with shelve.open('savefile/savefile') as f:
+    with shelve.open('spacerogue/savefile/savefile') as f:
         f['cash'] = cash
 def open_savefile() -> list:
-    with shelve.open('savefile/savefile') as f:
+    with shelve.open('spacerogue/savefile/savefile') as f:
         cash = f['cash']
     return cash
 

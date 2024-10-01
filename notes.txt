@@ -6,10 +6,16 @@
 +savefile
 +handle quit exceptions
 -menu
+ -upgrades
+ -start button
 +cash
 +flip enemies
 -more space ships
 -sounds
--waves
--spawn in groups, not all together
+-items
++waves
++spawn in groups, not all together
 +level up screen
++dmg clouds
++crit
+-choices have crit and crit chance

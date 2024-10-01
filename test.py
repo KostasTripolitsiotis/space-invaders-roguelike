@@ -18,5 +18,3 @@
 # 
 # 
 
-from func import spawn_enemies
-spawn_enemies(1, 0)

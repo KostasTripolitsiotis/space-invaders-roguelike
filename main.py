@@ -4,6 +4,7 @@ from const import *
 from player import Player
 from enemy import Enemy
 from levelupscreen import levelupscreen
+from dmgclouds import DmgCloud
 pygame.font.init()
 
 def main():
@@ -16,6 +17,7 @@ def main():
     enemies:list[Enemy] = []
     wave:list[str] = []
     timers:list[int] = []
+    dmgclouds:list[DmgCloud] = []
     enemy_timer = 0
     
     player = Player(SWIDTH/2 - YELLOW_SPACE_SHIP.get_width()/2, HEIGHT - YELLOW_SPACE_SHIP.get_height()-20)
@@ -41,6 +43,12 @@ def main():
             enemy.draw(WIN)
             
         player.draw(WIN)
+        
+        for dmgcloud in dmgclouds[:]:
+                dmgcloud.draw(WIN)
+                dmgcloud.move()
+                if dmgcloud.counter == 0:
+                    dmgclouds.remove(dmgcloud)
         
         if lost  == True:
             lost_label = lost_font.render("You Lost!!", 1, (255, 0, 0))
@@ -73,21 +81,14 @@ def main():
                     enemy_timer = timers[0]
                 elif len(timers) != 0:
                     enemy_timer = timers.pop(0)
-                    enemies.append(choose_enemy(wave.pop(0)))
+                    if wave[0] != "":
+                        enemies.append(choose_enemy(wave[0]))
+                    wave.pop(0)
             else: enemy_timer -= 1
-                    
-                    
-            
-            # if len(enemies) == 0:
-            #     if enemies_counter == 0:
-            #         level +1
-            #         if level != 0:
-            #             levelupscreen(player)
-            #     enemies, enemy_counter = spawn_enemies(level, enemies_counter)
             
             keys = pygame.key.get_pressed()   
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
+                if event.type == pygame.QUIT or keys[pygame.K_ESCAPE]:
                     save(player.cash)
                     pygame.quit()
                      
@@ -103,20 +104,26 @@ def main():
                 player.shoot()
             if keys[pygame.K_l]:
                 levelupscreen(player)
+            if keys[pygame.K_m]:
+                run = False
             
             for enemy in enemies[:]:
                 enemy.move_y(enemy.vel)
-                enemy.move_lasers(enemy.laser_vel, player)
+                if enemy.move_lasers(enemy.laser_vel, player):
+                    dmgclouds.append(DmgCloud(player.x+10, player.y, enemy.dmg))
                 enemy.shoot()
                 
                 if collide(enemy, player):
                     player.health -= enemy.health
+                    dmgclouds.append(DmgCloud(enemy.x+10, enemy.y, float(enemy.health)))
                     enemies.remove(enemy)
                 elif enemy.y + enemy.get_height() > HEIGHT:
                     player.lives -= 1
                     enemies.remove(enemy)
-                    
-            player.move_lasers(-player.laser_vel, enemies)
+            
+            playershot, shotplace, shotdmg, crit = player.move_lasers(-player.laser_vel, enemies)
+            if playershot:
+                dmgclouds.append(DmgCloud(shotplace[0], shotplace[1], shotdmg, crit))
         except pygame.error as error:
             save(player.cash)
             print(error)
@@ -128,7 +135,8 @@ def main_menu():
     pygame.display.set_mode((0,0), pygame.FULLSCREEN)
     while run:
         draw_static_bg()
-        WIN.blit(BG, (0+OFFSET, 0))
+        bgMenu  = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background-black.png")), (SWIDTH, HEIGHT))
+        WIN.blit(bgMenu, (0, 0))
         title_label = title_font.render("Press SPACE to begin...", 1, (255, 255, 255))
         WIN.blit(title_label, (WIDTH/2 - title_label.get_width()/2 + +OFFSET, HEIGHT/2 - title_label.get_height()/2))
         pygame.display.update()

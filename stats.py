@@ -9,6 +9,7 @@ pdmg = 10
 phealth = 100
 pcooldown = 60
 pcash = open_savefile()
+pcritchance = 50
 
 player = {
     "color" : pcolor,
@@ -19,7 +20,8 @@ player = {
     "dmg" : pdmg,
     "health" : phealth,
     "cooldown" : pcooldown,
-    "cash" : pcash
+    "cash" : pcash,
+    "critchance" : pcritchance
 }
 
 yellow = {
@@ -27,7 +29,7 @@ yellow = {
     "spaceship_img" : YELLOW_SPACE_SHIP, 
     "laser_img" : YELLOW_LASER, 
     "vel" : 20,
-    "laser_vel" : 3,
+    "laser_vel" : 15,
     "health" : 100,
     "cooldown" : 60,
 }
@@ -37,7 +39,7 @@ blue = {
     "spaceship_img" : BLUE_SPACE_SHIP, 
     "laser_img" : BLUE_LASER, 
     "vel" : 50,
-    "laser_vel" : 7,
+    "laser_vel" : 15,
     "health" : 10,
     "cooldown" : 100000,
     "worth" : 50
@@ -48,7 +50,7 @@ green = {
     "spaceship_img" : GREEN_SPACE_SHIP, 
     "laser_img" : GREEEN_LASER, 
     "vel" : 10,
-    "laser_vel" : 3,
+    "laser_vel" : 15,
     "health" : 20,
     "cooldown" : 200,
     "worth" : 20
@@ -59,7 +61,7 @@ red = {
     "spaceship_img" : RED_SPACE_SHIP, 
     "laser_img" : RED_LASER, 
     "vel" : 20,
-    "laser_vel" : 3,
+    "laser_vel" : 15,
     "health" : 12,
     "cooldown" : 100,
     "worth" : 10

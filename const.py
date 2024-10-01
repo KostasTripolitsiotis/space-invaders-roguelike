@@ -39,6 +39,6 @@ LEVELUP_CHOICES = ['+5 Speed', '-10% Cooldown', '+5 Damage', '+10 Health', '+1 L
 
 LEVELS = {
     1: [["red", 5]],
-    2: [["red", 6], ["green", 4]],
-    3: [["red", 10], ["green", 5]]
+    2: [["red", 6], ["", 3], ["green", 4]],
+    3: [["red", 10], ["", 3], ["green", 5]]
 }

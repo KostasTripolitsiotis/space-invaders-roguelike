@@ -1,17 +1,20 @@
 import pygame
+import random
 from laser import Laser
 from const import HEIGHT
 
 class Ship:
     
-    def __init__(self, x, y, vel = 1, laser_vel = 3, health=100, cooldown = 60, dmg = 10) -> None:
+    def __init__(self, x, y, vel = 1, laser_vel = 3, health=100, cooldown = 60, dmg = 10, critchance = 0, critdmg = 200) -> None:
         self.x = x
         self.y = y
-        self.health = health
-        self.max_health = self.health
+        self.health = float(health)
+        self.max_health = health
         self.vel = vel
         self.laser_vel = laser_vel
-        self.dmg = dmg
+        self.dmg = float(dmg)
+        self.critchance = critchance
+        self.critdmg = critdmg
         self.cooldown = cooldown
         # self.firerate = firerate
         self.ship_img = None
@@ -28,14 +31,25 @@ class Ship:
             
     def move_lasers(self, vel, obj):
         self.cooldown_counter()
+        shot = False
         for laser in self.lasers[:]:
             laser.move(vel)
             if laser.off_screen(HEIGHT):
                 self.lasers.remove(laser)
             elif laser.collision(obj):
-                obj.health -= 10
+                obj.health -= self.calcDmg()[0]
                 self.lasers.remove(laser)
-                
+                shot = True
+        return shot
+    
+    def calcDmg(self):
+        crit = False
+        dmg = self.dmg
+        if random.randrange(1, 10000, 1) < self.critchance*100:
+            dmg *= (self.critdmg/100)
+            crit = True
+        return dmg, crit
+    
     def move_y(self, vel):
         self.move_counter_y %= 10
         dv = vel % 10

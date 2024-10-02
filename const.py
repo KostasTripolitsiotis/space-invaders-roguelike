@@ -35,7 +35,7 @@ COLOR_MAP = {
                 "blue": (BLUE_SPACE_SHIP, BLUE_LASER)
     }
 
-LEVELUP_CHOICES = ['+5 Speed', '-10% Cooldown', '+5 Damage', '+10 Health', '+1 Life']
+LEVELUP_CHOICES = ['+5 Speed', '-10% Cooldown', '+5 Damage', '+10 Health', '+1 Life', '+5% Crit', '+20% Crit Dmg']
 
 LEVELS = {
     1: [["red", 5]],

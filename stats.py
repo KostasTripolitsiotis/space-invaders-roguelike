@@ -9,7 +9,8 @@ pdmg = 10
 phealth = 100
 pcooldown = 60
 pcash = open_savefile()
-pcritchance = 50
+pcritchance = 0
+pcritdmg = 200
 
 player = {
     "color" : pcolor,
@@ -21,7 +22,8 @@ player = {
     "health" : phealth,
     "cooldown" : pcooldown,
     "cash" : pcash,
-    "critchance" : pcritchance
+    "critchance" : pcritchance,
+    "critdmg" : pcritdmg
 }
 
 yellow = {

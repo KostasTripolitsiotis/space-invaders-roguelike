@@ -2,6 +2,7 @@ import pygame
 from ship import Ship
 from const import *
 from stats import player
+from item import *
 
 class Player(Ship):    
     def __init__(self, x, y) -> None:
@@ -12,6 +13,9 @@ class Player(Ship):
         self.cash = player["cash"]
         self.lives = 5
         self.critchance = player["critchance"]
+        self.critdmg = player["critdmg"]
+        self.items: list[Item] = []
+        self.items.append(BetterLasers())
         
     def move_lasers(self, vel, objs:list[Ship]):
         shot = False

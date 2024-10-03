@@ -10,12 +10,21 @@ class Player(Ship):
         self.ship_img = player["spaceship_img"]
         self.laser_img = player["laser_img"]
         self.mask = pygame.mask.from_surface(self.ship_img)
-        self.cash = player["cash"]
+        self.cash = float(player["cash"])
         self.lives = 5
         self.critchance = player["critchance"]
         self.critdmg = player["critdmg"]
-        self.items: list[Item] = []
-        self.items.append(BetterLasers())
+        self.enemy_modifiers = {
+            "vel" : 0, 
+            "health" : 0, 
+            "dmg" : 0, 
+            "critchance" : 0, 
+            "critdmg" : 0, 
+            "cooldown" : 1, 
+            "worth" : 1
+        }
+        # self.items.append(BetterLasers())
+        # self.items.append(JetEngine())
         
     def move_lasers(self, vel, objs:list[Ship]):
         shot = False
@@ -36,13 +45,19 @@ class Player(Ship):
                         obj.health -= shotdmg
                         if obj.health <= 0:
                             shotdmg += obj.health
-                            self.cash += obj.worth
+                            self.cash += self.getEnemyWorth(obj.worth)
                             if obj in objs:
                                 objs.remove(obj)
                         if laser in self.lasers:
                             self.lasers.remove(laser)
         return shot, shotcoord, shotdmg, crit
-                        
+    
+    def getEnemyWorth(self, worth):
+        for item in self.items:
+            if item.modifier == "worth":
+                worth = item.modify(worth)
+        return worth
+    
     def draw(self, window:pygame.surface.Surface):
         super().draw(window)
         self.healthbar(window)

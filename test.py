@@ -18,10 +18,19 @@
 # 
 # 
 
-import ctypes
+blue = {
+    "color" : "blue", 
+    "spaceship_img" : 1, 
+    "laser_img" : 2, 
+    "vel" : 50,
+    "laser_vel" : 15,
+    "health" : 10,
+    "cooldown" : 100000,
+    "worth" : 50,
+    "dmg" : 10, 
+    "critchance" : 0, 
+    "critdmg" : 200
+}
 
-user = ctypes.windll.user32
-SWIDTH = user.GetSystemMetrics(0)
-OFFSET = int(SWIDTH/6)
-WIDTH, HEIGHT = int(2*SWIDTH/3), user.GetSystemMetrics(1)
-print((SWIDTH, HEIGHT))
+blue["dmg"] +=10
+print(blue)

@@ -44,7 +44,10 @@ blue = {
     "laser_vel" : 15,
     "health" : 10,
     "cooldown" : 100000,
-    "worth" : 50
+    "worth" : 50,
+    "dmg" : 10, 
+    "critchance" : 0, 
+    "critdmg" : 200
 }
 
 green = {
@@ -55,7 +58,10 @@ green = {
     "laser_vel" : 15,
     "health" : 20,
     "cooldown" : 200,
-    "worth" : 20
+    "worth" : 20,
+    "dmg" : 10, 
+    "critchance" : 0, 
+    "critdmg" : 200
 }
 
 red = {
@@ -66,5 +72,8 @@ red = {
     "laser_vel" : 15,
     "health" : 12,
     "cooldown" : 100,
-    "worth" : 10
+    "worth" : 10,
+    "dmg" : 10, 
+    "critchance" : 0, 
+    "critdmg" : 200
 }

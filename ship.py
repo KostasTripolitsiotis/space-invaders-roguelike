@@ -2,6 +2,7 @@ import pygame
 import random
 from laser import Laser
 from const import HEIGHT
+from item import *
 
 class Ship:
     
@@ -10,7 +11,7 @@ class Ship:
         self.y = y
         self.health = float(health)
         self.max_health = health
-        self.vel = vel
+        self.vel = float(vel)
         self.laser_vel = laser_vel
         self.dmg = float(dmg)
         self.critchance = critchance
@@ -23,6 +24,7 @@ class Ship:
         self.cool_down_counter = 0
         self.move_counter_y = 0
         self.move_counter_x = 0
+        self.items: list[Item] = []
         
     def draw(self, window:pygame.surface.Surface):
         window.blit(self.ship_img, (self.x, self.y))
@@ -42,31 +44,65 @@ class Ship:
                 shot = True
         return shot
     
+    def getDmgFlat(self):
+        dmg = self.dmg
+        for item in self.items:
+            if item.modifier == "dmg" and item.type_modifier == "add":
+                dmg = item.modify(dmg)
+        for item in self.items:
+            if item.modifier == "dmg" and item.type_modifier == "mult":
+                dmg = item.modify(dmg)
+        return dmg
+                
     def calcDmg(self):
         crit = False
-        dmg = self.dmg
+        dmg = self.getDmgFlat()
         if random.randrange(1, 10000, 1) < self.critchance*100:
             dmg *= (self.critdmg/100)
             crit = True
         return dmg, crit
     
+    def getVel(self):
+        vel = self.vel
+        for item in self.items:
+            if item.modifier == "speed" and item.type_modifier == "add":
+                vel = item.modify(vel)
+        for item in self.items:
+            if item.modifier == "speed" and item.type_modifier == "mult":
+                vel = item.modify(vel)
+        return vel
+    
     def move_y(self, vel):
+        if vel > 0:
+            vel = self.getVel()
+        else:
+            vel = -self.getVel()
         self.move_counter_y %= 10
         dv = vel % 10
         vel = int(vel/10)
         if self.move_counter_y < dv:
-            self.y += (vel+1)
+            if vel > 0:
+                self.y += (vel+1)
+            else:
+                self.y += (vel-1)
             self.move_counter_y += 1
         else: 
             self.y += vel
             self.move_counter_y += 1
             
     def move_x(self, vel):
+        if vel > 0:
+            vel = self.getVel()
+        else:
+            vel = -self.getVel()
         self.move_counter_x %= 10
         dv = vel % 10
         vel = int(vel/10)
         if self.move_counter_x < dv:
-            self.x += (vel+1)
+            if vel > 0:
+                self.x += (vel+1)
+            else:
+                self.x += (vel-1)
             self.move_counter_x += 1
         else: 
             self.x += vel

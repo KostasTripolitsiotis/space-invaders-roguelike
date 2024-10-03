@@ -23,3 +23,8 @@
 
 ###Create .exe
 pyinstaller --onefile -w --clean --distpath ".\spacerogue" 'main.py'
+
+### Item List:
+Better Lasers: +1 damage per round
+Jet Engines: 10% speed
+Bigger Guns: 10% damage

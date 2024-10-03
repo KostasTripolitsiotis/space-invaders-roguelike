@@ -1,0 +1,6 @@
+'vel', (0, 5)
+'laser_vel', (512, 5)
+'health', (1024, 5)
+'cooldown', (1536, 5)
+'cash', (2048, 21)
+'player_color', (2560, 21)

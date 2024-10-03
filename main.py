@@ -10,6 +10,8 @@ pygame.font.init()
 def main():
     pygame.display.set_caption("Space Shooter")
     run = True
+    pause = False
+    pause_cooldown = 10
     level = 0
     main_font = pygame.font.SysFont("lucidaconsole", 30)
     lost_font = pygame.font.SysFont("comicsans", 100)
@@ -33,15 +35,21 @@ def main():
         # draw text
         lives_label = main_font.render(f"Lives: {player.lives}", 1, (255,255,255))
         level_label = main_font.render(f"Level: {level}", 1, (255, 255, 255))
-        cash_label = main_font.render(f"Cash: {player.cash}", 1, (255, 255, 255))
-        if player.dmg.is_integer():
-            dmg_label = main_font.render(f"Damage: {int(player.dmg)}", 1, (255, 255, 255))
+        if player.cash.is_integer:
+            cash_label = main_font.render(f"Cash: {int(player.cash)}", 1, (255, 255, 255))
         else:
-            dmg_label = main_font.render(f"Damage: {player.dmg}", 1, (255, 255, 255))
+            cash_label = main_font.render(f"Cash: {player.cash}", 1, (255, 255, 255))
+        if player.getDmgFlat().is_integer():
+            dmg_label = main_font.render(f"Damage: {int(player.getDmgFlat())}", 1, (255, 255, 255))
+        else:
+            dmg_label = main_font.render(f"Damage: {player.getDmgFlat()}", 1, (255, 255, 255))
         critchance_label = main_font.render(f"Crit: {player.critchance}%", 1, (255, 255, 255))
         critdmg_label = main_font.render(f"Crit dmg: {player.critdmg}%", 1, (255, 255, 255))
         cooldown_label = main_font.render(f"Cooldown: {player.cooldown}", 1, (255, 255, 255))
-        speed_label = main_font.render(f"Speed: {player.vel}", 1, (255, 255, 255))
+        if player.getVel().is_integer():
+            speed_label = main_font.render(f"Speed: {int(player.getVel())}", 1, (255, 255, 255))
+        else:
+            speed_label = main_font.render(f"Speed: {round(player.getVel(), 2)}", 1, (255, 255, 255))
         
         WIN.blit(lives_label, (10, 10))
         WIN.blit(level_label, (SWIDTH - level_label.get_width() - 10, 10))
@@ -51,6 +59,10 @@ def main():
         WIN.blit(critdmg_label, (10, lives_label.get_height()*4+12))
         WIN.blit(cooldown_label, (10, lives_label.get_height()*5+12))
         WIN.blit(speed_label, (10, lives_label.get_height()*6+12))
+        
+        for i in range(len(player.items)):
+            label = main_font.render(f"{player.items[i].name}", 1, (255,255,255))
+            WIN.blit(label, (SWIDTH - label.get_width() - 10, level_label.get_height()*(i+1) + 10))
         
         for enemy in enemies:
             enemy.draw(WIN)
@@ -65,7 +77,7 @@ def main():
         
         if lost  == True:
             lost_label = lost_font.render("You Lost!!", 1, (255, 0, 0))
-            WIN.blit(lost_label, (WIDTH/2 - lost_label.get_width()/2, HEIGHT/2 - lost_label.get_height()/2))
+            WIN.blit(lost_label, (SWIDTH/2 - lost_label.get_width()/2, HEIGHT/2 - lost_label.get_height()/2))
         
         pygame.display.update()
     
@@ -73,6 +85,8 @@ def main():
         clock.tick(FPS)
         try:
             redraw_win()  
+            if pause_cooldown > 0:
+                pause_cooldown -= 1
             
             if player.lives <= 0 or player.health <= 0:
                 lost = True 
@@ -85,19 +99,18 @@ def main():
                 else:
                     continue 
             
-            if enemy_timer == 0:
+            if enemy_timer == 0 and pause == False:
                 if len(timers) == 0 and len(enemies) == 0:
-                    if level != 0:
-                        levelupscreen(player)
+                    levelupscreen(player, level)
                     level += 1
                     wave, timers = getEnemyWave(level)
                     enemy_timer = timers[0]
                 elif len(timers) != 0:
                     enemy_timer = timers.pop(0)
                     if wave[0] != "":
-                        enemies.append(spawn_enemy(wave[0], player.items))
+                        enemies.append(spawn_enemy(wave[0], player))
                     wave.pop(0)
-            else: enemy_timer -= 1
+            elif pause == False: enemy_timer -= 1
             
             keys = pygame.key.get_pressed()   
             for event in pygame.event.get():
@@ -106,65 +119,85 @@ def main():
                     run = False
                     return "quit"
                      
-            if keys[pygame.K_a] and player.x - (player.vel/10) >= 0+OFFSET: # left
-                player.move_x(-player.vel)
-            if keys[pygame.K_d] and player.x + (player.vel/10) + player.get_width() <= WIDTH+OFFSET: # right
-                player.move_x(player.vel)
-            if keys[pygame.K_w] and player.y - (player.vel/10) > 0: # up
-                player.move_y(-player.vel)
-            if keys[pygame.K_s] and player.y + (player.vel/10) + player.get_height() + 20 < HEIGHT: # down
-                player.move_y(player.vel)
-            if keys[pygame.K_SPACE]:
+            if keys[pygame.K_LEFT] and pause == False: # left
+                if player.x - (player.getVel()/10) >= 0+OFFSET: 
+                    player.move_x(-player.vel)
+                else: player.x = OFFSET
+            if keys[pygame.K_RIGHT] and pause == False:# right
+                if player.x + (player.getVel()/10) + player.get_width() <= WIDTH+OFFSET: 
+                    player.move_x(player.vel)
+                else: player.x = SWIDTH - OFFSET - player.get_width()
+            if keys[pygame.K_UP] and pause == False: # up
+                if player.y - (player.getVel()/10) > 0: 
+                    player.move_y(-player.vel)
+                else: player.y = 0
+            if keys[pygame.K_DOWN] and pause == False: # down
+                if player.y + (player.getVel()/10) + player.get_height() + 20 < HEIGHT: 
+                    player.move_y(player.vel)
+                else: player.y = HEIGHT - player.get_height() - 20
+            if keys[pygame.K_SPACE] and pause == False: # shot
                 player.shoot()
-            if keys[pygame.K_l]:
-                levelupscreen(player)
-            if keys[pygame.K_m]:
+            if keys[pygame.K_l]: # go to level up screen (debug)
+                levelupscreen(player, level)
+            if keys[pygame.K_m]: # return to menu
                 run = False
-            if keys[pygame.K_0]:
+            if keys[pygame.K_0]: # 0 cash
                 player.cash = 0
-            if keys[pygame.K_9]:
+            if keys[pygame.K_9]: # 9999 cash
                 player.cash = 9999
+            if keys[pygame.K_p]:
+                if pause_cooldown <= 0:
+                    pause = not(pause)
+                    pause_cooldown = 10
             
             for enemy in enemies[:]:
-                enemy.move_y(enemy.vel)
-                if enemy.move_lasers(enemy.laser_vel, player):
-                    dmgclouds.append(DmgCloud(player.x+10, player.y, enemy.dmg))
-                enemy.shoot()
-                
-                if collide(enemy, player):
-                    player.health -= enemy.health
-                    dmgclouds.append(DmgCloud(enemy.x+10, enemy.y, float(enemy.health)))
-                    enemies.remove(enemy)
-                elif enemy.y + enemy.get_height() > HEIGHT:
-                    player.lives -= 1
-                    enemies.remove(enemy)
+                if pause == False:
+                    enemy.move_y(enemy.vel)
+                    if enemy.move_lasers(enemy.laser_vel, player):
+                        dmgclouds.append(DmgCloud(player.x+10, player.y, enemy.dmg))
+                    enemy.shoot()
+                    
+                    if collide(enemy, player):
+                        player.health -= enemy.health
+                        dmgclouds.append(DmgCloud(enemy.x+10, enemy.y, float(enemy.health)))
+                        enemies.remove(enemy)
+                    elif enemy.y + enemy.get_height() > HEIGHT:
+                        player.lives -= 1
+                        enemies.remove(enemy)
             
-            playershot, shotplace, shotdmg, crit = player.move_lasers(-player.laser_vel, enemies)
-            if playershot:
-                dmgclouds.append(DmgCloud(shotplace[0], shotplace[1], shotdmg, crit))
+            if pause == False:
+                playershot, shotplace, shotdmg, crit = player.move_lasers(-player.laser_vel, enemies)
+                if playershot:
+                    dmgclouds.append(DmgCloud(shotplace[0], shotplace[1], shotdmg, crit))
         except pygame.error as error:
             save(player.cash)
             print(error)
-            quit()
+            run = False
+            pygame.quit()
 
 def main_menu():
     run = True
     title_font = pygame.font.SysFont("lucidaconsole", 50)
     pygame.display.set_mode((0,0), pygame.FULLSCREEN, display=0)
     while run:
-        draw_static_bg()
-        bgMenu  = pygame.transform.scale(pygame.image.load(os.path.join("spacerogue", "assets", "background-black.png")), (SWIDTH, HEIGHT))
-        WIN.blit(bgMenu, (0, 0))
-        title_label = title_font.render("Press SPACE to begin...", 1, (255, 255, 255))
-        WIN.blit(title_label, (WIDTH/2 - title_label.get_width()/2 + +OFFSET, HEIGHT/2 - title_label.get_height()/2))
-        pygame.display.update()
-        keys = pygame.key.get_pressed()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT or keys[pygame.K_ESCAPE]:
-                run = False
-            if keys[pygame.K_SPACE]:
-                if main() == "quit":
-                    pygame.quit()
+        try:
+            draw_static_bg()
+            bgMenu  = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background-black.png")), (SWIDTH, HEIGHT))
+            WIN.blit(bgMenu, (0, 0))
+            title_label = title_font.render("Press SPACE to begin...", 1, (255, 255, 255))
+            WIN.blit(title_label, (WIDTH/2 - title_label.get_width()/2 + +OFFSET, HEIGHT/2 - title_label.get_height()/2))
+            pygame.display.update()
+            keys = pygame.key.get_pressed()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT or keys[pygame.K_ESCAPE]:
+                    run = False
+                if keys[pygame.K_SPACE]:
+                    if main() == "quit":
+                        pygame.quit()
+        except pygame.error as error:
+            print(error)
+            run = False
+            pygame.quit()
                 
     pygame.quit()
 

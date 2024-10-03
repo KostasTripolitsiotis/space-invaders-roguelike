@@ -20,6 +20,8 @@ class DmgCloud():
     def getLabel(self, label:float):
         if label.is_integer():
             label = int(label)
+        else:
+            label = round(label, 2)
         if self.crit == False:
             return self.font.render(str(label), 1, (250, 253, 247))
         else:

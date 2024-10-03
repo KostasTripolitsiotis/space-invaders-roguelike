@@ -6,8 +6,8 @@ from const import *
 from laser import Laser
 
 class Enemy(Ship):
-    def __init__(self, x, y, color, firerate, vel=1, laser_vel=3, health=11, cooldown = 120, worth = 10) -> None:
-        super().__init__(x, y, vel, laser_vel, health, cooldown)
+    def __init__(self, x, y, color, firerate, vel, laser_vel, health, cooldown, worth, dmg, critchance, critdmg) -> None:
+        super().__init__(x, y, vel, laser_vel, health, cooldown, dmg, critchance, critdmg)
         self.ship_img, self.laser_img = COLOR_MAP[color]
         self.mask = pygame.mask.from_surface(self.ship_img)
         self.firerate = firerate
@@ -18,7 +18,7 @@ class Enemy(Ship):
         self.healthbar(window)
 
     def shoot(self):
-        if random.randrange(0, self.firerate*FPS) == 1:
+        if random.randrange(0, int(self.firerate*FPS)) == 1:
             if self.cool_down_counter == 0:
                 laser = Laser(self.x-15, self.y, self.laser_img)
                 self.lasers.append(laser)

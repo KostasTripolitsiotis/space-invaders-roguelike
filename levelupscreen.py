@@ -5,10 +5,13 @@ from const import *
 from player import Player
 from enemy import Enemy
 
-def levelupscreen(player):
+def levelupscreen(player, level):
     run = True
     main_font = pygame.font.SysFont("lucidaconsole", 15)
-    choices = LEVELUP_CHOICES[:]
+    if level % 5 ==0:
+        choices = ITEMS[:]
+    else:
+        choices = LEVELUP_CHOICES[:]
     
     choice1 = random.choice(choices)
     choices.remove(choice1)

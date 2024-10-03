@@ -20,7 +20,7 @@ class Enemy(Ship):
     def shoot(self):
         if random.randrange(0, int(self.firerate*FPS)) == 1:
             if self.cool_down_counter == 0:
-                laser = Laser(self.x-15, self.y, self.laser_img)
+                laser = Laser(self.x-15, self.y, self.laser_img, self.laser_vel)
                 self.lasers.append(laser)
                 self.cool_down_counter = 1
     

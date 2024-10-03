@@ -136,7 +136,7 @@ def main():
                     player.move_y(player.vel)
                 else: player.y = HEIGHT - player.get_height() - 20
             if keys[pygame.K_SPACE] and pause == False: # shot
-                player.shoot()
+                player.shootMult()
             if keys[pygame.K_l]: # go to level up screen (debug)
                 levelupscreen(player, level)
             if keys[pygame.K_m]: # return to menu
@@ -153,7 +153,7 @@ def main():
             for enemy in enemies[:]:
                 if pause == False:
                     enemy.move_y(enemy.vel)
-                    if enemy.move_lasers(enemy.laser_vel, player):
+                    if enemy.move_lasers(player):
                         dmgclouds.append(DmgCloud(player.x+10, player.y, enemy.dmg))
                     enemy.shoot()
                     
@@ -166,7 +166,7 @@ def main():
                         enemies.remove(enemy)
             
             if pause == False:
-                playershot, shotplace, shotdmg, crit = player.move_lasers(-player.laser_vel, enemies)
+                playershot, shotplace, shotdmg, crit = player.move_lasers(enemies)
                 if playershot:
                     dmgclouds.append(DmgCloud(shotplace[0], shotplace[1], shotdmg, crit))
         except pygame.error as error:

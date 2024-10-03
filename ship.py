@@ -1,6 +1,6 @@
 import pygame
 import random
-from laser import Laser
+from laser import Laser, DiagonalLaser
 from const import HEIGHT
 from item import *
 
@@ -31,12 +31,12 @@ class Ship:
         for laser in self.lasers:
             laser.draw(window)
             
-    def move_lasers(self, vel, obj):
+    def move_lasers(self, obj):
         self.cooldown_counter()
         shot = False
         for laser in self.lasers[:]:
-            laser.move(vel)
-            if laser.off_screen(HEIGHT):
+            laser.move()
+            if laser.off_screen():
                 self.lasers.remove(laser)
             elif laser.collision(obj):
                 obj.health -= self.calcDmg()[0]
@@ -122,7 +122,17 @@ class Ship:
     
     def shoot(self):
         if self.cool_down_counter == 0:
-            laser = Laser(self.x, self.y, self.laser_img)
+            laser = Laser(self.x, self.y, self.laser_img, self.laser_vel)
+            self.lasers.append(laser)
+            self.cool_down_counter = 1
+            
+    def shootMult(self):
+        if self.cool_down_counter == 0:
+            laser = Laser(self.x, self.y, self.laser_img, self.laser_vel)
+            self.lasers.append(laser)
+            laser = DiagonalLaser(self.x, self.y, self.laser_img, self.laser_vel, 'right')
+            self.lasers.append(laser)
+            laser = DiagonalLaser(self.x, self.y, self.laser_img, self.laser_vel, 'left')
             self.lasers.append(laser)
             self.cool_down_counter = 1
             

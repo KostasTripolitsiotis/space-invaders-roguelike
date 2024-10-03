@@ -6,7 +6,7 @@ from item import *
 
 class Player(Ship):    
     def __init__(self, x, y) -> None:
-        super().__init__(x, y, player["vel"], player["laser_vel"], player["health"], player["cooldown"], player["dmg"])
+        super().__init__(x, y, player["vel"], -player["laser_vel"], player["health"], player["cooldown"], player["dmg"])
         self.ship_img = player["spaceship_img"]
         self.laser_img = player["laser_img"]
         self.mask = pygame.mask.from_surface(self.ship_img)
@@ -26,15 +26,15 @@ class Player(Ship):
         # self.items.append(BetterLasers())
         # self.items.append(JetEngine())
         
-    def move_lasers(self, vel, objs:list[Ship]):
+    def move_lasers(self, objs:list[Ship]):
         shot = False
         shotcoord = [0, 0]
         shotdmg = 0
         crit = False
         self.cooldown_counter()
         for laser in self.lasers[:]:
-            laser.move(vel)
-            if laser.off_screen(HEIGHT):
+            laser.move()
+            if laser.off_screen():
                 self.lasers.remove(laser)
             else:
                 for obj in objs:

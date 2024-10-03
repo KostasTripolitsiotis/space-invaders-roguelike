@@ -108,7 +108,7 @@ def levelup(choice: str, player):
                 player.enemy_modifiers["health"] += modify
         case '+1 Life': player.lives += 1
         case '+5% Crit': 
-            modify = 5 + modifier
+            modify = 5 * modifier
             if unluckycoin == False:
                 player.critchance += modify
             else: 

@@ -12,6 +12,7 @@ class Enemy(Ship):
         self.mask = pygame.mask.from_surface(self.ship_img)
         self.firerate = firerate
         self.worth = worth
+        self.id = random.randint(1, 10000)
         
     def draw(self, window:pygame.surface.Surface):
         super().draw(window)
@@ -20,7 +21,7 @@ class Enemy(Ship):
     def shoot(self):
         if random.randrange(0, int(self.firerate*FPS)) == 1:
             if self.cool_down_counter == 0:
-                laser = Laser(self.x-15, self.y, self.laser_img, self.laser_vel)
+                laser = Laser(self.x-15, self.y, self.laser_img, self.getLaserVel())
                 self.lasers.append(laser)
                 self.cool_down_counter = 1
     

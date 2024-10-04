@@ -40,6 +40,8 @@ class Player(Ship):
                 for obj in objs:
                     if laser.collision(obj):
                         shot = True
+                        laser.pierce -= 1
+                        laser.collided_enemies.append(obj.id)
                         shotcoord = [laser.x, laser.y]
                         shotdmg, crit = self.calcDmg()
                         obj.health -= shotdmg
@@ -48,7 +50,7 @@ class Player(Ship):
                             self.cash += self.getEnemyWorth(obj.worth)
                             if obj in objs:
                                 objs.remove(obj)
-                        if laser in self.lasers:
+                        if laser in self.lasers and laser.pierce < 0:
                             self.lasers.remove(laser)
         return shot, shotcoord, shotdmg, crit
     
@@ -61,6 +63,16 @@ class Player(Ship):
     def draw(self, window:pygame.surface.Surface):
         super().draw(window)
         self.healthbar(window)
+        
+    def shoot(self):
+        multishot = False
+        for item in self.items:
+            if item.name == "Multishot":
+                multishot = True
+        if multishot == True:
+            super().shootMult()
+        else:
+            super().shoot()
         
     def healthbar(self, window:pygame.surface.Surface):
         font = pygame.font.SysFont("comicssans", 17)

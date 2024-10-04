@@ -17,20 +17,13 @@
 # lucidaconsole
 # 
 # 
-
-blue = {
-    "color" : "blue", 
-    "spaceship_img" : 1, 
-    "laser_img" : 2, 
-    "vel" : 50,
-    "laser_vel" : 15,
-    "health" : 10,
-    "cooldown" : 100000,
-    "worth" : 50,
-    "dmg" : 10, 
-    "critchance" : 0, 
-    "critdmg" : 200
-}
-
-blue["dmg"] +=10
-print(blue)
+import pygame
+def draw_border_new(point1:tuple[int, int], point2:tuple[int, int], thicness:int, color:tuple[int, int, int]):
+    """point1: x, y of top left corner
+       point2: x, y of bottom right corner"""
+    print(color, (point1[0], point1[1], (point2[0]-point1[0]), thicness))
+    print((255, 0, 0), (point1[0]-thicness, point1[0], thicness, point2[1]-point1[1]))
+    print((0, 255, 255), (point1[0], point2[1]-thicness, (point2[0]-point1[0]), thicness))
+    print((100, 0, 255), (point1[0], point1[1], thicness,(point2[0]-point1[0])))
+    
+draw_border_new([864, 486], [1056, 540], 2, (255, 255, 255))

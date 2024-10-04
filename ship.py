@@ -25,6 +25,8 @@ class Ship:
         self.move_counter_y = 0
         self.move_counter_x = 0
         self.items: list[Item] = []
+        self.id = 0
+        self.laser_pierce = 0
         
     def draw(self, window:pygame.surface.Surface):
         window.blit(self.ship_img, (self.x, self.y))
@@ -71,6 +73,23 @@ class Ship:
             if item.modifier == "speed" and item.type_modifier == "mult":
                 vel = item.modify(vel)
         return vel
+    
+    def getLaserVel(self):
+        laser_vel = self.laser_vel
+        for item in self.items:
+            if item.modifier == "laser_vel" and item.type_modifier == "add":
+                laser_vel = item.modify(laser_vel)
+        for item in self.items:
+            if item.modifier == "laser_vel" and item.type_modifier == "mult":
+                laser_vel = item.modify(laser_vel)
+        return laser_vel
+    
+    def getLaserPierce(self):
+        pierce = self.laser_pierce
+        for item in self.items:
+            if item.name == "Concentrated Beam":
+                pierce =+ 1
+        return pierce
     
     def move_y(self, vel):
         if vel > 0:
@@ -122,17 +141,17 @@ class Ship:
     
     def shoot(self):
         if self.cool_down_counter == 0:
-            laser = Laser(self.x, self.y, self.laser_img, self.laser_vel)
+            laser = Laser(self.x, self.y, self.laser_img, self.getLaserVel(), self.getLaserPierce())
             self.lasers.append(laser)
             self.cool_down_counter = 1
             
     def shootMult(self):
         if self.cool_down_counter == 0:
-            laser = Laser(self.x, self.y, self.laser_img, self.laser_vel)
+            laser = Laser(self.x, self.y, self.laser_img, self.getLaserVel(), self.getLaserPierce())
             self.lasers.append(laser)
-            laser = DiagonalLaser(self.x, self.y, self.laser_img, self.laser_vel, 'right')
+            laser = DiagonalLaser(self.x, self.y, self.laser_img, 'right', self.getLaserVel(), self.getLaserPierce())
             self.lasers.append(laser)
-            laser = DiagonalLaser(self.x, self.y, self.laser_img, self.laser_vel, 'left')
+            laser = DiagonalLaser(self.x, self.y, self.laser_img, 'left', self.getLaserVel(), self.getLaserPierce())
             self.lasers.append(laser)
             self.cool_down_counter = 1
             

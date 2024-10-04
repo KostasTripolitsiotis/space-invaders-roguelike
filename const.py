@@ -29,6 +29,11 @@ YELLOW_LASER = pygame.image.load(os.path.join("assets", "pixel_laser_yellow.png"
 BG = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background-black.png")), (WIDTH, HEIGHT))
 #BG_STATIC = pygame.Rect((0, 0, SWIDTH, HEIGHT), )
 
+OPTIONS = {
+    'res' : (0,0),
+    'sfx' : True
+    }
+
 COLOR_MAP = {
                 "red": (RED_SPACE_SHIP, RED_LASER),
                 "green": (GREEN_SPACE_SHIP, GREEEN_LASER),
@@ -36,7 +41,7 @@ COLOR_MAP = {
     }
 
 LEVELUP_CHOICES = ['+5 Speed', '-10% Cooldown', '+3 Damage', '+10 Health', '+1 Life', '+5% Crit', '+20% Crit Dmg']
-ITEMS = ['Lucky Coin', 'Better Lasers', 'Jet Engines', 'Bigger Guns', 'Golden Shot']
+ITEMS = ['Lucky Coin', 'Better Lasers', 'Jet Engines', 'Bigger Guns', 'Golden Shot', 'Concentrated Beam', 'Multishot']
 
 LEVELS = {
     1: [["red", 5]],

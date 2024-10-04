@@ -7,7 +7,7 @@ from enemy import Enemy
 
 def levelupscreen(player, level):
     run = True
-    main_font = pygame.font.SysFont("lucidaconsole", 15)
+    main_font = pygame.font.SysFont("lucidaconsole", 12)
     if level % 5 ==0:
         choices = ITEMS[:]
     else:
@@ -44,29 +44,30 @@ def levelupscreen(player, level):
                 run = False
                 pygame.quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if choice1_btn_rect.collidepoint(event.pos):
-                    levelup(choice1, player)
-                    run = False
-                if choice2_btn_rect.collidepoint(event.pos):
-                    levelup(choice2, player)
-                    run = False
-                if choice3_btn_rect.collidepoint(event.pos):
-                    levelup(choice3, player)
-                    run = False
+                if event.button == 1:
+                    if choice1_btn_rect.collidepoint(event.pos):
+                        levelup(choice1, player)
+                        run = False
+                    if choice2_btn_rect.collidepoint(event.pos):
+                        levelup(choice2, player)
+                        run = False
+                    if choice3_btn_rect.collidepoint(event.pos):
+                        levelup(choice3, player)
+                        run = False
                 
         # Check if the mouse is over the button. This will create the button hover effect
         if choice1_btn_rect.collidepoint(pygame.mouse.get_pos()):
-            draw_border(choice1_surface, 2, 2)
+            draw_border(choice1_surface, (0, 0), (choice1_btn_rect.width, choice1_btn_rect.height), 3, (100,100,100))
         else:
             pygame.draw.rect(choice1_surface, (19, 17, 17), (0, 0, 100, 100))
             
         if choice2_btn_rect.collidepoint(pygame.mouse.get_pos()):
-            draw_border(choice2_surface, 2, 2)
+            draw_border(choice2_surface, (0, 0), (choice2_btn_rect.width, choice2_btn_rect.height), 3, (100,100,100))
         else:
             pygame.draw.rect(choice2_surface, (19, 17, 17), (0, 0, 100, 100))
             
         if choice3_btn_rect.collidepoint(pygame.mouse.get_pos()):
-            draw_border(choice3_surface, 2, 2)
+            draw_border(choice3_surface, (0, 0), (choice3_btn_rect.width, choice3_btn_rect.height), 3, (100,100,100))
         else:
             pygame.draw.rect(choice3_surface, (19, 17, 17), (0, 0, 100, 100))
         

@@ -3,7 +3,7 @@ import random
 
 class Item(ABC):
     """Type Modifiers: add, mult, misc, rep
-    Modify: speed, dmg, vel, crit, crit dmg, worth, misc"""
+    Modify: speed, dmg, vel, crit, crit dmg, worth, misc, laser_vel"""
     def __init__(self, name:str, type_modifier:str, modifier: str) -> None:
         self.name = name
         self.type_modifier = type_modifier
@@ -118,3 +118,39 @@ class GoldenShot(Item):
 
     def modify(self, worth):
         return worth * self.worth
+    
+class ConcentratedBeam(Item):
+    "+10% laser speed, +1 pierce"
+    def __init__(self, name = 'Concentrated Beam', type_modifier = 'mult', modifier = 'laser_vel') -> None:
+        super().__init__(name, type_modifier, modifier)
+        self.laserspeed = 1.1
+        
+    def getModifiers(self):
+        pass
+
+    def modify_player(self, player):
+        pass
+
+    def modify_enemy(self, enemy):
+        pass
+        
+    def modify(self, laserspeed):
+        return laserspeed * self.laserspeed
+    
+class Multishot(Item):
+    "Adds 2 more shots to your laser, 33% less damage per laser"
+    def __init__(self, name = 'Multishot', type_modifier = 'mult', modifier = 'dmg') -> None:
+        super().__init__(name, type_modifier, modifier)
+        self.dmg = 0.66
+        
+    def getModifiers(self):
+        pass
+
+    def modify_player(self, player):
+        pass
+
+    def modify_enemy(self, enemy):
+        pass
+        
+    def modify(self, dmg):
+        return dmg * self.dmg

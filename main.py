@@ -1,14 +1,16 @@
 import pygame
+import sys, os
 from func import *
 from const import *
 from player import Player
 from enemy import Enemy
 from levelupscreen import levelupscreen
 from dmgclouds import DmgCloud
+from options import options
+from hangar import hangar
 pygame.font.init()
 
 def main():
-    pygame.display.set_caption("Space Shooter")
     run = True
     pause = False
     pause_cooldown = 10
@@ -42,7 +44,7 @@ def main():
         if player.getDmgFlat().is_integer():
             dmg_label = main_font.render(f"Damage: {int(player.getDmgFlat())}", 1, (255, 255, 255))
         else:
-            dmg_label = main_font.render(f"Damage: {player.getDmgFlat()}", 1, (255, 255, 255))
+            dmg_label = main_font.render(f"Damage: {round(player.getDmgFlat(), 2)}", 1, (255, 255, 255))
         critchance_label = main_font.render(f"Crit: {player.critchance}%", 1, (255, 255, 255))
         critdmg_label = main_font.render(f"Crit dmg: {player.critdmg}%", 1, (255, 255, 255))
         cooldown_label = main_font.render(f"Cooldown: {player.cooldown}", 1, (255, 255, 255))
@@ -136,7 +138,7 @@ def main():
                     player.move_y(player.vel)
                 else: player.y = HEIGHT - player.get_height() - 20
             if keys[pygame.K_SPACE] and pause == False: # shot
-                player.shootMult()
+                player.shoot()
             if keys[pygame.K_l]: # go to level up screen (debug)
                 levelupscreen(player, level)
             if keys[pygame.K_m]: # return to menu
@@ -176,26 +178,68 @@ def main():
             pygame.quit()
 
 def main_menu():
+    pygame.display.set_caption("Spacerogue")
     run = True
-    title_font = pygame.font.SysFont("lucidaconsole", 50)
+    title_font = pygame.font.SysFont("lucidaconsole", 40)
     pygame.display.set_mode((0,0), pygame.FULLSCREEN, display=0)
+    
+    def redraw_buttons(start_button:pygame.Rect, options_button:pygame.Rect, hangar_button:pygame.Rect, quit_button:pygame.Rect):
+        pygame.draw.rect(WIN, (29, 27, 27), start_button)
+        start_label = title_font.render("START", 1, (238, 240, 240))
+        WIN.blit(start_label, (start_button.x + (start_button.width - start_label.get_width())/2, start_button.y + (start_button.height - start_label.get_height())/2))
+        draw_border(WIN, (start_button.x, start_button.y), (start_button.x+start_button.width, start_button.y+start_button.height), 1, (255, 255, 255))
+        
+        pygame.draw.rect(WIN, (29, 27, 27), options_button)
+        options_label = title_font.render("OPTIONS", 1, (238, 240, 240))
+        WIN.blit(options_label, (options_button.x + (options_button.width - options_label.get_width())/2, options_button.y + (options_button.height - options_label.get_height())/2))
+        draw_border(WIN, (options_button.x, options_button.y), (options_button.x+options_button.width, options_button.y+options_button.height), 1, (255, 255, 255))
+        
+        pygame.draw.rect(WIN, (29, 27, 27), hangar_button)
+        hangar_label = title_font.render("HANGAR", 1, (238, 240, 240))
+        WIN.blit(hangar_label, (hangar_button.x + (hangar_button.width - hangar_label.get_width())/2, hangar_button.y + (hangar_button.height - hangar_label.get_height())/2))
+        draw_border(WIN, (hangar_button.x, hangar_button.y), (hangar_button.x+hangar_button.width, hangar_button.y+hangar_button.height), 1, (255, 255, 255))
+        
+        pygame.draw.rect(WIN, (29, 27, 27), quit_button)
+        quit_label = title_font.render("QUIT", 1, (238, 240, 240))
+        WIN.blit(quit_label, (quit_button.x + (quit_button.width - quit_label.get_width())/2, quit_button.y + (quit_button.height - quit_label.get_height())/2))
+        draw_border(WIN, (quit_button.x, quit_button.y), (quit_button.x+quit_button.width, quit_button.y+quit_button.height), 1, (255, 255, 255))
+        
+        pygame.display.update()
+        
+    start_button = pygame.Rect(SWIDTH/2 - SWIDTH/20, HEIGHT/2 - HEIGHT/20, SWIDTH/10, HEIGHT/20)
+    options_button = pygame.Rect(SWIDTH/2 - SWIDTH/20, start_button.y + start_button.height*1.5, SWIDTH/10, HEIGHT/20)
+    hangar_button = pygame.Rect(SWIDTH/2 - SWIDTH/20, options_button.y + options_button.height*1.5, SWIDTH/10, HEIGHT/20)
+    quit_button = pygame.Rect(SWIDTH/2 - SWIDTH/20, hangar_button.y + hangar_button.height*1.5, SWIDTH/10, HEIGHT/20)
+    
     while run:
         try:
-            draw_static_bg()
             bgMenu  = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background-black.png")), (SWIDTH, HEIGHT))
             WIN.blit(bgMenu, (0, 0))
-            title_label = title_font.render("Press SPACE to begin...", 1, (255, 255, 255))
-            WIN.blit(title_label, (WIDTH/2 - title_label.get_width()/2 + +OFFSET, HEIGHT/2 - title_label.get_height()/2))
-            pygame.display.update()
+            
             keys = pygame.key.get_pressed()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or keys[pygame.K_ESCAPE]:
                     run = False
-                if keys[pygame.K_SPACE]:
-                    if main() == "quit":
-                        pygame.quit()
-        except pygame.error as error:
-            print(error)
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        if start_button.collidepoint(event.pos):
+                            if main() == "quit":
+                                pygame.quit()
+                                run = False
+                        if options_button.collidepoint(event.pos):
+                            options()
+                        if hangar_button.collidepoint(event.pos):
+                            hangar()
+                        if quit_button.collidepoint(event.pos):
+                            pygame.quit()
+                            run = False
+            
+            if run:
+                redraw_buttons(start_button, options_button, hangar_button, quit_button)
+        except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(exc_type, fname, exc_tb.tb_lineno)
             run = False
             pygame.quit()
                 

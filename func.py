@@ -53,10 +53,18 @@ def open_savefile() -> list:
     with shelve.open('savefile/savefile') as f:
         cash = f['cash']
     return cash
-
-def draw_border(surface: pygame.Surface, x: int, y: int):
-    for i in range(4):
-        pygame.draw.rect(surface, (100,100,100), (x-i,y-i,99,99), 1)
+        
+def draw_border(surface: pygame.Surface, point1:tuple[int, int], point2:tuple[int, int], thicness:int, color:tuple[int, int, int]):
+    """point1: x, y of top left corner
+       point2: x, y of bottom right corner"""
+    rect1 = pygame.Rect(point1[0], point1[1], (point2[0]-point1[0]), thicness)
+    rect2 = pygame.Rect(point2[0]-thicness, point1[1], thicness, point2[1]-point1[1])
+    rect3 = pygame.Rect(point1[0], point2[1]-thicness, (point2[0]-point1[0]), thicness)
+    rect4 = pygame.Rect(point1[0], point1[1], thicness,(point2[1]-point1[1]))
+    pygame.draw.rect(surface, color, rect1)
+    pygame.draw.rect(surface, color, rect2)
+    pygame.draw.rect(surface, color, rect3)
+    pygame.draw.rect(surface, color, rect4)
      
 def getLevelupModifiers(player):
     from item import Item
@@ -73,7 +81,7 @@ def getLevelupModifiers(player):
     return modifier, luckycoin
         
 def levelup(choice: str, player):
-    from item import BetterLasers, LuckyCoin, JetEngine, BiggerGuns, GoldenShot
+    from item import BetterLasers, LuckyCoin, JetEngine, BiggerGuns, GoldenShot, ConcentratedBeam, Multishot
     from player import Player
     player:Player = player
     modifier, unluckycoin = getLevelupModifiers(player)
@@ -127,6 +135,8 @@ def levelup(choice: str, player):
         case 'Bigger Guns': player.items.append(BiggerGuns())
         case 'Lucky Coin': player.items.append(LuckyCoin())
         case 'Golden Shot': player.items.append(GoldenShot())
+        case 'Concentrated Beam': player.items.append(ConcentratedBeam())
+        case 'Multishot' : player.items.append(Multishot())
         case _: pass
     for item in player.items:
         if item.type_modifier == "rep":

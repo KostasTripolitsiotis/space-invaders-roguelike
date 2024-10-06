@@ -15,7 +15,7 @@ def main():
     pause = False
     pause_cooldown = 10
     level = 0
-    main_font = pygame.font.SysFont("lucidaconsole", 30)
+    main_font = pygame.font.SysFont("lucidaconsole", OPTIONS['fontsize']-5)
     lost_font = pygame.font.SysFont("comicsans", 100)
     
     enemies:list[Enemy] = []
@@ -120,7 +120,7 @@ def main():
                     save(player.cash)
                     run = False
                     return "quit"
-                     
+                        
             if keys[pygame.K_LEFT] and pause == False: # left
                 if player.x - (player.getVel()/10) >= 0+OFFSET: 
                     player.move_x(-player.vel)
@@ -175,46 +175,29 @@ def main():
             save(player.cash)
             print(error)
             run = False
-            pygame.quit()
+            pygame.quit() 
 
 def main_menu():
     pygame.display.set_caption("Spacerogue")
     run = True
-    title_font = pygame.font.SysFont("lucidaconsole", 40)
-    pygame.display.set_mode((0,0), pygame.FULLSCREEN, display=0)
-    
-    def redraw_buttons(start_button:pygame.Rect, options_button:pygame.Rect, hangar_button:pygame.Rect, quit_button:pygame.Rect):
-        pygame.draw.rect(WIN, (29, 27, 27), start_button)
-        start_label = title_font.render("START", 1, (238, 240, 240))
-        WIN.blit(start_label, (start_button.x + (start_button.width - start_label.get_width())/2, start_button.y + (start_button.height - start_label.get_height())/2))
-        draw_border(WIN, (start_button.x, start_button.y), (start_button.x+start_button.width, start_button.y+start_button.height), 1, (255, 255, 255))
-        
-        pygame.draw.rect(WIN, (29, 27, 27), options_button)
-        options_label = title_font.render("OPTIONS", 1, (238, 240, 240))
-        WIN.blit(options_label, (options_button.x + (options_button.width - options_label.get_width())/2, options_button.y + (options_button.height - options_label.get_height())/2))
-        draw_border(WIN, (options_button.x, options_button.y), (options_button.x+options_button.width, options_button.y+options_button.height), 1, (255, 255, 255))
-        
-        pygame.draw.rect(WIN, (29, 27, 27), hangar_button)
-        hangar_label = title_font.render("HANGAR", 1, (238, 240, 240))
-        WIN.blit(hangar_label, (hangar_button.x + (hangar_button.width - hangar_label.get_width())/2, hangar_button.y + (hangar_button.height - hangar_label.get_height())/2))
-        draw_border(WIN, (hangar_button.x, hangar_button.y), (hangar_button.x+hangar_button.width, hangar_button.y+hangar_button.height), 1, (255, 255, 255))
-        
-        pygame.draw.rect(WIN, (29, 27, 27), quit_button)
-        quit_label = title_font.render("QUIT", 1, (238, 240, 240))
-        WIN.blit(quit_label, (quit_button.x + (quit_button.width - quit_label.get_width())/2, quit_button.y + (quit_button.height - quit_label.get_height())/2))
-        draw_border(WIN, (quit_button.x, quit_button.y), (quit_button.x+quit_button.width, quit_button.y+quit_button.height), 1, (255, 255, 255))
-        
-        pygame.display.update()
+    title_font = pygame.font.SysFont("lucidaconsole", OPTIONS['fontsize'])
+    pygame.display.set_mode((0,0), pygame.FULLSCREEN, display=1)
         
     start_button = pygame.Rect(SWIDTH/2 - SWIDTH/20, HEIGHT/2 - HEIGHT/20, SWIDTH/10, HEIGHT/20)
     options_button = pygame.Rect(SWIDTH/2 - SWIDTH/20, start_button.y + start_button.height*1.5, SWIDTH/10, HEIGHT/20)
     hangar_button = pygame.Rect(SWIDTH/2 - SWIDTH/20, options_button.y + options_button.height*1.5, SWIDTH/10, HEIGHT/20)
     quit_button = pygame.Rect(SWIDTH/2 - SWIDTH/20, hangar_button.y + hangar_button.height*1.5, SWIDTH/10, HEIGHT/20)
     
-    while run:
+    while run: 
         try:
             bgMenu  = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background-black.png")), (SWIDTH, HEIGHT))
-            WIN.blit(bgMenu, (0, 0))
+            WIN.blit(bgMenu, (0, 0)) 
+            draw_basic_button(start_button, 'START')
+            draw_basic_button(options_button, 'OPTIONS')
+            draw_basic_button(hangar_button, 'HANGAR')
+            draw_basic_button(quit_button, 'QUIT')
+            
+            pygame.display.update()
             
             keys = pygame.key.get_pressed()
             for event in pygame.event.get():
@@ -234,8 +217,6 @@ def main_menu():
                             pygame.quit()
                             run = False
             
-            if run:
-                redraw_buttons(start_button, options_button, hangar_button, quit_button)
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]

@@ -31,7 +31,8 @@ BG = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background
 
 OPTIONS = {
     'res' : (0,0),
-    'sfx' : True
+    'sfx' : True,
+    'fontsize': int(HEIGHT/25)
     }
 
 COLOR_MAP = {

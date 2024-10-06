@@ -4,20 +4,14 @@ from const import *
 from func import *
 
 def options():
-    font = pygame.font.SysFont("lucidaconsole", 40)
+    font = pygame.font.SysFont("lucidaconsole", OPTIONS['fontsize'])
     run = True
     back_button = pygame.Rect(SWIDTH - SWIDTH/10 - 10, HEIGHT - HEIGHT/20 - 10, SWIDTH/10, HEIGHT/20)
     
-    def draw_buttons(back_button:pygame.Rect):
-        pygame.draw.rect(WIN, (29, 27, 27), back_button)
-        back_label = font.render("BACK", 1, (238, 240, 240))
-        WIN.blit(back_label, (back_button.x + (back_button.width - back_label.get_width())/2, back_button.y + (back_button.height - back_label.get_height())/2))
-        draw_border(WIN, (back_button.x, back_button.y), (back_button.x+back_button.width, back_button.y+back_button.height), 1, (255, 255, 255))
-        
-        pygame.display.update()
-    
     while run:
         try:
+            bgMenu  = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background-black.png")), (SWIDTH, HEIGHT))
+            WIN.blit(bgMenu, (0, 0))
             keys = pygame.key.get_pressed()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or keys[pygame.K_ESCAPE]:
@@ -27,7 +21,8 @@ def options():
                         if back_button.collidepoint(event.pos):
                                 run = False
             
-            draw_buttons(back_button)
+            draw_basic_button(back_button, 'BACK')
+            pygame.display.update()
             
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()

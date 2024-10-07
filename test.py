@@ -17,13 +17,37 @@
 # lucidaconsole
 # 
 # 
+import shelve
+from func import getActiceSpaceship
 import pygame
-def draw_border_new(point1:tuple[int, int], point2:tuple[int, int], thicness:int, color:tuple[int, int, int]):
-    """point1: x, y of top left corner
-       point2: x, y of bottom right corner"""
-    print(color, (point1[0], point1[1], (point2[0]-point1[0]), thicness))
-    print((255, 0, 0), (point1[0]-thicness, point1[0], thicness, point2[1]-point1[1]))
-    print((0, 255, 255), (point1[0], point2[1]-thicness, (point2[0]-point1[0]), thicness))
-    print((100, 0, 255), (point1[0], point1[1], thicness,(point2[0]-point1[0])))
-    
-draw_border_new([864, 486], [1056, 540], 2, (255, 255, 255))
+pygame.font.init()
+
+yellow = {
+    "color" : 'yellow',
+    # "spaceship_img" : YELLOW_SPACE_SHIP, 
+    # "laser_img" : YELLOW_LASER, 
+    "vel" : 20,
+    "laser_vel" : 15,
+    "dmg" : 10,
+    "health" : 100,
+    "cooldown" : 60,
+    "critchance" : 0,
+    "critdmg" : 200
+}
+def open_savefile() -> list:
+    with shelve.open('savefile/test') as f:
+        for item in f:
+            print(f'{item} = {f[item]}')
+            
+def save(cash: int) -> None:
+    with shelve.open('savefile/test') as f:
+        f['yellow'] = yellow
+        f['cash'] = cash
+        f['color'] = 'yellow'
+
+cash = 50
+# save(50)
+open_savefile()
+stats = getActiceSpaceship('yellow')
+
+print(stats)

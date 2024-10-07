@@ -32,8 +32,11 @@ yellow = {
     "laser_img" : YELLOW_LASER, 
     "vel" : 20,
     "laser_vel" : 15,
+    "dmg" : 10,
     "health" : 100,
     "cooldown" : 60,
+    "critchance" : 0,
+    "critdmg" : 200
 }
 
 blue = {

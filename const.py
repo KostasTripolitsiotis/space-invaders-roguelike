@@ -38,7 +38,8 @@ OPTIONS = {
 COLOR_MAP = {
                 "red": (RED_SPACE_SHIP, RED_LASER),
                 "green": (GREEN_SPACE_SHIP, GREEEN_LASER),
-                "blue": (BLUE_SPACE_SHIP, BLUE_LASER)
+                "blue": (BLUE_SPACE_SHIP, BLUE_LASER), 
+                "yellow": (YELLOW_SPACE_SHIP, YELLOW_LASER)
     }
 
 LEVELUP_CHOICES = ['+5 Speed', '-10% Cooldown', '+3 Damage', '+10 Health', '+1 Life', '+5% Crit', '+20% Crit Dmg']
@@ -47,5 +48,18 @@ ITEMS = ['Lucky Coin', 'Better Lasers', 'Jet Engines', 'Bigger Guns', 'Golden Sh
 LEVELS = {
     1: [["red", 5]],
     2: [["red", 6], ["", 3], ["green", 4]],
-    3: [["red", 10], ["", 3], ["green", 5]]
+    3: [["red", 10], ["", 3], ["green", 5]],
+    4: [["red", 3], ["", 2], ["green", 3], ["red", 4], ["", 2], ["green", 4], ["red", 5], ["", 2], ["green", 5]],
+    5:[["blue", 4], ["", 3], ['red', 5], ["", 2], ["green", 5], ["", 3], ["blue", 4]]
+}
+
+YELLOW_MAX = {
+    "color" : 'yellow',
+    "vel" : 50,
+    "laser_vel" : 15,
+    "dmg" : 17,
+    "health" : 200,
+    "cooldown" : 45,
+    "critchance" : 5,
+    "critdmg" : 250
 }

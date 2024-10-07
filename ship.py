@@ -1,7 +1,7 @@
 import pygame
 import random
 from laser import Laser, DiagonalLaser
-from const import HEIGHT
+from const import WIN
 from item import *
 
 class Ship:
@@ -20,6 +20,7 @@ class Ship:
         # self.firerate = firerate
         self.ship_img = None
         self.laser_img = None
+        self.mask:pygame.Mask = None
         self.lasers:list[Laser] = []
         self.cool_down_counter = 0
         self.move_counter_y = 0
@@ -27,9 +28,19 @@ class Ship:
         self.items: list[Item] = []
         self.id = 0
         self.laser_pierce = 0
+        self.gotHit = False
+        self.hitcounter = 120
         
     def draw(self, window:pygame.surface.Surface):
         window.blit(self.ship_img, (self.x, self.y))
+        if self.gotHit == True:
+            white_surface = self.mask.to_surface(WIN)
+            white_surface.set_colorkey((255, 0, 0))
+            self.ship_img.blit(white_surface, (0, 0))
+            self.hitcounter -= 1
+            if self.hitcounter == 0:
+                self.hitcounter = 2
+                self.gotHit = False
         for laser in self.lasers:
             laser.draw(window)
             

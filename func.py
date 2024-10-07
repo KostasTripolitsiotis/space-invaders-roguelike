@@ -54,6 +54,9 @@ def open_savefile() -> list:
     with shelve.open('savefile/savefile') as f:
         cash = f['cash']
     return cash
+def getActiceSpaceship(color:str) ->dict:
+    with shelve.open('savefile/test') as f:
+        return f[color]
         
 def draw_border(surface: pygame.Surface, point1:tuple[int, int], point2:tuple[int, int], thicness:int, color:tuple[int, int, int]):
     """point1: x, y of top left corner

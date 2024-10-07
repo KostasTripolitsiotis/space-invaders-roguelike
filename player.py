@@ -39,6 +39,7 @@ class Player(Ship):
             else:
                 for obj in objs:
                     if laser.collision(obj):
+                        obj.gotHit = True
                         shot = True
                         laser.pierce -= 1
                         laser.collided_enemies.append(obj.id)

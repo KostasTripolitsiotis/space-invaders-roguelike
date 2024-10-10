@@ -18,7 +18,7 @@
 # 
 # 
 import shelve
-from func import getActiceSpaceship
+from func import getActiveSpaceship
 import pygame
 pygame.font.init()
 
@@ -48,6 +48,6 @@ def save(cash: int) -> None:
 cash = 50
 # save(50)
 open_savefile()
-stats = getActiceSpaceship('yellow')
+stats = getActiveSpaceship('yellow')
 
 print(stats)

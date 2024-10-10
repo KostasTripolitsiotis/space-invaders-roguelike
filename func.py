@@ -54,7 +54,7 @@ def open_savefile() -> list:
     with shelve.open('savefile/savefile') as f:
         cash = f['cash']
     return cash
-def getActiceSpaceship(color:str) ->dict:
+def getShipStats(color:str) ->dict:
     with shelve.open('savefile/test') as f:
         return f[color]
         
@@ -70,9 +70,9 @@ def draw_border(surface: pygame.Surface, point1:tuple[int, int], point2:tuple[in
     pygame.draw.rect(surface, color, rect3)
     pygame.draw.rect(surface, color, rect4)
     
-def draw_basic_button(button:pygame.Rect, label:str):
+def draw_basic_button(button:pygame.Rect, label:str, fontzise = OPTIONS['fontsize']):
     pygame.draw.rect(WIN, (29, 27, 27), button)
-    font = pygame.font.SysFont("lucidaconsole", OPTIONS['fontsize'])
+    font = pygame.font.SysFont("lucidaconsole", fontzise)
     label = font.render(label, 1, (238, 240, 240))
     WIN.blit(label, (button.x + (button.width - label.get_width())/2, button.y + (button.height - label.get_height())/2))
     draw_border(WIN, (button.x, button.y), (button.x+button.width, button.y+button.height), 1, (255, 255, 255)) 

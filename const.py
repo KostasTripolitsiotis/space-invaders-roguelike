@@ -63,3 +63,13 @@ YELLOW_MAX = {
     "critchance" : 5,
     "critdmg" : 250
 }
+
+MAX_STATS = {
+    "vel" : 130,
+    "laser_vel" : 15,
+    "dmg" : 30,
+    "health" : 500,
+    "cooldown" : 35,
+    "critchance" : 15,
+    "critdmg" : 300
+}

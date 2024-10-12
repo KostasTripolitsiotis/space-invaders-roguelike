@@ -181,7 +181,7 @@ def main_menu():
     pygame.display.set_caption("Spacerogue")
     run = True
     title_font = pygame.font.SysFont("lucidaconsole", OPTIONS['fontsize'])
-    pygame.display.set_mode((0,0), pygame.FULLSCREEN, display=1)
+    pygame.display.set_mode((0,0), pygame.FULLSCREEN, display=1) 
         
     start_button = pygame.Rect(SWIDTH/2 - SWIDTH/20, HEIGHT/2 - HEIGHT/20, SWIDTH/10, HEIGHT/20)
     options_button = pygame.Rect(SWIDTH/2 - SWIDTH/20, start_button.y + start_button.height*1.5, SWIDTH/10, HEIGHT/20)

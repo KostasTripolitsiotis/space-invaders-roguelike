@@ -24,7 +24,9 @@ def getButtonsPos(shiplist:list[pygame.Surface]) -> list[tuple[int, int]]:
 
 def hangar():
     font = pygame.font.SysFont("lucidaconsole", OPTIONS['fontsize'])
-    stats_font = pygame.font.SysFont("lucidaconsole", int(OPTIONS['fontsize']/2))
+    title_font = pygame.font.SysFont("lucidaconsole", OPTIONS['fontsize']*2)
+    stats_font = pygame.font.SysFont("lucidaconsole", int(OPTIONS['fontsize']))
+    title_label = title_font.render("HANGAR", 1, (255, 255, 255))
     run = True
     back_button = pygame.Rect(WIDTH - WIDTH/10 + OFFSET - 10, HEIGHT - HEIGHT/20 - 10, WIDTH/10, HEIGHT/20)
     ship_list:list[pygame.Surface] = [YELLOW_SPACE_SHIP, GREEN_SPACE_SHIP, RED_SPACE_SHIP, BLUE_SPACE_SHIP]
@@ -32,12 +34,12 @@ def hangar():
     buttons_pos:list[tuple[int, int]] = getButtonsPos(ship_list)
     selected_spaceship = 'yellow'
     
-    vel_upgrade_button = pygame.Rect(0, 0, 64, 16)
-    dmg_upgrade_button = pygame.Rect(0, 0, 64, 16)
-    health_upgrdade_button = pygame.Rect(0, 0, 64, 16)
-    cooldown_upgrade_button = pygame.Rect(0, 0, 64, 16)
-    critchance_upgrade_button = pygame.Rect(0, 0, 64, 16)
-    critdmg_upgrade_button = pygame.Rect(0, 0, 64, 16)
+    vel_upgrade_button = pygame.Rect(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1)
+    dmg_upgrade_button = pygame.Rect(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1)
+    health_upgrdade_button = pygame.Rect(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1)
+    cooldown_upgrade_button = pygame.Rect(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1)
+    critchance_upgrade_button = pygame.Rect(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1)
+    critdmg_upgrade_button = pygame.Rect(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1)
     
     for i in range(len(ship_list)):
         buttons[ship_list[i]] = pygame.Rect(buttons_pos[i], (ship_list[i].get_width(), ship_list[i].get_height()))
@@ -46,6 +48,7 @@ def hangar():
         try:
             draw_static_bg()
             WIN.blit(BG, (0+OFFSET,0))
+            WIN.blit(title_label, (SWIDTH/2-title_label.get_width()/2, title_label.get_height()))
             
             pygame.draw.rect(WIN, (255, 255, 255), (OFFSET-1, 0, 1, HEIGHT))
             pygame.draw.rect(WIN, (255, 255, 255), (SWIDTH-OFFSET, 0, 1, HEIGHT))
@@ -70,50 +73,62 @@ def hangar():
             critchance_label = stats_font.render(f'Crit%: {str(stats['critchance'])}', 1, (255,255,255))
             critdmg_label = stats_font.render(f'Crit mult: {str(stats['critdmg'])}', 1, (255,255,255))
             
+            bar_width = 300
+            padx = (WIDTH-critdmg_label.get_width()-bar_width-stats_font.get_linesize()-1)/4
+            pady = HEIGHT/3 - (vel_label.get_height()*6)/3
+            padx_button = 15
+            
+            # blit selected spaceship
+            img_scale = 3/2
+            spaceship_image = pygame.transform.scale(COLOR_MAP[stats['color']][0], 
+                                                     (COLOR_MAP[stats['color']][0].get_width()*img_scale, 
+                                                      COLOR_MAP[stats['color']][0].get_height()*img_scale))
+            WIN.blit(spaceship_image, (SWIDTH/2 - spaceship_image.get_width()/2, 
+                                                    HEIGHT-spaceship_image.get_height()/2-pady))
+            
             # blit amount of stats
-            WIN.blit(vel_label, (OFFSET+critdmg_label.get_width()-vel_label.get_width(), 13))
-            WIN.blit(dmg_label, (OFFSET+critdmg_label.get_width()-dmg_label.get_width(), vel_label.get_height()*1+12))
-            WIN.blit(health_label, (OFFSET+critdmg_label.get_width()-health_label.get_width(), vel_label.get_height()*2+12))
-            WIN.blit(cooldown_label, (OFFSET+critdmg_label.get_width()-cooldown_label.get_width(), vel_label.get_height()*3+12))
-            WIN.blit(critchance_label, (OFFSET+critdmg_label.get_width()-critchance_label.get_width(), vel_label.get_height()*4+12))
-            WIN.blit(critdmg_label, (OFFSET, vel_label.get_height()*5+12))
-            WIN.blit(COLOR_MAP[stats['color']][0], (OFFSET, vel_label.get_height()*6+12))
+            WIN.blit(vel_label, (OFFSET+critdmg_label.get_width()-vel_label.get_width()+padx, 12+pady))
+            WIN.blit(dmg_label, (OFFSET+critdmg_label.get_width()-dmg_label.get_width()+padx, vel_label.get_height()*1+12+pady))
+            WIN.blit(health_label, (OFFSET+critdmg_label.get_width()-health_label.get_width()+padx, vel_label.get_height()*2+12+pady))
+            WIN.blit(cooldown_label, (OFFSET+critdmg_label.get_width()-cooldown_label.get_width()+padx, vel_label.get_height()*3+12+pady))
+            WIN.blit(critchance_label, (OFFSET+critdmg_label.get_width()-critchance_label.get_width()+padx, vel_label.get_height()*4+12+pady))
+            WIN.blit(critdmg_label, (OFFSET+padx, vel_label.get_height()*5+12+pady))
             
-            # ugrade progres bar and buttons
-            pygame.draw.rect(WIN, (70, 70, 70), (OFFSET+critdmg_label.get_width()+5, 12, 150, vel_label.get_height()-1))
-            pygame.draw.rect(WIN, (255, 255, 255), (OFFSET+critdmg_label.get_width()+5, 12, 150*(stats['vel']/stats_max['vel']), vel_label.get_height()-1))
-            vel_upgrade_button.topleft = [OFFSET+critdmg_label.get_width()+150+10, 12]
-            draw_basic_button(vel_upgrade_button, 'Upgrade', fontzise=12)
+            # blit ugrade progres bar and button           
+            pygame.draw.rect(WIN, (70, 70, 70), (OFFSET+critdmg_label.get_width()+5+padx, 12+pady, bar_width, vel_label.get_height()-1))
+            pygame.draw.rect(WIN, (255, 255, 255), (OFFSET+critdmg_label.get_width()+5+padx, 12+pady, bar_width*(stats['vel']/stats_max['vel']), vel_label.get_height()-1))
+            vel_upgrade_button.topleft = [OFFSET+critdmg_label.get_width()+bar_width+padx_button+padx, 12+pady]
+            draw_basic_button(vel_upgrade_button, 'Upgrade', fontzise=stats_font.get_linesize())
             
-            pygame.draw.rect(WIN, (70, 70, 70), (OFFSET+critdmg_label.get_width()+5, vel_label.get_height()*1+12, 150, dmg_label.get_height()-1))
-            pygame.draw.rect(WIN, (255, 255, 255), (OFFSET+critdmg_label.get_width()+5, vel_label.get_height()*1+12,
-                                                    150*(stats['dmg']/stats_max['dmg']), dmg_label.get_height()-1))
-            dmg_upgrade_button.topleft = [OFFSET+critdmg_label.get_width()+150+10, vel_label.get_height()*1+12]
-            draw_basic_button(dmg_upgrade_button, 'Upgrade', fontzise=12)
+            pygame.draw.rect(WIN, (70, 70, 70), (OFFSET+critdmg_label.get_width()+5+padx, vel_label.get_height()*1+12+pady, bar_width, dmg_label.get_height()-1))
+            pygame.draw.rect(WIN, (255, 255, 255), (OFFSET+critdmg_label.get_width()+5+padx, vel_label.get_height()*1+12+pady,
+                                                    bar_width*(stats['dmg']/stats_max['dmg']), dmg_label.get_height()-1))
+            dmg_upgrade_button.topleft = [OFFSET+critdmg_label.get_width()+bar_width+padx_button+padx, vel_label.get_height()*1+12+pady]
+            draw_basic_button(dmg_upgrade_button, 'Upgrade', fontzise=stats_font.get_linesize())
             
-            pygame.draw.rect(WIN, (70, 70, 70), (OFFSET+critdmg_label.get_width()+5, vel_label.get_height()*2+12, 150, health_label.get_height()-1))
-            pygame.draw.rect(WIN, (255, 255, 255), (OFFSET+critdmg_label.get_width()+5, vel_label.get_height()*2+12,
-                                                 150*(stats['health']/stats_max['health']), health_label.get_height()-1))
-            health_upgrdade_button.topleft = [OFFSET+critdmg_label.get_width()+150+10, vel_label.get_height()*2+12]
-            draw_basic_button(health_upgrdade_button, 'Upgrade', fontzise=12)
+            pygame.draw.rect(WIN, (70, 70, 70), (OFFSET+critdmg_label.get_width()+5+padx, vel_label.get_height()*2+12+pady, bar_width, health_label.get_height()-1))
+            pygame.draw.rect(WIN, (255, 255, 255), (OFFSET+critdmg_label.get_width()+5+padx, vel_label.get_height()*2+12+pady,
+                                                 bar_width*(stats['health']/stats_max['health']), health_label.get_height()-1))
+            health_upgrdade_button.topleft = [OFFSET+critdmg_label.get_width()+bar_width+padx_button+padx, vel_label.get_height()*2+12+pady]
+            draw_basic_button(health_upgrdade_button, 'Upgrade', fontzise=stats_font.get_linesize())
             
-            pygame.draw.rect(WIN, (70, 70, 70), (OFFSET+critdmg_label.get_width()+5, vel_label.get_height()*3+12, 150, cooldown_label.get_height()-1))
-            pygame.draw.rect(WIN, (255, 255, 255), (OFFSET+critdmg_label.get_width()+5, vel_label.get_height()*3+12,
-                                                 150*(stats_max['cooldown']/stats['cooldown']), cooldown_label.get_height()-1))
-            cooldown_upgrade_button.topleft = [OFFSET+critdmg_label.get_width()+150+10, vel_label.get_height()*3+12]
-            draw_basic_button(cooldown_upgrade_button, 'Upgrade', fontzise=12)
+            pygame.draw.rect(WIN, (70, 70, 70), (OFFSET+critdmg_label.get_width()+5+padx, vel_label.get_height()*3+12+pady, bar_width, cooldown_label.get_height()-1))
+            pygame.draw.rect(WIN, (255, 255, 255), (OFFSET+critdmg_label.get_width()+5+padx, vel_label.get_height()*3+12+pady,
+                                                 bar_width*(stats_max['cooldown']/stats['cooldown']), cooldown_label.get_height()-1))
+            cooldown_upgrade_button.topleft = [OFFSET+critdmg_label.get_width()+bar_width+padx_button+padx, vel_label.get_height()*3+12+pady]
+            draw_basic_button(cooldown_upgrade_button, 'Upgrade', fontzise=stats_font.get_linesize())
             
-            pygame.draw.rect(WIN, (70, 70, 70), (OFFSET+critdmg_label.get_width()+5, vel_label.get_height()*4+12, 150, critchance_label.get_height()-1))
-            pygame.draw.rect(WIN, (255, 255, 255), (OFFSET+critdmg_label.get_width()+5, vel_label.get_height()*4+12,
-                                                 150*(stats['critchance']/stats_max['critchance']), critchance_label.get_height()-1))
-            critchance_upgrade_button.topleft = [OFFSET+critdmg_label.get_width()+150+10, vel_label.get_height()*4+12]
-            draw_basic_button(critchance_upgrade_button, 'Upgrade', fontzise=12)
+            pygame.draw.rect(WIN, (70, 70, 70), (OFFSET+critdmg_label.get_width()+5+padx, vel_label.get_height()*4+12+pady, bar_width, critchance_label.get_height()-1))
+            pygame.draw.rect(WIN, (255, 255, 255), (OFFSET+critdmg_label.get_width()+5+padx, vel_label.get_height()*4+12+pady,
+                                                 bar_width*(stats['critchance']/stats_max['critchance']), critchance_label.get_height()-1))
+            critchance_upgrade_button.topleft = [OFFSET+critdmg_label.get_width()+bar_width+padx_button+padx, vel_label.get_height()*4+12+pady]
+            draw_basic_button(critchance_upgrade_button, 'Upgrade', fontzise=stats_font.get_linesize())
             
-            pygame.draw.rect(WIN, (70, 70, 70), (OFFSET+critdmg_label.get_width()+5, vel_label.get_height()*5+12, 150, critdmg_label.get_height()-1))
-            pygame.draw.rect(WIN, (255, 255, 255), (OFFSET+critdmg_label.get_width()+5, vel_label.get_height()*5+12,
-                                                 150*(stats['critdmg']/stats_max['critdmg']), critdmg_label.get_height()-1))
-            critdmg_upgrade_button.topleft = [OFFSET+critdmg_label.get_width()+150+10, vel_label.get_height()*5+12]
-            draw_basic_button(critdmg_upgrade_button, 'Upgrade', fontzise=12)
+            pygame.draw.rect(WIN, (70, 70, 70), (OFFSET+critdmg_label.get_width()+5+padx, vel_label.get_height()*5+12+pady, bar_width, critdmg_label.get_height()-1))
+            pygame.draw.rect(WIN, (255, 255, 255), (OFFSET+critdmg_label.get_width()+5+padx, vel_label.get_height()*5+12+pady,
+                                                 bar_width*(stats['critdmg']/stats_max['critdmg']), critdmg_label.get_height()-1))
+            critdmg_upgrade_button.topleft = [OFFSET+critdmg_label.get_width()+bar_width+padx_button+padx, vel_label.get_height()*5+12+pady]
+            draw_basic_button(critdmg_upgrade_button, 'Upgrade', fontzise=stats_font.get_linesize())
             
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()

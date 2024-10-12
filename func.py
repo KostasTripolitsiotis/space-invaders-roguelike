@@ -70,7 +70,7 @@ def draw_border(surface: pygame.Surface, point1:tuple[int, int], point2:tuple[in
     pygame.draw.rect(surface, color, rect3)
     pygame.draw.rect(surface, color, rect4)
     
-def draw_basic_button(button:pygame.Rect, label:str, fontzise = OPTIONS['fontsize']):
+def draw_basic_button(button:pygame.Rect, label:str, fontzise: pygame.font.SysFont = OPTIONS['fontsize']):
     pygame.draw.rect(WIN, (29, 27, 27), button)
     font = pygame.font.SysFont("lucidaconsole", fontzise)
     label = font.render(label, 1, (238, 240, 240))

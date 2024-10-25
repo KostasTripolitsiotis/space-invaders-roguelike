@@ -1,16 +1,27 @@
 from const import *
-from func import open_savefile
+from func import open_savefile, getShipStats
 import shelve
 
+# pcolor = "yellow"
+# pvel = 20
+# plaser_vel = 15
+# pdmg = 10
+# phealth = 100
+# pcooldown = 60
+# pcash = open_savefile()
+# pcritchance = 0
+# pcritdmg = 200
+
 pcolor = "yellow"
-pvel = 20
-plaser_vel = 15
-pdmg = 10
-phealth = 100
-pcooldown = 60
+stats = getShipStats(pcolor)
+pvel = stats['vel']
+plaser_vel = stats['laser_vel']
+pdmg = stats['dmg']
+phealth = stats['health']
+pcooldown = stats['cooldown']
 pcash = open_savefile()
-pcritchance = 0
-pcritdmg = 200
+pcritchance = stats['critchance']
+pcritdmg = stats['critdmg']
 
 player = {
     "color" : pcolor,
@@ -28,8 +39,6 @@ player = {
 
 yellow = {
     "color" : 'yellow',
-    "spaceship_img" : YELLOW_SPACE_SHIP, 
-    "laser_img" : YELLOW_LASER, 
     "vel" : 20,
     "laser_vel" : 15,
     "dmg" : 10,

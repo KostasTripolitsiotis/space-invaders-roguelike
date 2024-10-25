@@ -1,3 +1,5 @@
-'yellow', (0, 114)
+'yellow', (0, 121)
 'cash', (512, 5)
 'color', (1024, 21)
+'items_unlocked', (1536, 119)
+'items_selected', (2048, 5)

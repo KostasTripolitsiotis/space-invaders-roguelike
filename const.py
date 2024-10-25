@@ -10,6 +10,13 @@ WIDTH, HEIGHT = int(2*SWIDTH/3), user.GetSystemMetrics(1)
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 FPS = 120
+XMOD = SWIDTH/1920
+YMOD = HEIGHT/1080
+
+# Colors
+C_WHITE = (255, 255, 255)
+C_BLACK = (0, 0, 0)
+C_BLUEVIOLET = (138, 43, 226)
 
 # Load images
 RED_SPACE_SHIP = pygame.transform.flip(pygame.image.load(os.path.join("assets", "pixel_ship_red_small.png")), 0, 1)
@@ -53,11 +60,22 @@ LEVELS = {
     5:[["blue", 4], ["", 3], ['red', 5], ["", 2], ["green", 5], ["", 3], ["blue", 4]]
 }
 
+YELLOW_MIN = {
+    "color" : 'yellow',
+    "vel" : 20,
+    "laser_vel" : 15,
+    "dmg" : 10,
+    "health" : 100,
+    "cooldown" : 60,
+    "critchance" : 0,
+    "critdmg" : 200
+    }
+
 YELLOW_MAX = {
     "color" : 'yellow',
     "vel" : 50,
     "laser_vel" : 15,
-    "dmg" : 17,
+    "dmg" : 15,
     "health" : 200,
     "cooldown" : 45,
     "critchance" : 5,

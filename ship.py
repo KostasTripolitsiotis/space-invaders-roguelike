@@ -1,7 +1,7 @@
 import pygame
 import random
 from laser import Laser, DiagonalLaser
-from const import WIN
+from const import *
 from item import *
 
 class Ship:
@@ -18,9 +18,10 @@ class Ship:
         self.critdmg = critdmg
         self.cooldown = cooldown
         # self.firerate = firerate
-        self.ship_img = None
+        self.ship_img:pygame.surface.Surface = None
         self.laser_img = None
         self.mask:pygame.Mask = None
+        self.hit_img:pygame.surface.Surface = None
         self.lasers:list[Laser] = []
         self.cool_down_counter = 0
         self.move_counter_y = 0
@@ -29,18 +30,21 @@ class Ship:
         self.id = 0
         self.laser_pierce = 0
         self.gotHit = False
-        self.hitcounter = 120
-        
+        self.hitcounter_max = 4
+        self.hitcounter = self.hitcounter_max
+
     def draw(self, window:pygame.surface.Surface):
         window.blit(self.ship_img, (self.x, self.y))
         if self.gotHit == True:
-            white_surface = self.mask.to_surface(WIN)
-            white_surface.set_colorkey((255, 0, 0))
-            self.ship_img.blit(white_surface, (0, 0))
+            if self.hitcounter == int(self.hitcounter_max/2):
+                self.hit_img = self.mask.copy().to_surface(setcolor=C_BLACK, unsetcolor=(0, 0, 0, 0))
+            WIN.blit(self.hit_img, (self.x, self.y))
             self.hitcounter -= 1
-            if self.hitcounter == 0:
-                self.hitcounter = 2
+            if self.hitcounter <= 0:
+                self.hit_img = self.mask.copy().to_surface(setcolor=C_WHITE, unsetcolor=(0, 0, 0, 0))
+                self.hitcounter = self.hitcounter_max
                 self.gotHit = False
+
         for laser in self.lasers:
             laser.draw(window)
             
@@ -104,9 +108,9 @@ class Ship:
     
     def move_y(self, vel):
         if vel > 0:
-            vel = self.getVel()
+            vel = self.getVel()*YMOD
         else:
-            vel = -self.getVel()
+            vel = -self.getVel()*YMOD
         self.move_counter_y %= 10
         dv = vel % 10
         vel = int(vel/10)
@@ -122,9 +126,9 @@ class Ship:
             
     def move_x(self, vel):
         if vel > 0:
-            vel = self.getVel()
+            vel = self.getVel()*XMOD
         else:
-            vel = -self.getVel()
+            vel = -self.getVel()*XMOD
         self.move_counter_x %= 10
         dv = vel % 10
         vel = int(vel/10)

@@ -10,6 +10,7 @@ class Player(Ship):
         self.ship_img = player["spaceship_img"]
         self.laser_img = player["laser_img"]
         self.mask = pygame.mask.from_surface(self.ship_img)
+        self.hit_img = self.mask.copy().to_surface(setcolor=C_WHITE, unsetcolor=(0, 0, 0, 0))
         self.cash = float(player["cash"])
         self.lives = 5
         self.critchance = player["critchance"]

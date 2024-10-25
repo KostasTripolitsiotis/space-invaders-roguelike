@@ -8,6 +8,7 @@ from levelupscreen import levelupscreen
 from dmgclouds import DmgCloud
 from options import options
 from hangar import hangar
+from button import Button
 pygame.font.init()
 
 def main():
@@ -25,6 +26,9 @@ def main():
     enemy_timer = 0
     
     player = Player(SWIDTH/2 - YELLOW_SPACE_SHIP.get_width()/2, HEIGHT - YELLOW_SPACE_SHIP.get_height()-20)
+    items = getSavedItems('equiped')
+    for item in items:
+        levelup(item, player)
     
     clock = pygame.time.Clock()
     
@@ -156,10 +160,12 @@ def main():
                 if pause == False:
                     enemy.move_y(enemy.vel)
                     if enemy.move_lasers(player):
+                        player.gotHit = True
                         dmgclouds.append(DmgCloud(player.x+10, player.y, enemy.dmg))
                     enemy.shoot()
                     
                     if collide(enemy, player):
+                        player.gotHit = True
                         player.health -= enemy.health
                         dmgclouds.append(DmgCloud(enemy.x+10, enemy.y, float(enemy.health)))
                         enemies.remove(enemy)
@@ -181,21 +187,21 @@ def main_menu():
     pygame.display.set_caption("Spacerogue")
     run = True
     title_font = pygame.font.SysFont("lucidaconsole", OPTIONS['fontsize'])
-    pygame.display.set_mode((0,0), pygame.FULLSCREEN, display=1) 
-        
-    start_button = pygame.Rect(SWIDTH/2 - SWIDTH/20, HEIGHT/2 - HEIGHT/20, SWIDTH/10, HEIGHT/20)
-    options_button = pygame.Rect(SWIDTH/2 - SWIDTH/20, start_button.y + start_button.height*1.5, SWIDTH/10, HEIGHT/20)
-    hangar_button = pygame.Rect(SWIDTH/2 - SWIDTH/20, options_button.y + options_button.height*1.5, SWIDTH/10, HEIGHT/20)
-    quit_button = pygame.Rect(SWIDTH/2 - SWIDTH/20, hangar_button.y + hangar_button.height*1.5, SWIDTH/10, HEIGHT/20)
+    pygame.display.set_mode((0,0), pygame.FULLSCREEN, display=0) 
+    
+    start_button = Button(SWIDTH/2 - SWIDTH/20, HEIGHT/2 - HEIGHT/20, SWIDTH/10, HEIGHT/20, label='START')
+    options_button = Button(SWIDTH/2 - SWIDTH/20, start_button.y + start_button.height*1.5, SWIDTH/10, HEIGHT/20, label='OPTIONS')
+    hangar_button = Button(SWIDTH/2 - SWIDTH/20, options_button.y + options_button.height*1.5, SWIDTH/10, HEIGHT/20, label='HANGAR')
+    quit_button = Button(SWIDTH/2 - SWIDTH/20, hangar_button.y + hangar_button.height*1.5, SWIDTH/10, HEIGHT/20, label='QUIT')
     
     while run: 
         try:
             bgMenu  = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background-black.png")), (SWIDTH, HEIGHT))
             WIN.blit(bgMenu, (0, 0)) 
-            draw_basic_button(start_button, 'START')
-            draw_basic_button(options_button, 'OPTIONS')
-            draw_basic_button(hangar_button, 'HANGAR')
-            draw_basic_button(quit_button, 'QUIT')
+            start_button.draw(WIN)
+            options_button.draw(WIN)
+            hangar_button.draw(WIN)
+            quit_button.draw(WIN)
             
             pygame.display.update()
             
@@ -205,22 +211,22 @@ def main_menu():
                     run = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
-                        if start_button.collidepoint(event.pos):
+                        if start_button.rect.collidepoint(event.pos):
                             if main() == "quit":
                                 pygame.quit()
                                 run = False
-                        if options_button.collidepoint(event.pos):
+                        if options_button.rect.collidepoint(event.pos):
                             options()
-                        if hangar_button.collidepoint(event.pos):
+                        if hangar_button.rect.collidepoint(event.pos):
                             hangar()
-                        if quit_button.collidepoint(event.pos):
+                        if quit_button.rect.collidepoint(event.pos):
                             pygame.quit()
                             run = False
             
-        except Exception as e:
+        except Exception:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            print(exc_type, fname, exc_tb.tb_lineno, e)
+            print(exc_type, fname, exc_tb.tb_lineno, exc_obj)
             run = False
             pygame.quit()
                 

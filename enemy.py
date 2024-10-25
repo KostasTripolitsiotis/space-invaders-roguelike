@@ -10,6 +10,7 @@ class Enemy(Ship):
         super().__init__(x, y, vel, laser_vel, health, cooldown, dmg, critchance, critdmg)
         self.ship_img, self.laser_img = COLOR_MAP[color]
         self.mask = pygame.mask.from_surface(self.ship_img)
+        self.hit_img = self.mask.copy().to_surface(setcolor=C_WHITE, unsetcolor=(0, 0, 0, 0))
         self.firerate = firerate
         self.worth = worth
         self.id = random.randint(1, 10000)

@@ -18,7 +18,7 @@
 # 
 # 
 import shelve
-from func import getActiveSpaceship
+from func import getShipStats
 import pygame
 pygame.font.init()
 
@@ -41,13 +41,13 @@ def open_savefile() -> list:
             
 def save(cash: int) -> None:
     with shelve.open('savefile/test') as f:
-        f['yellow'] = yellow
-        f['cash'] = cash
-        f['color'] = 'yellow'
+        # f['items_unlocked'] = ['Lucky Coin', 'Better Lasers', 'Jet Engines', 'Bigger Guns', 'Golden Shot', 'Concentrated Beam', 'Multishot']
+        f['items_selected'] = []
 
 cash = 50
-# save(50)
+save(50)
 open_savefile()
-stats = getActiveSpaceship('yellow')
+stats = getShipStats('yellow')
 
 print(stats)
+

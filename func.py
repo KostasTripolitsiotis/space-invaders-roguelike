@@ -57,6 +57,28 @@ def open_savefile() -> list:
 def getShipStats(color:str) ->dict:
     with shelve.open('savefile/test') as f:
         return f[color]
+def saveStats(color, stats):
+    with shelve.open('savefile/test') as f:
+        f[color] = stats
+def editItems(item:str, op='add'):
+    """op = add | rm
+    Returns from savefile"""
+    with shelve.open('savefile/test') as f:
+        temp:list = []
+        if op == 'add' and not(item in f['items_selected']):
+            temp = f['items_selected']
+            temp.append(item)
+            f['items_selected'] = temp
+        elif op == 'rm' and item in f['items_selected']:
+            temp = f['items_selected']
+            temp.remove(item)
+            f['items_selected'] = temp
+def getSavedItems(op='equiped') -> list[str]:
+    """op = equiped | unlocked
+    Returns from savefile"""
+    with shelve.open('savefile/test') as f:
+        if op == 'equiped': return f['items_selected']
+        elif op == 'unlocked': return f['items_unlocked']
         
 def draw_border(surface: pygame.Surface, point1:tuple[int, int], point2:tuple[int, int], thicness:int, color:tuple[int, int, int]):
     """point1: x, y of top left corner
@@ -70,12 +92,12 @@ def draw_border(surface: pygame.Surface, point1:tuple[int, int], point2:tuple[in
     pygame.draw.rect(surface, color, rect3)
     pygame.draw.rect(surface, color, rect4)
     
-def draw_basic_button(button:pygame.Rect, label:str, fontzise: pygame.font.SysFont = OPTIONS['fontsize']):
-    pygame.draw.rect(WIN, (29, 27, 27), button)
+def draw_basic_button(button:pygame.Rect, label:str, fontzise: pygame.font.SysFont = OPTIONS['fontsize'], thic = 1, border_color = (255, 255, 255), color = (29, 27, 27)):
+    pygame.draw.rect(WIN, color, button)
     font = pygame.font.SysFont("lucidaconsole", fontzise)
     label = font.render(label, 1, (238, 240, 240))
     WIN.blit(label, (button.x + (button.width - label.get_width())/2, button.y + (button.height - label.get_height())/2))
-    draw_border(WIN, (button.x, button.y), (button.x+button.width, button.y+button.height), 1, (255, 255, 255)) 
+    draw_border(WIN, (button.x, button.y), (button.x+button.width, button.y+button.height), thic, border_color) 
      
 def getLevelupModifiers(player):
     from item import Item
@@ -158,3 +180,43 @@ def draw_static_bg():
         pygame.draw.rect(WIN, (55, 53, 59), (0, 0, SWIDTH, HEIGHT))
     except pygame.error as error:
         print(error)
+
+def upgrade(spaceship:str, stat:str) -> None:
+    from stats import yellow
+    spaceship_stats = {}
+    stats_max = {}
+    stats_min = {}
+    step = 5 # Step is how many upgrades before it reach its maximum
+    match spaceship:
+        case "yellow": 
+            spaceship_stats = yellow
+            stats_max = YELLOW_MAX
+            stats_min = YELLOW_MIN
+        case _:pass
+        
+    if spaceship_stats[stat] >= stats_max[stat] and stat != "cooldown": # if stat is max do nothing
+        return None
+    elif spaceship_stats[stat] <= stats_max[stat] and stat == "cooldown": # if stat is max do nothing
+        return None
+    
+    if stat != "cooldown":
+        spaceship_stats[stat] += (stats_max[stat]-stats_min[stat])/step # Increase by an amount so this*step = max
+        if spaceship_stats[stat] > stats_max[stat]: spaceship_stats[stat] = stats_max[stat]
+    else:
+        spaceship_stats[stat] -= (stats_min[stat]-stats_max[stat])/step # Increase by an amount so this*step = max
+        if spaceship_stats[stat] < stats_max[stat]: spaceship_stats[stat] = stats_max[stat]   
+    
+    saveStats(spaceship, spaceship_stats)
+    
+def resetYellow() -> None:  
+    player = {
+    "color" : 'yellow',
+    "vel" : 20,
+    "laser_vel" : 15,
+    "dmg" : 10,
+    "health" : 100,
+    "cooldown" : 60,
+    "critchance" : 0,
+    "critdmg" : 200
+    }
+    saveStats('yellow', player)

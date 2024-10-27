@@ -4,15 +4,6 @@ from const import *
 from func import *
 from button import Button
 
-yellow = {
-    'vel' : 65,
-    'laser_vel' : 5,
-    'health' : 100,
-    'cooldown' : 60,
-    'cash' : 8821,
-    'player_color' : 'yellow'
-}
-
 def getShipButtonsPos(shiplist:list[pygame.Surface]) -> list[tuple[int, int]]:
     pos_list:list[tuple[int, int]] = []
     for i in range(len(shiplist)):
@@ -83,7 +74,9 @@ def hangar():
                 button.draw(WIN)
             
             # Grab stats from selected spaceship     
-            stats = getShipStats(selected_spaceship)
+            # stats = getShipStats(selected_spaceship)
+            from stats import player
+            stats = player
             stats_max = MAX_STATS
             vel_label = stats_font.render(f'Speed: {str(stats["vel"])}', 1, (255,255,255))
             laser_vel_label = stats_font.render(f'Laser Speed: {str(stats["laser_vel"])}', 1, (255,255,255))

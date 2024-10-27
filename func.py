@@ -47,23 +47,39 @@ def getEnemyWave(level:int):
                 
     return enemytype, dtime
 
-def save(cash: int) -> None:
+def save_onExit(cash: int) -> None:
+    from stats import player
     with shelve.open('savefile/savefile') as f:
         f['cash'] = cash
-def open_savefile() -> list:
+    player['cash'] = cash
+
+def print_savefile() -> None:
     with shelve.open('savefile/savefile') as f:
-        cash = f['cash']
-    return cash
+        for item in f:
+            print(f'{item} = {f[item]}')
+
+def get_savefile():
+    with shelve.open('savefile/savefile') as f:
+        file = {}
+        for item in f:
+            file[item] = f[item]
+        return file
+            
 def getShipStats(color:str) ->dict:
-    with shelve.open('savefile/test') as f:
+    with shelve.open('savefile/savefile') as f:
         return f[color]
+    
 def saveStats(color, stats):
-    with shelve.open('savefile/test') as f:
+    from stats import player
+    with shelve.open('savefile/savefile') as f:
         f[color] = stats
+    for stat in stats:
+        player[stat] = stats[stat]
+        
 def editItems(item:str, op='add'):
     """op = add | rm
     Returns from savefile"""
-    with shelve.open('savefile/test') as f:
+    with shelve.open('savefile/savefile') as f:
         temp:list = []
         if op == 'add' and not(item in f['items_selected']):
             temp = f['items_selected']
@@ -73,10 +89,11 @@ def editItems(item:str, op='add'):
             temp = f['items_selected']
             temp.remove(item)
             f['items_selected'] = temp
+            
 def getSavedItems(op='equiped') -> list[str]:
     """op = equiped | unlocked
     Returns from savefile"""
-    with shelve.open('savefile/test') as f:
+    with shelve.open('savefile/savefile') as f:
         if op == 'equiped': return f['items_selected']
         elif op == 'unlocked': return f['items_unlocked']
         

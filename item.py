@@ -4,10 +4,12 @@ import random
 class Item(ABC):
     """Type Modifiers: add, mult, misc, rep
     Modify: speed, dmg, vel, crit, crit dmg, worth, misc, laser_vel"""
-    def __init__(self, name:str, type_modifier:str, modifier: str) -> None:
+    def __init__(self, name:str, type_modifier:str, modifier: str, description: str) -> None:
         self.name = name
         self.type_modifier = type_modifier
         self.modifier = modifier
+        self.description = description
+        self.img = None
         
     @abstractmethod
     def getModifiers(self):
@@ -28,7 +30,7 @@ class Item(ABC):
 class LuckyCoin(Item):
     "Doubles the buff from level up, but 10% chance it will buff the enemy"
     def __init__(self, name = "Lucky Coin", type_modifier = "misc", modifier = "misc") -> None:
-        super().__init__(name, type_modifier, modifier)
+        super().__init__(name, type_modifier, modifier, "x2 level up bonus\n10% will affect enemies")
         
     def getModifiers(self):
         modifiers = []
@@ -50,7 +52,7 @@ class LuckyCoin(Item):
 class BetterLasers(Item):
     "+1 Damage each level"
     def __init__(self, name = "Better Lasers", type_modifier = "rep", modifier = "dmg") -> None:
-        super().__init__(name, type_modifier, modifier)
+        super().__init__(name, type_modifier, modifier, description="+1dmg per level")
         self.damage = 1
         
     def getModifiers(self):
@@ -68,7 +70,7 @@ class BetterLasers(Item):
 class JetEngine(Item):
     "+10% Speed"
     def __init__(self, name = "Jet Engine", type_modifier = "mult", modifier = "speed") -> None:
-        super().__init__(name, type_modifier, modifier)
+        super().__init__(name, type_modifier, modifier, "+10% speed")
         self.speed = 1.1
         
     def getModifiers(self):
@@ -86,7 +88,7 @@ class JetEngine(Item):
 class BiggerGuns(Item):
     "+10% Damage"
     def __init__(self, name = "Bigger Guns", type_modifier = "mult", modifier = "dmg") -> None:
-        super().__init__(name, type_modifier, modifier)
+        super().__init__(name, type_modifier, modifier, "+10% dmg")
         self.dmg = 1.1
         
     def getModifiers(self):
@@ -104,7 +106,7 @@ class BiggerGuns(Item):
 class GoldenShot(Item):
     "10% more cash per spaceship"
     def __init__(self, name = "Golden Shot", type_modifier = "mult", modifier = "worth") -> None:
-        super().__init__(name, type_modifier, modifier)
+        super().__init__(name, type_modifier, modifier, "+10% cash")
         self.worth = 1.1
         
     def getModifiers(self):
@@ -122,7 +124,7 @@ class GoldenShot(Item):
 class ConcentratedBeam(Item):
     "+10% laser speed, +1 pierce"
     def __init__(self, name = 'Concentrated Beam', type_modifier = 'mult', modifier = 'laser_vel') -> None:
-        super().__init__(name, type_modifier, modifier)
+        super().__init__(name, type_modifier, modifier, "+1 pierce")
         self.laserspeed = 1.1
         
     def getModifiers(self):
@@ -140,7 +142,7 @@ class ConcentratedBeam(Item):
 class Multishot(Item):
     "Adds 2 more shots to your laser, 33% less damage per laser"
     def __init__(self, name = 'Multishot', type_modifier = 'mult', modifier = 'dmg') -> None:
-        super().__init__(name, type_modifier, modifier)
+        super().__init__(name, type_modifier, modifier, "+2 lasers")
         self.dmg = 0.66
         
     def getModifiers(self):

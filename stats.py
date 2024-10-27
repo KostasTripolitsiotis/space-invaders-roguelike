@@ -1,5 +1,5 @@
 from const import *
-from func import open_savefile, getShipStats
+from func import get_savefile, getShipStats
 import shelve
 
 # pcolor = "yellow"
@@ -19,7 +19,7 @@ plaser_vel = stats['laser_vel']
 pdmg = stats['dmg']
 phealth = stats['health']
 pcooldown = stats['cooldown']
-pcash = open_savefile()
+pcash = get_savefile()['cash']
 pcritchance = stats['critchance']
 pcritdmg = stats['critdmg']
 

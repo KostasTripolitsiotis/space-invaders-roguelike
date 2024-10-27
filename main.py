@@ -26,9 +26,12 @@ def main():
     enemy_timer = 0
     
     player = Player(SWIDTH/2 - YELLOW_SPACE_SHIP.get_width()/2, HEIGHT - YELLOW_SPACE_SHIP.get_height()-20)
+    print(player.cash)
     items = getSavedItems('equiped')
+    remain_items = ITEMS[:]
     for item in items:
         levelup(item, player)
+        remain_items.remove(item)
     
     clock = pygame.time.Clock()
     
@@ -101,13 +104,13 @@ def main():
             if lost:
                 if lost_count > FPS:
                     run = False
-                    save(player.cash)
+                    save_onExit(player.cash)
                 else:
                     continue 
             
             if enemy_timer == 0 and pause == False:
                 if len(timers) == 0 and len(enemies) == 0:
-                    levelupscreen(player, level)
+                    levelupscreen(player, level, remain_items)
                     level += 1
                     wave, timers = getEnemyWave(level)
                     enemy_timer = timers[0]
@@ -121,7 +124,7 @@ def main():
             keys = pygame.key.get_pressed()   
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or keys[pygame.K_ESCAPE]:
-                    save(player.cash)
+                    save_onExit(player.cash)
                     run = False
                     return "quit"
                         
@@ -144,7 +147,7 @@ def main():
             if keys[pygame.K_SPACE] and pause == False: # shot
                 player.shoot()
             if keys[pygame.K_l]: # go to level up screen (debug)
-                levelupscreen(player, level)
+                levelupscreen(player, level, remain_items)
             if keys[pygame.K_m]: # return to menu
                 run = False
             if keys[pygame.K_0]: # 0 cash
@@ -178,7 +181,7 @@ def main():
                 if playershot:
                     dmgclouds.append(DmgCloud(shotplace[0], shotplace[1], shotdmg, crit))
         except pygame.error as error:
-            save(player.cash)
+            save_onExit(player.cash)
             print(error)
             run = False
             pygame.quit() 

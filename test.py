@@ -17,37 +17,5 @@
 # lucidaconsole
 # 
 # 
-import shelve
-from func import getShipStats
-import pygame
-pygame.font.init()
-
-yellow = {
-    "color" : 'yellow',
-    # "spaceship_img" : YELLOW_SPACE_SHIP, 
-    # "laser_img" : YELLOW_LASER, 
-    "vel" : 20,
-    "laser_vel" : 15,
-    "dmg" : 10,
-    "health" : 100,
-    "cooldown" : 60,
-    "critchance" : 0,
-    "critdmg" : 200
-}
-def open_savefile() -> list:
-    with shelve.open('savefile/test') as f:
-        for item in f:
-            print(f'{item} = {f[item]}')
-            
-def save(cash: int) -> None:
-    with shelve.open('savefile/test') as f:
-        # f['items_unlocked'] = ['Lucky Coin', 'Better Lasers', 'Jet Engines', 'Bigger Guns', 'Golden Shot', 'Concentrated Beam', 'Multishot']
-        f['items_selected'] = []
-
-cash = 50
-save(50)
-open_savefile()
-stats = getShipStats('yellow')
-
-print(stats)
+print("10% speed")
 

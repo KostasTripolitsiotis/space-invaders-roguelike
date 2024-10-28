@@ -20,19 +20,19 @@ def levelupscreen(player, level, remaining_items):
     choice1 = random.choice(choices)
     choices.remove(choice1)
     if choice_type == "stat":
-        choice1_btn = Button((SWIDTH/2 - 50) - 200, HEIGHT/2 - 50, 100, 100, label=choice1, fontsize=main_font.get_linesize())
-    else: choice1_btn = Button((SWIDTH/2 - 50) - 100, HEIGHT/2 - 50, 100, 100, label=choice1, fontsize=main_font.get_linesize())
+        choice1_btn = Button((SWIDTH/2 - 50) - 200, HEIGHT/2 - 50, 100, 100, name=choice1, fontsize=main_font.get_linesize())
+    else: choice1_btn = Button((SWIDTH/2 - 50) - 100, HEIGHT/2 - 50, 100, 100, name=choice1, fontsize=main_font.get_linesize(), img=ITEM_TO_PNG[choice1])
     
     choice2 = random.choice(choices)
     choices.remove(choice2)
     if choice_type == "stat":
-        choice2_btn = Button(SWIDTH/2 - 50, HEIGHT/2 - 50, 100, 100, label=choice2, fontsize=main_font.get_linesize())
-    else: choice2_btn = Button((SWIDTH/2 - 50) + 100, HEIGHT/2 - 50, 100, 100, label=choice2, fontsize=main_font.get_linesize())
+        choice2_btn = Button(SWIDTH/2 - 50, HEIGHT/2 - 50, 100, 100, name=choice2, fontsize=main_font.get_linesize())
+    else: choice2_btn = Button((SWIDTH/2 - 50) + 100, HEIGHT/2 - 50, 100, 100, name=choice2, fontsize=main_font.get_linesize(), img=ITEM_TO_PNG[choice2])
     
     if choice_type == "stat":
         choice3 = random.choice(choices)
         choices.remove(choice3)
-        choice3_btn = Button((SWIDTH/2 - 50) + 200, HEIGHT/2 - 50, 100, 100, label=choice3, fontsize=main_font.get_linesize())
+        choice3_btn = Button((SWIDTH/2 - 50) + 200, HEIGHT/2 - 50, 100, 100, name=choice3, fontsize=main_font.get_linesize())
     
     while(run):
         draw_static_bg()

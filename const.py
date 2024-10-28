@@ -50,7 +50,28 @@ COLOR_MAP = {
     }
 
 LEVELUP_CHOICES = ['+5 Speed', '-10% Cooldown', '+3 Damage', '+10 Health', '+1 Life', '+5% Crit', '+20% Crit Dmg']
+
+### Items
 ITEMS = ['Lucky Coin', 'Better Lasers', 'Jet Engines', 'Bigger Guns', 'Golden Shot', 'Concentrated Beam', 'Multishot']
+# Items PNG
+LUCKY_COIN = pygame.image.load(os.path.join("assets", "golden coin.png"))
+MULTISHOT = pygame.image.load(os.path.join("assets", "multishot.png"))
+BETTER_LASERS = pygame.image.load(os.path.join("assets", "better_lasers.png"))
+JET_ENGINES = pygame.image.load(os.path.join("assets", "jet_engines.png"))
+BIGGER_GUNS = pygame.image.load(os.path.join("assets", "bigger_guns.png"))
+GOLDEN_SHOT = pygame.image.load(os.path.join("assets", "golden_shot.png"))
+CONCENTRATED_BEAM = pygame.image.load(os.path.join("assets", "concentrated_beam.png"))
+ITEMS_PNG = [LUCKY_COIN, BETTER_LASERS, JET_ENGINES, BIGGER_GUNS, GOLDEN_SHOT, CONCENTRATED_BEAM, MULTISHOT]
+
+ITEM_TO_PNG = {
+    'Lucky Coin' : LUCKY_COIN, 
+    'Better Lasers': BETTER_LASERS, 
+    'Jet Engines' : JET_ENGINES, 
+    'Bigger Guns' : BIGGER_GUNS, 
+    'Golden Shot' : GOLDEN_SHOT, 
+    'Concentrated Beam' : CONCENTRATED_BEAM, 
+    'Multishot' : MULTISHOT
+}
 
 LEVELS = {
     1: [["red", 5]],

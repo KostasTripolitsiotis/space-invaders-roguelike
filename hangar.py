@@ -30,17 +30,17 @@ def hangar():
     stats_font = pygame.font.SysFont("lucidaconsole", int(OPTIONS['fontsize']))
     title_label = title_font.render("HANGAR", 1, (255, 255, 255))
     run = True
-    back_btn = Button(WIDTH - WIDTH/10 + OFFSET - 10, HEIGHT - HEIGHT/20 - 10, WIDTH/10, HEIGHT/20, label='BACK')
+    back_btn = Button(WIDTH - WIDTH/10 + OFFSET - 10, HEIGHT - HEIGHT/20 - 10, WIDTH/10, HEIGHT/20, name='BACK')
     selected_spaceship = 'yellow'
     selected_stats = getShipStats(selected_spaceship)
     
     # Upgrade buttons
-    vel_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, label='Upgrade', fontsize=stats_font.get_linesize())
-    dmg_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, label='Upgrade', fontsize=stats_font.get_linesize())
-    health_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, label='Upgrade', fontsize=stats_font.get_linesize())
-    cooldown_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, label='Upgrade', fontsize=stats_font.get_linesize())
-    critchance_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, label='Upgrade', fontsize=stats_font.get_linesize())
-    critdmg_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, label='Upgrade', fontsize=stats_font.get_linesize())
+    vel_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, name='Upgrade', fontsize=stats_font.get_linesize())
+    dmg_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, name='Upgrade', fontsize=stats_font.get_linesize())
+    health_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, name='Upgrade', fontsize=stats_font.get_linesize())
+    cooldown_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, name='Upgrade', fontsize=stats_font.get_linesize())
+    critchance_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, name='Upgrade', fontsize=stats_font.get_linesize())
+    critdmg_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, name='Upgrade', fontsize=stats_font.get_linesize())
     upgrade_buttons = [(vel_upgrade_btn, "vel"), (dmg_upgrade_btn, "dmg"), (health_upgrade_btn, "health"), 
                        (cooldown_upgrade_btn, "cooldown"), (critchance_upgrade_btn, "critchance"), (critdmg_upgrade_btn, "critdmg")]
     
@@ -57,7 +57,14 @@ def hangar():
     item_buttons:list[Button] = []
     item_buttons_pos:list[tuple[int, int]] = getItemButtonPos(ITEMS)
     for i in range(len(ITEMS)):
-        item_buttons.append(Button(item_buttons_pos[i][0], item_buttons_pos[i][1], OFFSET/4, OFFSET/4, label=ITEMS[i], fontsize=item_font.get_linesize()))
+        try:
+            item_buttons.append(Button(item_buttons_pos[i][0], item_buttons_pos[i][1], OFFSET/4, OFFSET/4, name=ITEMS[i], fontsize=item_font.get_linesize(), img=ITEMS_PNG[i]))
+        except:
+            item_buttons.append(Button(item_buttons_pos[i][0], item_buttons_pos[i][1], OFFSET/4, OFFSET/4, name=ITEMS[i], fontsize=item_font.get_linesize()))
+        # if ITEMS[i] == 'Lucky Coin':
+        #     item_buttons.append(Button(item_buttons_pos[i][0], item_buttons_pos[i][1], OFFSET/4, OFFSET/4, name=ITEMS[i], fontsize=item_font.get_linesize(), img=LUCKY_COIN))
+        # else:
+        #     item_buttons.append(Button(item_buttons_pos[i][0], item_buttons_pos[i][1], OFFSET/4, OFFSET/4, name=ITEMS[i], fontsize=item_font.get_linesize()))
     equiped_items = getSavedItems('equiped')
     for button in item_buttons: 
         if button.label in equiped_items: button.clicked = True
@@ -190,8 +197,8 @@ def hangar():
                             if button.rect.collidepoint(event.pos):
                                 button.clicked = not(button.clicked) # Stay selected/de-selected
                                 if button.clicked == True:
-                                    editItems(button.label, 'add') # Add or remove selected item from player
-                                else: editItems(button.label, 'rm')
+                                    editItems(button.name, 'add') # Add or remove selected item from player
+                                else: editItems(button.name, 'rm')
             
             redraw_win()
             pygame.display.update()

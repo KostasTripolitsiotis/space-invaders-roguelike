@@ -191,10 +191,10 @@ def main_menu():
     title_font = pygame.font.SysFont("lucidaconsole", OPTIONS['fontsize'])
     pygame.display.set_mode((0,0), pygame.FULLSCREEN, display=0) 
     
-    start_button = Button(SWIDTH/2 - SWIDTH/20, HEIGHT/2 - HEIGHT/20, SWIDTH/10, HEIGHT/20, label='START')
-    options_button = Button(SWIDTH/2 - SWIDTH/20, start_button.y + start_button.height*1.5, SWIDTH/10, HEIGHT/20, label='OPTIONS')
-    hangar_button = Button(SWIDTH/2 - SWIDTH/20, options_button.y + options_button.height*1.5, SWIDTH/10, HEIGHT/20, label='HANGAR')
-    quit_button = Button(SWIDTH/2 - SWIDTH/20, hangar_button.y + hangar_button.height*1.5, SWIDTH/10, HEIGHT/20, label='QUIT')
+    start_button = Button(SWIDTH/2 - SWIDTH/20, HEIGHT/2 - HEIGHT/20, SWIDTH/10, HEIGHT/20, name='START')
+    options_button = Button(SWIDTH/2 - SWIDTH/20, start_button.y + start_button.height*1.5, SWIDTH/10, HEIGHT/20, name='OPTIONS')
+    hangar_button = Button(SWIDTH/2 - SWIDTH/20, options_button.y + options_button.height*1.5, SWIDTH/10, HEIGHT/20, name='HANGAR')
+    quit_button = Button(SWIDTH/2 - SWIDTH/20, hangar_button.y + hangar_button.height*1.5, SWIDTH/10, HEIGHT/20, name='QUIT')
     
     while run: 
         try:

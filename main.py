@@ -26,7 +26,6 @@ def main():
     enemy_timer = 0
     
     player = Player(SWIDTH/2 - YELLOW_SPACE_SHIP.get_width()/2, HEIGHT - YELLOW_SPACE_SHIP.get_height()-20)
-    print(player.cash)
     items = getSavedItems('equiped')
     remain_items = ITEMS[:]
     for item in items:
@@ -222,6 +221,7 @@ def main_menu():
                             options()
                         if hangar_button.rect.collidepoint(event.pos):
                             hangar()
+                            print(getShipStats('yellow'))
                         if quit_button.rect.collidepoint(event.pos):
                             pygame.quit()
                             run = False

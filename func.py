@@ -198,15 +198,14 @@ def draw_static_bg():
     except pygame.error as error:
         print(error)
 
-def upgrade(spaceship:str, stat:str) -> None:
-    from stats import yellow
+def upgrade(spaceship:str, stat:str) -> int | float:
     spaceship_stats = {}
     stats_max = {}
     stats_min = {}
     step = 5 # Step is how many upgrades before it reach its maximum
     match spaceship:
         case "yellow": 
-            spaceship_stats = yellow
+            spaceship_stats = getShipStats('yellow')
             stats_max = YELLOW_MAX
             stats_min = YELLOW_MIN
         case _:pass
@@ -224,8 +223,9 @@ def upgrade(spaceship:str, stat:str) -> None:
         if spaceship_stats[stat] < stats_max[stat]: spaceship_stats[stat] = stats_max[stat]   
     
     saveStats(spaceship, spaceship_stats)
+    return spaceship_stats[stat]
     
-def resetYellow() -> None:  
+def resetYellow() -> dict:  
     player = {
     "color" : 'yellow',
     "vel" : 20,
@@ -237,3 +237,4 @@ def resetYellow() -> None:
     "critdmg" : 200
     }
     saveStats('yellow', player)
+    return player

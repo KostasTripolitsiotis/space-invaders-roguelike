@@ -17,5 +17,3 @@
 # lucidaconsole
 # 
 # 
-print("10% speed")
-

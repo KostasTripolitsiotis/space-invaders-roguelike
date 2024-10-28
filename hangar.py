@@ -32,6 +32,7 @@ def hangar():
     run = True
     back_btn = Button(WIDTH - WIDTH/10 + OFFSET - 10, HEIGHT - HEIGHT/20 - 10, WIDTH/10, HEIGHT/20, label='BACK')
     selected_spaceship = 'yellow'
+    selected_stats = getShipStats(selected_spaceship)
     
     # Upgrade buttons
     vel_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, label='Upgrade', fontsize=stats_font.get_linesize())
@@ -73,18 +74,15 @@ def hangar():
             for button in ship_buttons:
                 button.draw(WIN)
             
-            # Grab stats from selected spaceship     
-            # stats = getShipStats(selected_spaceship)
-            from stats import player
-            stats = player
+            # Stats labels 
             stats_max = MAX_STATS
-            vel_label = stats_font.render(f'Speed: {str(stats["vel"])}', 1, (255,255,255))
-            laser_vel_label = stats_font.render(f'Laser Speed: {str(stats["laser_vel"])}', 1, (255,255,255))
-            dmg_label = stats_font.render(f'Damage: {str(stats["dmg"])}', 1, (255,255,255))
-            health_label = stats_font.render(f'Health: {str(stats["health"])}', 1, (255,255,255))
-            cooldown_label = stats_font.render(f'Cooldown {str(stats["cooldown"])}', 1, (255,255,255))
-            critchance_label = stats_font.render(f'Crit%: {str(stats["critchance"])}', 1, (255,255,255))
-            critdmg_label = stats_font.render(f'Crit mult: {str(stats["critdmg"])}', 1, (255,255,255))
+            vel_label = stats_font.render(f'Speed: {str(selected_stats["vel"])}', 1, (255,255,255))
+            laser_vel_label = stats_font.render(f'Laser Speed: {str(selected_stats["laser_vel"])}', 1, (255,255,255))
+            dmg_label = stats_font.render(f'Damage: {str(selected_stats["dmg"])}', 1, (255,255,255))
+            health_label = stats_font.render(f'Health: {str(selected_stats["health"])}', 1, (255,255,255))
+            cooldown_label = stats_font.render(f'Cooldown {str(selected_stats["cooldown"])}', 1, (255,255,255))
+            critchance_label = stats_font.render(f'Crit%: {str(selected_stats["critchance"])}', 1, (255,255,255))
+            critdmg_label = stats_font.render(f'Crit mult: {str(selected_stats["critdmg"])}', 1, (255,255,255))
             
             bar_width = 300
             padx = (WIDTH-critdmg_label.get_width()-bar_width-stats_font.get_linesize()-1)/4
@@ -93,9 +91,9 @@ def hangar():
             
             # blit selected spaceship
             img_scale = 3/2
-            spaceship_image = pygame.transform.scale(COLOR_MAP[stats['color']][0], 
-                                                     (COLOR_MAP[stats['color']][0].get_width()*img_scale, 
-                                                      COLOR_MAP[stats['color']][0].get_height()*img_scale))
+            spaceship_image = pygame.transform.scale(COLOR_MAP[selected_stats['color']][0], 
+                                                     (COLOR_MAP[selected_stats['color']][0].get_width()*img_scale, 
+                                                      COLOR_MAP[selected_stats['color']][0].get_height()*img_scale))
             WIN.blit(spaceship_image, (SWIDTH/2 - spaceship_image.get_width()/2, 
                                                     HEIGHT-spaceship_image.get_height()/2-pady))
             
@@ -110,7 +108,7 @@ def hangar():
             ### blit ugrade progres bar and button 
             # Speed          
             pygame.draw.rect(WIN, (70, 70, 70), (OFFSET+critdmg_label.get_width()+5+padx, 12+pady, bar_width, vel_label.get_height()-1))
-            pygame.draw.rect(WIN, (255, 255, 255), (OFFSET+critdmg_label.get_width()+5+padx, 12+pady, bar_width*(stats['vel']/stats_max['vel']), vel_label.get_height()-1))
+            pygame.draw.rect(WIN, (255, 255, 255), (OFFSET+critdmg_label.get_width()+5+padx, 12+pady, bar_width*(selected_stats['vel']/stats_max['vel']), vel_label.get_height()-1))
             vel_upgrade_btn.x, vel_upgrade_btn.y = OFFSET+critdmg_label.get_width()+bar_width+padx_button+padx, 12+pady
             vel_upgrade_btn.updateRect()
             vel_upgrade_btn.draw(WIN)
@@ -118,7 +116,7 @@ def hangar():
             # Damage
             pygame.draw.rect(WIN, (70, 70, 70), (OFFSET+critdmg_label.get_width()+5+padx, vel_label.get_height()*1+12+pady, bar_width, dmg_label.get_height()-1))
             pygame.draw.rect(WIN, (255, 255, 255), (OFFSET+critdmg_label.get_width()+5+padx, vel_label.get_height()*1+12+pady,
-                                                    bar_width*(stats['dmg']/stats_max['dmg']), dmg_label.get_height()-1))
+                                                    bar_width*(selected_stats['dmg']/stats_max['dmg']), dmg_label.get_height()-1))
             dmg_upgrade_btn.x, dmg_upgrade_btn.y = OFFSET+critdmg_label.get_width()+bar_width+padx_button+padx, vel_label.get_height()*1+12+pady
             dmg_upgrade_btn.updateRect()
             dmg_upgrade_btn.draw(WIN)
@@ -126,7 +124,7 @@ def hangar():
             # Health
             pygame.draw.rect(WIN, (70, 70, 70), (OFFSET+critdmg_label.get_width()+5+padx, vel_label.get_height()*2+12+pady, bar_width, health_label.get_height()-1))
             pygame.draw.rect(WIN, (255, 255, 255), (OFFSET+critdmg_label.get_width()+5+padx, vel_label.get_height()*2+12+pady,
-                                                 bar_width*(stats['health']/stats_max['health']), health_label.get_height()-1))
+                                                 bar_width*(selected_stats['health']/stats_max['health']), health_label.get_height()-1))
             health_upgrade_btn.x, health_upgrade_btn.y = OFFSET+critdmg_label.get_width()+bar_width+padx_button+padx, vel_label.get_height()*2+12+pady
             health_upgrade_btn.updateRect()
             health_upgrade_btn.draw(WIN)
@@ -134,21 +132,21 @@ def hangar():
             # Cooldown
             pygame.draw.rect(WIN, (70, 70, 70), (OFFSET+critdmg_label.get_width()+5+padx, vel_label.get_height()*3+12+pady, bar_width, cooldown_label.get_height()-1))
             pygame.draw.rect(WIN, (255, 255, 255), (OFFSET+critdmg_label.get_width()+5+padx, vel_label.get_height()*3+12+pady,
-                                                 bar_width*(stats_max['cooldown']/stats['cooldown']), cooldown_label.get_height()-1))
+                                                 bar_width*(stats_max['cooldown']/selected_stats['cooldown']), cooldown_label.get_height()-1))
             cooldown_upgrade_btn.x, cooldown_upgrade_btn.y = OFFSET+critdmg_label.get_width()+bar_width+padx_button+padx, vel_label.get_height()*3+12+pady
             cooldown_upgrade_btn.updateRect()
             cooldown_upgrade_btn.draw(WIN)
             
             pygame.draw.rect(WIN, (70, 70, 70), (OFFSET+critdmg_label.get_width()+5+padx, vel_label.get_height()*4+12+pady, bar_width, critchance_label.get_height()-1))
             pygame.draw.rect(WIN, (255, 255, 255), (OFFSET+critdmg_label.get_width()+5+padx, vel_label.get_height()*4+12+pady,
-                                                 bar_width*(stats['critchance']/stats_max['critchance']), critchance_label.get_height()-1))
+                                                 bar_width*(selected_stats['critchance']/stats_max['critchance']), critchance_label.get_height()-1))
             critchance_upgrade_btn.x, critchance_upgrade_btn.y = OFFSET+critdmg_label.get_width()+bar_width+padx_button+padx, vel_label.get_height()*4+12+pady
             critchance_upgrade_btn.updateRect()
             critchance_upgrade_btn.draw(WIN)
             
             pygame.draw.rect(WIN, (70, 70, 70), (OFFSET+critdmg_label.get_width()+5+padx, vel_label.get_height()*5+12+pady, bar_width, critdmg_label.get_height()-1))
             pygame.draw.rect(WIN, (255, 255, 255), (OFFSET+critdmg_label.get_width()+5+padx, vel_label.get_height()*5+12+pady,
-                                                 bar_width*(stats['critdmg']/stats_max['critdmg']), critdmg_label.get_height()-1))
+                                                 bar_width*(selected_stats['critdmg']/stats_max['critdmg']), critdmg_label.get_height()-1))
             critdmg_upgrade_btn.x, critdmg_upgrade_btn.y = OFFSET+critdmg_label.get_width()+bar_width+padx_button+padx, vel_label.get_height()*5+12+pady
             critdmg_upgrade_btn.updateRect()
             critdmg_upgrade_btn.draw(WIN)
@@ -161,37 +159,39 @@ def hangar():
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             print(exc_type, fname, exc_tb.tb_lineno, e)
-   
-    def checkEvents(keys, event, run, selected_spaceship):
-        """Checks for events every clock cycle"""
-        if event.type == pygame.QUIT or keys[pygame.K_ESCAPE]:
-            run = False
-        if event.type == keys[pygame.K_r]: # Reset spaceship stats to original
-            resetYellow()
-        if event.type == pygame.MOUSEBUTTONDOWN: # Check for mouseclick
-            if event.button == 1:
-                if back_btn.rect.collidepoint(event.pos):
-                    run = False
-                for button in ship_buttons: # Check all spaceship on the left (to be removed)
-                    if button.rect.collidepoint(event.pos):
-                        if button.img == YELLOW_SPACE_SHIP:
-                            selected_spaceship = 'yellow'
-                for button in upgrade_buttons: # Check all upgrade buttons
-                    if button[0].rect.collidepoint(event.pos):
-                        upgrade(selected_spaceship, button[1])
-                for button in item_buttons: # Check all items
-                    if button.rect.collidepoint(event.pos):
-                        button.clicked = not(button.clicked) # Stay selected/de-selected
-                        if button.clicked == True:
-                            editItems(button.label, 'add') # Add or remove selected item from player
-                        else: editItems(button.label, 'rm')
-        return run, selected_spaceship
     
     while run:
         try:
             keys = pygame.key.get_pressed()
             for event in pygame.event.get():
-                run, selected_spaceship = checkEvents(keys, event, run, selected_spaceship)
+                
+                if event.type == pygame.QUIT or keys[pygame.K_ESCAPE]:
+                    run = False
+                if keys[pygame.K_r]: # Reset spaceship stats to original
+                    selected_stats = resetYellow()
+                    
+                if event.type == pygame.MOUSEBUTTONDOWN: # Check for mouseclick
+                    if event.button == 1:
+                        if back_btn.rect.collidepoint(event.pos):
+                            run = False
+                            
+                        for button in ship_buttons: # Check all spaceship on the left (to be removed)
+                            if button.rect.collidepoint(event.pos):
+                                if button.img == YELLOW_SPACE_SHIP:
+                                    selected_spaceship = 'yellow'
+                                    
+                        for button in upgrade_buttons: # Check all upgrade buttons
+                            if button[0].rect.collidepoint(event.pos):
+                                stat = upgrade(selected_spaceship, button[1])
+                                if stat != None:
+                                    selected_stats[button[1]] = stat
+                                
+                        for button in item_buttons: # Check all items
+                            if button.rect.collidepoint(event.pos):
+                                button.clicked = not(button.clicked) # Stay selected/de-selected
+                                if button.clicked == True:
+                                    editItems(button.label, 'add') # Add or remove selected item from player
+                                else: editItems(button.label, 'rm')
             
             redraw_win()
             pygame.display.update()

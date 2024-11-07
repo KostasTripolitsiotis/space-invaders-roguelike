@@ -131,7 +131,7 @@ def getLevelupModifiers(player):
     return modifier, luckycoin
         
 def levelup(choice: str, player):
-    from item import BetterLasers, LuckyCoin, JetEngine, BiggerGuns, GoldenShot, ConcentratedBeam, Multishot
+    from item import BetterLasers, LuckyCoin, JetEngine, BiggerGuns, GoldenShot, ConcentratedBeam, Multishot, Boosters
     from player import Player
     player:Player = player
     modifier, unluckycoin = getLevelupModifiers(player)
@@ -187,6 +187,7 @@ def levelup(choice: str, player):
         case 'Golden Shot': player.items.append(GoldenShot())
         case 'Concentrated Beam': player.items.append(ConcentratedBeam())
         case 'Multishot' : player.items.append(Multishot())
+        case 'Boosters' : player.active_items.append(Boosters())
         case _: pass
     for item in player.items:
         if item.type_modifier == "rep":
@@ -194,7 +195,7 @@ def levelup(choice: str, player):
         
 def draw_static_bg():
     try:
-        pygame.draw.rect(WIN, (55, 53, 59), (0, 0, SWIDTH, HEIGHT))
+        pygame.draw.rect(WIN, C_BACKROUND, (0, 0, SWIDTH, HEIGHT))
     except pygame.error as error:
         print(error)
 

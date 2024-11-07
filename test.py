@@ -17,3 +17,7 @@
 # lucidaconsole
 # 
 # 
+l = [4, 5, 50, 4.2, 5.0, 'a', 'b']
+for item in l:
+    if (isinstance(item, float) and item.is_integer()):
+        print(item)

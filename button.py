@@ -4,7 +4,7 @@ from const import *
 
 class Button():
     def __init__(self, x:int, y:int, width:int, height:int, *, name:str = "", img:pygame.Surface = None, 
-                 border:bool = True, border_thic:int = 1, border_color:tuple[int, int, int] = (255, 255, 255), 
+                 border:bool = True, border_thic:int = 1, border_color:tuple[int, int, int] = C_WHITE, 
                  border_thic_active:int = 3, border_color_active:tuple[int, int, int] = (100, 100, 100),
                  clicked:bool = False, fontsize:int = OPTIONS['fontsize'], color:tuple[int, int, int] = (29, 27, 27)):
         self.x = x
@@ -14,7 +14,7 @@ class Button():
         self.rect = pygame.Rect(x, y, width, height)
         self.name = name
         font = pygame.font.SysFont("lucidaconsole", fontsize)
-        self.label = font.render(name, 1, (255, 255, 255))
+        self.label = font.render(name, 1, C_WHITE)
         self.fontsize = fontsize
         self.img = img
         if self.img != None:

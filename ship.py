@@ -84,9 +84,11 @@ class Ship:
         for item in self.items:
             if item.modifier == "speed" and item.type_modifier == "add":
                 vel = item.modify(vel)
+                
         for item in self.items:
             if item.modifier == "speed" and item.type_modifier == "mult":
                 vel = item.modify(vel)
+                
         return vel
     
     def getLaserVel(self):

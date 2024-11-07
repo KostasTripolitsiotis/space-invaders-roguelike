@@ -24,8 +24,7 @@ class Player(Ship):
             "cooldown" : 1, 
             "worth" : 1
         }
-        # self.items.append(BetterLasers())
-        # self.items.append(JetEngine())
+        self.active_items:list[Item] = []
         
     def move_lasers(self, objs:list[Ship]):
         shot = False
@@ -84,4 +83,15 @@ class Player(Ship):
             healthbar_label = font.render(f"{int(self.health)}/{self.max_health}", 1, (0, 0, 0))
         else: healthbar_label = font.render(f"{self.health}/{self.max_health}", 1, (0, 0, 0))
         window.blit(healthbar_label, healthbar_label.get_rect(center = (self.x + self.ship_img.get_width()/2, self.y + self.ship_img.get_height() + healthbar_label.get_height() + 4)))
-                        
+
+    def useAbility(self, slot):
+        if (slot > len(self.active_items)-1): return None # If pressed slot is larger than active items length do nothing
+        else: 
+            self.active_items[slot].activate()
+    
+    def getVel(self):
+        vel = super().getVel()
+        
+        for item in self.active_items:
+            vel = item.modify(vel)
+        return vel

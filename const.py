@@ -9,7 +9,7 @@ OFFSET = int(SWIDTH/6)
 WIDTH, HEIGHT = int(2*SWIDTH/3), user.GetSystemMetrics(1)
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
-FPS = 120
+FPS = 60
 XMOD = SWIDTH/1920
 YMOD = HEIGHT/1080
 
@@ -17,8 +17,10 @@ YMOD = HEIGHT/1080
 C_WHITE = (255, 255, 255)
 C_BLACK = (0, 0, 0)
 C_BLUEVIOLET = (138, 43, 226)
+C_BACKROUND = (55, 53, 59)
 
-# Load images
+### Load images
+# Enemy ships
 RED_SPACE_SHIP = pygame.transform.flip(pygame.image.load(os.path.join("assets", "pixel_ship_red_small.png")), 0, 1)
 GREEN_SPACE_SHIP = pygame.transform.flip(pygame.image.load(os.path.join("assets", "pixel_ship_green_small.png")), 0, 1)
 BLUE_SPACE_SHIP = pygame.transform.flip(pygame.image.load(os.path.join("assets", "pixel_ship_blue_small.png")), 0, 1)
@@ -34,7 +36,10 @@ YELLOW_LASER = pygame.image.load(os.path.join("assets", "pixel_laser_yellow.png"
 
 # Backround
 BG = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background-black.png")), (WIDTH, HEIGHT))
-#BG_STATIC = pygame.Rect((0, 0, SWIDTH, HEIGHT), )
+
+# Misc
+CHECKMARK = pygame.image.load(os.path.join("assets", "checkmark.png"))
+XMARK = pygame.image.load(os.path.join("assets", "xmark.png"))
 
 OPTIONS = {
     'res' : (0,0),
@@ -52,7 +57,7 @@ COLOR_MAP = {
 LEVELUP_CHOICES = ['+5 Speed', '-10% Cooldown', '+3 Damage', '+10 Health', '+1 Life', '+5% Crit', '+20% Crit Dmg']
 
 ### Items
-ITEMS = ['Lucky Coin', 'Better Lasers', 'Jet Engines', 'Bigger Guns', 'Golden Shot', 'Concentrated Beam', 'Multishot']
+ITEMS = ['Lucky Coin', 'Better Lasers', 'Jet Engines', 'Bigger Guns', 'Golden Shot', 'Concentrated Beam', 'Multishot', 'Boosters']
 # Items PNG
 LUCKY_COIN = pygame.image.load(os.path.join("assets", "golden coin.png"))
 MULTISHOT = pygame.image.load(os.path.join("assets", "multishot.png"))

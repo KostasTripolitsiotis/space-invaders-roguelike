@@ -9,6 +9,7 @@ from dmgclouds import DmgCloud
 from options import options
 from hangar import hangar
 from button import Button
+from activeslot import ActiveSlot
 pygame.font.init()
 
 def main():
@@ -32,6 +33,16 @@ def main():
         levelup(item, player)
         remain_items.remove(item)
     
+    try:
+        slot1 = ActiveSlot(OFFSET/16, HEIGHT-OFFSET/4-OFFSET/16, player.active_items[0])
+    except: slot1 = ActiveSlot(OFFSET/16, HEIGHT-OFFSET/4-OFFSET/16, None)
+    try:
+        slot2 = ActiveSlot(OFFSET/16*2 + OFFSET/4, HEIGHT-OFFSET/4-OFFSET/16, player.active_items[1])
+    except: slot2 = ActiveSlot(OFFSET/16*2 + OFFSET/4, HEIGHT-OFFSET/4-OFFSET/16, None)
+    try:
+        slot3 = ActiveSlot(OFFSET/16*3 + OFFSET/2, HEIGHT-OFFSET/4-OFFSET/16, player.active_items[2])
+    except: slot3 = ActiveSlot(OFFSET/16*3 + OFFSET/2, HEIGHT-OFFSET/4-OFFSET/16, None)
+    
     clock = pygame.time.Clock()
     
     lost = False
@@ -40,7 +51,8 @@ def main():
     def redraw_win():
         draw_static_bg()
         WIN.blit(BG, (0+OFFSET,0))
-        # draw text
+        
+        ###  draw text for stats
         lives_label = main_font.render(f"Lives: {player.lives}", 1, (255,255,255))
         level_label = main_font.render(f"Level: {level}", 1, (255, 255, 255))
         if player.cash.is_integer:
@@ -68,20 +80,32 @@ def main():
         WIN.blit(cooldown_label, (10, lives_label.get_height()*5+12))
         WIN.blit(speed_label, (10, lives_label.get_height()*6+12))
         
-        for i in range(len(player.items)):
-            label = main_font.render(f"{player.items[i].name}", 1, (255,255,255))
-            WIN.blit(label, (SWIDTH - label.get_width() - 10, level_label.get_height()*(i+1) + 10))
+        ### Draw ability slots
+        slot1.draw()
+        slot2.draw()  
+        slot3.draw()      
         
+        ### Draw list of items on the left
+        i = 0   
+        for item in player.items+ player.active_items:
+            label = main_font.render(f"{item.name}", 1, (255,255,255))
+            WIN.blit(label, (SWIDTH - label.get_width() - 10, level_label.get_height()*(i+1) + 10))
+            i +=1
+        
+        ### Draw enemies
         for enemy in enemies:
             enemy.draw(WIN)
-            
+        
+        ### Draw players
         player.draw(WIN)
         
+        ### Draw damage clouds
         for dmgcloud in dmgclouds[:]:
                 dmgcloud.draw(WIN)
                 dmgcloud.move()
                 if dmgcloud.counter == 0:
                     dmgclouds.remove(dmgcloud)
+        
         
         if lost  == True:
             lost_label = lost_font.render("You Lost!!", 1, (255, 0, 0))
@@ -145,6 +169,9 @@ def main():
                 else: player.y = HEIGHT - player.get_height() - 20
             if keys[pygame.K_SPACE] and pause == False: # shot
                 player.shoot()
+            if keys[pygame.K_z] and pause == False: # Activate ability on slot 1
+                player.useAbility(0)
+                
             if keys[pygame.K_l]: # go to level up screen (debug)
                 levelupscreen(player, level, remain_items)
             if keys[pygame.K_m]: # return to menu
@@ -158,7 +185,7 @@ def main():
                     pause = not(pause)
                     pause_cooldown = 10
             
-            for enemy in enemies[:]:
+            for enemy in enemies[:]: # Move/shot/check for collisions for enemies
                 if pause == False:
                     enemy.move_y(enemy.vel)
                     if enemy.move_lasers(player):
@@ -174,6 +201,9 @@ def main():
                     elif enemy.y + enemy.get_height() > HEIGHT:
                         player.lives -= 1
                         enemies.remove(enemy)
+            
+            for item in player.active_items: # check for active item cooldown or active mod
+                item.update()
             
             if pause == False:
                 playershot, shotplace, shotdmg, crit = player.move_lasers(enemies)

@@ -61,10 +61,7 @@ def hangar():
             item_buttons.append(Button(item_buttons_pos[i][0], item_buttons_pos[i][1], OFFSET/4, OFFSET/4, name=ITEMS[i], fontsize=item_font.get_linesize(), img=ITEMS_PNG[i]))
         except:
             item_buttons.append(Button(item_buttons_pos[i][0], item_buttons_pos[i][1], OFFSET/4, OFFSET/4, name=ITEMS[i], fontsize=item_font.get_linesize()))
-        # if ITEMS[i] == 'Lucky Coin':
-        #     item_buttons.append(Button(item_buttons_pos[i][0], item_buttons_pos[i][1], OFFSET/4, OFFSET/4, name=ITEMS[i], fontsize=item_font.get_linesize(), img=LUCKY_COIN))
-        # else:
-        #     item_buttons.append(Button(item_buttons_pos[i][0], item_buttons_pos[i][1], OFFSET/4, OFFSET/4, name=ITEMS[i], fontsize=item_font.get_linesize()))
+
     equiped_items = getSavedItems('equiped')
     for button in item_buttons: 
         if button.label in equiped_items: button.clicked = True

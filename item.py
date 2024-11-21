@@ -124,3 +124,43 @@ class Boosters(Item):
         if self.active == True:
             return vel*self.vel
         else: return vel
+        
+class Freeze(Item): 
+    def __init__(self, name = "Freeze", type_modifier="active", modifier="misc", description="Freeze enemies for 3 sec"):
+        super().__init__(name, type_modifier, modifier, description)
+        
+        self.enemy_vel = 0
+        self.enemy_firerate = 0
+        self.duration = 3*FPS
+        self.duration_counter = 0
+        self.cooldown = 25*FPS
+        self.cooldown_counter = 0
+        self.active = False
+        self.onCooldown = False
+        
+    def activate(self, player):
+        if self.onCooldown == False:
+            self.active = True
+            self.duration_counter = self.duration
+            self.cooldown_counter = self.cooldown
+            self.onCooldown = True
+            player.enemy_modifiers['vel'] *= self.enemy_vel
+    
+    def update(self, player):
+        if self.cooldown_counter > 0: # Lower cooldown if skill has been used
+            self.cooldown_counter -=1
+            if self.cooldown_counter == 0:
+                self.onCooldown = False
+
+        if self.active == True:
+            self.duration_counter -=1
+            
+            if self.duration_counter == 0:
+                self.active = False
+                player.enemy_modifiers['vel'] = 1
+    
+    def modify(self, vel):
+        pass
+        # if self.active == True:
+        #     return vel*self.vel
+        # else: return vel

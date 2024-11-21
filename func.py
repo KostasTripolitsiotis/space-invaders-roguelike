@@ -16,17 +16,17 @@ def spawn_enemy(color, player):
     player:Player = player
     match color:
         case "red":
-            enemy = Enemy(random.randrange(50+OFFSET, WIDTH-100), random.randrange(-100, -50), color, 4*player.enemy_modifiers["cooldown"], red["vel"]+player.enemy_modifiers["vel"], 
-                          red["laser_vel"], red["health"]+player.enemy_modifiers["health"], red["cooldown"]*player.enemy_modifiers["cooldown"], red["worth"],
-                          red["dmg"]+player.enemy_modifiers["dmg"], red["critchance"]+player.enemy_modifiers["critchance"], red["critdmg"]+player.enemy_modifiers["critdmg"])
+            enemy = Enemy(random.randrange(50+OFFSET, WIDTH-100), random.randrange(-100, -50), color, 4*player.enemy_modifiers["cooldown"], red["vel"], 
+                          red["laser_vel"], red["health"]*player.enemy_modifiers["health"], red["cooldown"]*player.enemy_modifiers["cooldown"], red["worth"],
+                          red["dmg"]*player.enemy_modifiers["dmg"], red["critchance"]*player.enemy_modifiers["critchance"], red["critdmg"]*player.enemy_modifiers["critdmg"])
         case "blue":
-            enemy = Enemy(random.randrange(50+OFFSET, WIDTH-100), random.randrange(-100, -50), color, 4*player.enemy_modifiers["cooldown"], blue["vel"]+player.enemy_modifiers["vel"], 
-                          blue["laser_vel"], blue["health"]+player.enemy_modifiers["health"], blue["cooldown"]*player.enemy_modifiers["cooldown"], blue["worth"],
-                          blue["dmg"]+player.enemy_modifiers["dmg"], blue["critchance"]+player.enemy_modifiers["critchance"], blue["critdmg"]*player.enemy_modifiers["critdmg"])
+            enemy = Enemy(random.randrange(50+OFFSET, WIDTH-100), random.randrange(-100, -50), color, 4*player.enemy_modifiers["cooldown"], blue["vel"], 
+                          blue["laser_vel"], blue["health"]*player.enemy_modifiers["health"], blue["cooldown"]*player.enemy_modifiers["cooldown"], blue["worth"],
+                          blue["dmg"]*player.enemy_modifiers["dmg"], blue["critchance"]+player.enemy_modifiers["critchance"], blue["critdmg"]*player.enemy_modifiers["critdmg"])
         case "green":
-            enemy = Enemy(random.randrange(50+OFFSET, WIDTH-100), random.randrange(-100, -50), color, 4*player.enemy_modifiers["cooldown"], green["vel"]+player.enemy_modifiers["vel"], 
-                          green["laser_vel"], green["health"]+player.enemy_modifiers["health"], green["cooldown"]*player.enemy_modifiers["cooldown"], green["worth"],
-                          green["dmg"]+player.enemy_modifiers["dmg"], green["critchance"]+player.enemy_modifiers["critchance"], green["critdmg"]+player.enemy_modifiers["critdmg"])
+            enemy = Enemy(random.randrange(50+OFFSET, WIDTH-100), random.randrange(-100, -50), color, 4*player.enemy_modifiers["cooldown"], green["vel"], 
+                          green["laser_vel"], green["health"]*player.enemy_modifiers["health"], green["cooldown"]*player.enemy_modifiers["cooldown"], green["worth"],
+                          green["dmg"]*player.enemy_modifiers["dmg"], green["critchance"]*player.enemy_modifiers["critchance"], green["critdmg"]*player.enemy_modifiers["critdmg"])
     
     
     return enemy
@@ -131,7 +131,7 @@ def getLevelupModifiers(player):
     return modifier, luckycoin
         
 def levelup(choice: str, player):
-    from item import BetterLasers, LuckyCoin, JetEngine, BiggerGuns, GoldenShot, ConcentratedBeam, Multishot, Boosters
+    from item import BetterLasers, LuckyCoin, JetEngine, BiggerGuns, GoldenShot, ConcentratedBeam, Multishot, Boosters, Freeze
     from player import Player
     player:Player = player
     modifier, unluckycoin = getLevelupModifiers(player)
@@ -188,6 +188,7 @@ def levelup(choice: str, player):
         case 'Concentrated Beam': player.items.append(ConcentratedBeam())
         case 'Multishot' : player.items.append(Multishot())
         case 'Boosters' : player.active_items.append(Boosters())
+        case 'Freeze' : player.active_items.append(Freeze())
         case _: pass
     for item in player.items:
         if item.type_modifier == "rep":

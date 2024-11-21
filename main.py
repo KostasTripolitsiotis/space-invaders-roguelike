@@ -1,4 +1,6 @@
 import pygame
+pygame.font.init()
+pygame.mixer.init()
 import sys, os
 from func import *
 from const import *
@@ -10,7 +12,6 @@ from options import options
 from hangar import hangar
 from button import Button
 from activeslot import ActiveSlot
-pygame.font.init()
 
 def main():
     run = True
@@ -28,7 +29,7 @@ def main():
     
     player = Player(SWIDTH/2 - YELLOW_SPACE_SHIP.get_width()/2, HEIGHT - YELLOW_SPACE_SHIP.get_height()-20)
     items = getSavedItems('equiped')
-    remain_items = ITEMS[:]
+    remain_items = ITEMS[:]+ABILITIES[:]
     for item in items:
         levelup(item, player)
         remain_items.remove(item)
@@ -171,6 +172,8 @@ def main():
                 player.shoot()
             if keys[pygame.K_z] and pause == False: # Activate ability on slot 1
                 player.useAbility(0)
+            if keys[pygame.K_x] and pause == False:
+                player.useAbility(1)
                 
             if keys[pygame.K_l]: # go to level up screen (debug)
                 levelupscreen(player, level, remain_items)
@@ -187,23 +190,27 @@ def main():
             
             for enemy in enemies[:]: # Move/shot/check for collisions for enemies
                 if pause == False:
-                    enemy.move_y(enemy.vel)
+                    enemy.move_y(enemy.vel*player.enemy_modifiers["vel"])
                     if enemy.move_lasers(player):
                         player.gotHit = True
                         dmgclouds.append(DmgCloud(player.x+10, player.y, enemy.dmg))
                     enemy.shoot()
                     
                     if collide(enemy, player):
+                        CRASH.play()
                         player.gotHit = True
                         player.health -= enemy.health
                         dmgclouds.append(DmgCloud(enemy.x+10, enemy.y, float(enemy.health)))
                         enemies.remove(enemy)
                     elif enemy.y + enemy.get_height() > HEIGHT:
+                        CRASH.play()
                         player.lives -= 1
                         enemies.remove(enemy)
             
             for item in player.active_items: # check for active item cooldown or active mod
-                item.update()
+                if not(item.modifier == "misc"):
+                    item.update()
+                else: item.update(player)
             
             if pause == False:
                 playershot, shotplace, shotdmg, crit = player.move_lasers(enemies)
@@ -219,7 +226,9 @@ def main_menu():
     pygame.display.set_caption("Spacerogue")
     run = True
     title_font = pygame.font.SysFont("lucidaconsole", OPTIONS['fontsize'])
-    pygame.display.set_mode((0,0), pygame.FULLSCREEN, display=0) 
+    pygame.display.set_mode(OPTIONS['res_list'][-1], pygame.FULLSCREEN, display=0) 
+    
+    
     
     start_button = Button(SWIDTH/2 - SWIDTH/20, HEIGHT/2 - HEIGHT/20, SWIDTH/10, HEIGHT/20, name='START')
     options_button = Button(SWIDTH/2 - SWIDTH/20, start_button.y + start_button.height*1.5, SWIDTH/10, HEIGHT/20, name='OPTIONS')
@@ -227,7 +236,7 @@ def main_menu():
     quit_button = Button(SWIDTH/2 - SWIDTH/20, hangar_button.y + hangar_button.height*1.5, SWIDTH/10, HEIGHT/20, name='QUIT')
     
     while run: 
-        try:
+        # try:
             bgMenu  = pygame.transform.scale(pygame.image.load(os.path.join("assets", "background-black.png")), (SWIDTH, HEIGHT))
             WIN.blit(bgMenu, (0, 0)) 
             start_button.draw(WIN)
@@ -251,17 +260,16 @@ def main_menu():
                             options()
                         if hangar_button.rect.collidepoint(event.pos):
                             hangar()
-                            print(getShipStats('yellow'))
                         if quit_button.rect.collidepoint(event.pos):
                             pygame.quit()
                             run = False
             
-        except Exception:
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            print(exc_type, fname, exc_tb.tb_lineno, exc_obj)
-            run = False
-            pygame.quit()
+        # except Exception:
+        #     exc_type, exc_obj, exc_tb = sys.exc_info()
+        #     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        #     print(exc_type, fname, exc_tb.tb_lineno, exc_obj)
+        #     run = False
+        #     pygame.quit()
                 
     pygame.quit()
 

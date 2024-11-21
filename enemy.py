@@ -10,7 +10,7 @@ class Enemy(Ship):
         super().__init__(x, y, vel, laser_vel, health, cooldown, dmg, critchance, critdmg)
         self.ship_img, self.laser_img = COLOR_MAP[color]
         self.mask = pygame.mask.from_surface(self.ship_img)
-        self.hit_img = self.mask.copy().to_surface(setcolor=C_WHITE, unsetcolor=(0, 0, 0, 0))
+        self.hit_img = self.mask.copy().to_surface(setcolor=C_RED, unsetcolor=(0, 0, 0, 0))
         self.firerate = firerate
         self.worth = worth
         self.id = random.randint(1, 10000)
@@ -21,7 +21,8 @@ class Enemy(Ship):
 
     def shoot(self):
         if random.randrange(0, int(self.firerate*FPS)) == 1:
-            if self.cool_down_counter == 0:
+            if self.cool_down_counter == 0 and (self.y >= 0 - self.ship_img.get_height()):
+                PEW1.play()
                 laser = Laser(self.x-15, self.y, self.laser_img, self.getLaserVel())
                 self.lasers.append(laser)
                 self.cool_down_counter = 1

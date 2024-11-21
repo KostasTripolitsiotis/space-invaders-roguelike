@@ -41,7 +41,7 @@ class Ship:
             WIN.blit(self.hit_img, (self.x, self.y))
             self.hitcounter -= 1
             if self.hitcounter <= 0:
-                self.hit_img = self.mask.copy().to_surface(setcolor=C_WHITE, unsetcolor=(0, 0, 0, 0))
+                self.hit_img = self.mask.copy().to_surface(setcolor=C_RED, unsetcolor=(0, 0, 0, 0))
                 self.hitcounter = self.hitcounter_max
                 self.gotHit = False
 
@@ -56,6 +56,7 @@ class Ship:
             if laser.off_screen():
                 self.lasers.remove(laser)
             elif laser.collision(obj):
+                CRASH.play()
                 obj.health -= self.calcDmg()[0]
                 self.lasers.remove(laser)
                 shot = True
@@ -111,8 +112,9 @@ class Ship:
     def move_y(self, vel):
         if vel > 0:
             vel = self.getVel()*YMOD
-        else:
+        elif vel < 0:
             vel = -self.getVel()*YMOD
+            
         self.move_counter_y %= 10
         dv = vel % 10
         vel = int(vel/10)
@@ -158,12 +160,14 @@ class Ship:
     
     def shoot(self):
         if self.cool_down_counter == 0:
+            PEW1.play()
             laser = Laser(self.x, self.y, self.laser_img, self.getLaserVel(), self.getLaserPierce())
             self.lasers.append(laser)
             self.cool_down_counter = 1
             
     def shootMult(self):
         if self.cool_down_counter == 0:
+            PEW1.play()
             laser = Laser(self.x, self.y, self.laser_img, self.getLaserVel(), self.getLaserPierce())
             self.lasers.append(laser)
             laser = DiagonalLaser(self.x, self.y, self.laser_img, 'right', self.getLaserVel(), self.getLaserPierce())

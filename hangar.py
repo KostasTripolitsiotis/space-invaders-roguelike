@@ -4,16 +4,6 @@ from const import *
 from func import *
 from button import Button
 
-def getShipButtonsPos(shiplist:list[pygame.Surface]) -> list[tuple[int, int]]:
-    pos_list:list[tuple[int, int]] = []
-    for i in range(len(shiplist)):
-            if i == 0:
-                pos_list.append((OFFSET/2 - shiplist[i].get_width()/2, 50))
-                
-            else:
-                pos_list.append((OFFSET/2 - shiplist[i].get_width()/2, (shiplist[i-1].get_height() + 50)*i + 50))
-    return pos_list
-
 def getItemButtonPos(items:list[str]) -> list[tuple[int, int]]:
     pos_list:list[tuple[int, int]] = []
     for i in range(len(items)):
@@ -23,6 +13,12 @@ def getItemButtonPos(items:list[str]) -> list[tuple[int, int]]:
             pos_list.append((SWIDTH-OFFSET+OFFSET/2-OFFSET/4-25, 110*i+OFFSET/4))
     return pos_list
 
+def getAbilityButtonPos(items:list[str]) -> list[tuple[int, int]]:
+    pos_list:list[tuple[int, int]] = getItemButtonPos(items)
+    return_list:list[tuple[int, int]] = []
+    for pos in pos_list:
+        return_list.append((pos[0] + OFFSET/3 + OFFSET/12, pos[1]))
+    return return_list
 
 def hangar():
     item_font = pygame.font.SysFont("lucidaconsole", int(OPTIONS['fontsize']/2))
@@ -44,14 +40,6 @@ def hangar():
     upgrade_buttons = [(vel_upgrade_btn, "vel"), (dmg_upgrade_btn, "dmg"), (health_upgrade_btn, "health"), 
                        (cooldown_upgrade_btn, "cooldown"), (critchance_upgrade_btn, "critchance"), (critdmg_upgrade_btn, "critdmg")]
     
-    # Spaceship buttons
-    ship_list:list[pygame.Surface] = [YELLOW_SPACE_SHIP, GREEN_SPACE_SHIP, RED_SPACE_SHIP, BLUE_SPACE_SHIP]
-    ship_buttons:list[Button] = []
-    ship_buttons_pos:list[tuple[int, int]] = getShipButtonsPos(ship_list)
-    for i in range(len(ship_list)):
-        ship_buttons.append(Button(ship_buttons_pos[i][0], ship_buttons_pos[i][1], ship_list[i].get_width(), ship_list[i].get_height(), img=ship_list[i]))
-    
-    
     ### Perk Buttons
     #item_list
     item_buttons:list[Button] = []
@@ -61,6 +49,15 @@ def hangar():
             item_buttons.append(Button(item_buttons_pos[i][0], item_buttons_pos[i][1], OFFSET/4, OFFSET/4, name=ITEMS[i], fontsize=item_font.get_linesize(), img=ITEMS_PNG[i]))
         except:
             item_buttons.append(Button(item_buttons_pos[i][0], item_buttons_pos[i][1], OFFSET/4, OFFSET/4, name=ITEMS[i], fontsize=item_font.get_linesize()))
+
+    #ability list
+    ability_buttons:list[Button] = []
+    ability_button_pos:list[tuple[int, int]] = getAbilityButtonPos(ABILITIES)
+    for i in range(len(ABILITIES)):
+        try:
+            ability_buttons.append(Button(ability_button_pos[i][0], ability_button_pos[i][1], OFFSET/4, OFFSET/4, name=ABILITIES[i], fontsize=item_font.get_linesize(), img=ABILITIES_PNG[i]))
+        except:
+            ability_buttons.append(Button(ability_button_pos[i][0], ability_button_pos[i][1], OFFSET/4, OFFSET/4, name=ABILITIES[i], fontsize=item_font.get_linesize()))
 
     equiped_items = getSavedItems('equiped')
     for button in item_buttons: 
@@ -74,10 +71,6 @@ def hangar():
             pygame.draw.rect(WIN, (255, 255, 255), (SWIDTH-OFFSET, 0, 1, HEIGHT))
             back_btn.draw(WIN)
             
-            # Draw spaceship left of screen
-            for button in ship_buttons:
-                button.draw(WIN)
-            
             # Stats labels 
             stats_max = MAX_STATS
             vel_label = stats_font.render(f'Speed: {str(selected_stats["vel"])}', 1, (255,255,255))
@@ -90,7 +83,7 @@ def hangar():
             
             bar_width = 300
             padx = (WIDTH-critdmg_label.get_width()-bar_width-stats_font.get_linesize()-1)/4
-            pady = HEIGHT/3 - (vel_label.get_height()*6)/3
+            pady = HEIGHT/4 - (vel_label.get_height()*6)/4
             padx_button = 15
             
             # blit selected spaceship
@@ -155,8 +148,13 @@ def hangar():
             critdmg_upgrade_btn.updateRect()
             critdmg_upgrade_btn.draw(WIN)
             
-            # blit perks left of screen
+            ### blit perks left of screen
+            # Items, Abilities
             for button in item_buttons:
+                button.draw(WIN)
+
+            # Abilities
+            for button in ability_buttons:
                 button.draw(WIN)
             
         except Exception as e:
@@ -178,11 +176,6 @@ def hangar():
                     if event.button == 1:
                         if back_btn.rect.collidepoint(event.pos):
                             run = False
-                            
-                        for button in ship_buttons: # Check all spaceship on the left (to be removed)
-                            if button.rect.collidepoint(event.pos):
-                                if button.img == YELLOW_SPACE_SHIP:
-                                    selected_spaceship = 'yellow'
                                     
                         for button in upgrade_buttons: # Check all upgrade buttons
                             if button[0].rect.collidepoint(event.pos):
@@ -191,6 +184,13 @@ def hangar():
                                     selected_stats[button[1]] = stat
                                 
                         for button in item_buttons: # Check all items
+                            if button.rect.collidepoint(event.pos):
+                                button.clicked = not(button.clicked) # Stay selected/de-selected
+                                if button.clicked == True:
+                                    editItems(button.name, 'add') # Add or remove selected item from player
+                                else: editItems(button.name, 'rm')
+                                
+                        for button in ability_buttons: # Check all abilities
                             if button.rect.collidepoint(event.pos):
                                 button.clicked = not(button.clicked) # Stay selected/de-selected
                                 if button.clicked == True:

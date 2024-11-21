@@ -10,17 +10,17 @@ class Player(Ship):
         self.ship_img = player["spaceship_img"]
         self.laser_img = player["laser_img"]
         self.mask = pygame.mask.from_surface(self.ship_img)
-        self.hit_img = self.mask.copy().to_surface(setcolor=C_WHITE, unsetcolor=(0, 0, 0, 0))
+        self.hit_img = self.mask.copy().to_surface(setcolor=C_RED, unsetcolor=(0, 0, 0, 0))
         self.cash = float(player["cash"])
         self.lives = 5
         self.critchance = player["critchance"]
         self.critdmg = player["critdmg"]
         self.enemy_modifiers = {
-            "vel" : 0, 
-            "health" : 0, 
-            "dmg" : 0, 
-            "critchance" : 0, 
-            "critdmg" : 0, 
+            "vel" : 1, 
+            "health" : 1, 
+            "dmg" : 1, 
+            "critchance" : 1, 
+            "critdmg" : 1, 
             "cooldown" : 1, 
             "worth" : 1
         }
@@ -39,6 +39,7 @@ class Player(Ship):
             else:
                 for obj in objs:
                     if laser.collision(obj):
+                        CRASH.play()
                         obj.gotHit = True
                         shot = True
                         laser.pierce -= 1
@@ -87,11 +88,14 @@ class Player(Ship):
     def useAbility(self, slot):
         if (slot > len(self.active_items)-1): return None # If pressed slot is larger than active items length do nothing
         else: 
-            self.active_items[slot].activate()
+            if not(self.active_items[slot].modifier == "misc"):
+                self.active_items[slot].activate()
+            else: self.active_items[slot].activate(self)
     
     def getVel(self):
         vel = super().getVel()
         
         for item in self.active_items:
-            vel = item.modify(vel)
+            if item.modifier == "speed":
+                vel = item.modify(vel)
         return vel

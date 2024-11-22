@@ -1,8 +1,10 @@
 import pygame
+from const import *
+font = pygame.font.SysFont("lucidaconsole", OPTIONS['fontsize'])
 
 class OptionBox():
   
-    def __init__(self, x, y, w, h, option_list, clickable, color, highlight_color, disabled_color, font, selected = 0):
+    def __init__(self, x, y, w, h, option_list, clickable, color=C_WHITE, highlight_color=C_WHITE, disabled_color=C_WHITE, font=font, selected = 0):
         self.color = color
         self.highlight_color = highlight_color
         self.disabled_color = disabled_color

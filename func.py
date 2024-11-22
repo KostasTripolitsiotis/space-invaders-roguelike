@@ -47,10 +47,13 @@ def getEnemyWave(level:int):
                 
     return enemytype, dtime
 
-def save_onExit(cash: int) -> None:
+def save_onExit(cash= None, options = None) -> None:
     from stats import player
     with shelve.open('savefile/savefile') as f:
-        f['cash'] = cash
+        if cash != None:
+            f['cash'] = cash
+        if options != None:
+            f['options'] = options
     player['cash'] = cash
 
 def print_savefile() -> None:

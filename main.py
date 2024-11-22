@@ -1,6 +1,5 @@
 import pygame
 pygame.font.init()
-pygame.mixer.init()
 import sys, os
 from func import *
 from const import *
@@ -225,8 +224,9 @@ def main():
 def main_menu():
     pygame.display.set_caption("Spacerogue")
     run = True
-    title_font = pygame.font.SysFont("lucidaconsole", OPTIONS['fontsize'])
-    pygame.display.set_mode(OPTIONS['res_list'][-1], pygame.FULLSCREEN, display=0) 
+    
+    OPTIONS = get_savefile()['options']
+    pygame.display.set_mode(OPTIONS['res_list'][0], pygame.FULLSCREEN, display=0) 
     
     
     

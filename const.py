@@ -86,6 +86,8 @@ ITEM_TO_PNG = {
 }
 
 ### SFX
+pygame.mixer.init()
+
 PEW1 = pygame.mixer.Sound(os.path.join("assets", "sfx", "pew1.wav"))
 CRASH = pygame.mixer.Sound(os.path.join("assets", "sfx", "crash.wav"))
 

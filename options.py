@@ -12,8 +12,8 @@ def options():
     fullscreen_label = font.render("Fullscreen", 0, C_WHITE)
     res_label = font.render("Resolution", 0, C_WHITE)
     ###Buttons
-    back_button = Button(SWIDTH - SWIDTH/10 - 10, HEIGHT - HEIGHT/20 - 10, SWIDTH/10, HEIGHT/20, "BACK")
-    fullscreen_button = Button(SWIDTH - OFFSET, 100, img=CHECKMARK)
+    back_button = Button(SWIDTH - SWIDTH/10 - 10, HEIGHT - HEIGHT/20 - 10, SWIDTH/10, HEIGHT/20, name="BACK")
+    fullscreen_button = Button(SWIDTH - OFFSET, 100, SWIDTH/10, HEIGHT/20, img=CHECKMARK)
     ### Dropbar
     res_optionbar = OptionBox(SWIDTH - OFFSET +50, 200 - res_label.get_height(), 200, 
                               res_label.get_height(), OPTIONS['res_list'], not(fullscreen_button.clicked))
@@ -36,7 +36,7 @@ def options():
         
         
     while run:
-        try:
+        # try:
             
             keys = pygame.key.get_pressed()
             res_optionbar.update(pygame.event.get())
@@ -54,10 +54,10 @@ def options():
             redraw_win()
             pygame.display.update()
             
-        except Exception as e:
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            print(exc_type, fname, exc_tb.tb_lineno)
-            run = False
+        # except Exception as e:
+        #     exc_type, exc_obj, exc_tb = sys.exc_info()
+        #     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        #     print(exc_type, fname, exc_tb.tb_lineno)
+        #     run = False
             
     

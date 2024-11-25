@@ -1,6 +1,6 @@
 import pygame
 pygame.font.init()
-import sys, os
+import os
 from func import *
 from const import *
 from player import Player
@@ -85,7 +85,7 @@ def main():
         slot2.draw()  
         slot3.draw()      
         
-        ### Draw list of items on the left
+        ### Draw list of items on the right
         i = 0   
         for item in player.items+ player.active_items:
             label = main_font.render(f"{item.name}", 1, (255,255,255))

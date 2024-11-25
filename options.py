@@ -3,19 +3,21 @@ import sys, os
 from const import *
 from func import *
 from optionBox import OptionBox
-from button import Button
+from button import Button, CheckButton
 
 def options():
     font = pygame.font.SysFont("lucidaconsole", OPTIONS['fontsize'])
     run = True
+    res = get_savefile()['options']['res']
     ###Labels
     fullscreen_label = font.render("Fullscreen", 0, C_WHITE)
     res_label = font.render("Resolution", 0, C_WHITE)
     ###Buttons
     back_button = Button(SWIDTH - SWIDTH/10 - 10, HEIGHT - HEIGHT/20 - 10, SWIDTH/10, HEIGHT/20, name="BACK")
-    fullscreen_button = Button(SWIDTH - OFFSET, 100, SWIDTH/10, HEIGHT/20, img=CHECKMARK)
+    fullscreen_button = CheckButton(SWIDTH-SWIDTH/4, 100, 50, 50, img=CHECKMARK, clicked=True)
+
     ### Dropbar
-    res_optionbar = OptionBox(SWIDTH - OFFSET +50, 200 - res_label.get_height(), 200, 
+    res_optionbar = OptionBox(SWIDTH - OFFSET +50, 500 - res_label.get_height(), 200, 
                               res_label.get_height(), OPTIONS['res_list'], not(fullscreen_button.clicked))
     ### TODO res (dropdown bar with pygame.display.list_modes()), volume (slider bar or dropdown), 
 
@@ -31,7 +33,7 @@ def options():
         fullscreen_button.draw(WIN)
 
         # Resolutions
-        WIN.blit(res_label, (OFFSET, res_label.get_height()))
+        WIN.blit(res_label, (OFFSET, res_optionbar.get_y()))
         res_optionbar.draw(WIN)
         
         
@@ -39,18 +41,24 @@ def options():
         # try:
             
             keys = pygame.key.get_pressed()
-            res_optionbar.update(pygame.event.get())
+            
+            ### Optionbar
+            
             for event in pygame.event.get():
+                pos = res_optionbar.update(event)
+                res = res_optionbar.option_list[pos if pos !=-1 else 0]
+                
                 if event.type == pygame.QUIT or keys[pygame.K_ESCAPE]:
                     run = False
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 1:
-                        if back_button.rect.collidepoint(event.pos):
-                                run = False
-                        if fullscreen_button.rec.collidepoint(event.pos):
-                            fullscreen_button.clicked = not(fullscreen_button.clicked)
-                            pygame.display.toggle_fullscreen()
-                            res_optionbar.clickable = not(res_optionbar.clickable)
+
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    if back_button.rect.collidepoint(event.pos):
+                            run = False
+                    if fullscreen_button.rect.collidepoint(event.pos):
+                        fullscreen_button.clicked = not(fullscreen_button.clicked)
+                        pygame.display.toggle_fullscreen()
+                        res_optionbar.clickable = not(res_optionbar.clickable)
+                    
             redraw_win()
             pygame.display.update()
             

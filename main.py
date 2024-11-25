@@ -113,6 +113,21 @@ def main():
         
         pygame.display.update()
     
+    def add_to_active_slot():
+        item = None
+        slots = [slot1, slot2, slot3]
+        sloted_items = [slot1.item, slot2.item, slot3.item]
+        if level % 5 ==0 and len(player.active_items) > 0 and not(player.active_items[-1] in sloted_items):
+            for i, item in enumerate(sloted_items):
+                if item == None:
+                    slots[i].item = player.active_items[-1]
+                
+            
+        if item != None and item.type_modifier == "active":
+            if slot1.item == None: slot1.item = item
+            elif slot2.item == None: slot3.item = item
+            elif slot3.item == None: slot3.item = item
+    
     while run:
         clock.tick(FPS)
         try:
@@ -134,6 +149,7 @@ def main():
             if enemy_timer == 0 and pause == False:
                 if len(timers) == 0 and len(enemies) == 0:
                     levelupscreen(player, level, remain_items)
+                    add_to_active_slot()
                     level += 1
                     wave, timers = getEnemyWave(level)
                     enemy_timer = timers[0]
@@ -176,6 +192,7 @@ def main():
                 
             if keys[pygame.K_l]: # go to level up screen (debug)
                 levelupscreen(player, level, remain_items)
+                add_to_active_slot()
             if keys[pygame.K_m]: # return to menu
                 run = False
             if keys[pygame.K_0]: # 0 cash

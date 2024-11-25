@@ -18,12 +18,12 @@ class ActiveSlot():
         self.cooldown_surf.set_alpha(128)
         self.cooldown_rect = pygame.rect.Rect(0, 0, OFFSET/4, 0)
         self.label:pygame.Surface = None
-        font = pygame.font.SysFont("lucidaconsole", int(OPTIONS['fontsize']/4))
+        self.font = pygame.font.SysFont("lucidaconsole", int(OPTIONS['fontsize']/4))
         self.image:pygame.image = None
         if item != None:
-            self.label = font.render(item.name, 1, C_WHITE)
+            self.label = self.font.render(item.name, 1, C_WHITE)
         try: 
-            self.img = pygame.transform.scale(item.img, (self.width, self.height))
+            self.img = pygame.transform.scale(ITEM_TO_PNG[item.name], (self.width, self.height))
         except: self.img = pygame.transform.scale(XMARK, (self.width, self.height))
         
     def draw(self):
@@ -32,8 +32,18 @@ class ActiveSlot():
         WIN.blit(self.img, (self.x, self.y))
         if self.item != None:
             self.cooldown_rect.height = (OFFSET/4) * (self.item.cooldown_counter/self.item.cooldown)
-            WIN.blit(self.label, (self.rect.center[0]-self.label.get_width()/2, self.rect.center[1]-self.label.get_height()/2))
+            if self.img == None:
+                WIN.blit(self.label, (self.rect.center[0]-self.label.get_width()/2, self.rect.center[1]-self.label.get_height()/2))
+            else:
+                WIN.blit(self.img, (self.x, self.y))
         self.cooldown_surf.fill((0, 0, 0, 0))
         pygame.draw.rect(self.cooldown_surf, self.cooldown_color, self.cooldown_rect)
         WIN.blit(self.cooldown_surf, (self.x, self.y))
+        
+    def add_item(self, item:Item):
+        self.item = item
+        self.label = self.font.render(item.name, 1, C_WHITE)
+        try: 
+            self.img = pygame.transform.scale(ITEM_TO_PNG[item.name], (self.width, self.height))
+        except: self.img = pygame.transform.scale(XMARK, (self.width, self.height))
     

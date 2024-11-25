@@ -120,7 +120,8 @@ def main():
         if level % 5 ==0 and len(player.active_items) > 0 and not(player.active_items[-1] in sloted_items):
             for i, item in enumerate(sloted_items):
                 if item == None:
-                    slots[i].item = player.active_items[-1]
+                    slots[i].add_item(player.active_items[-1])
+                    break
                 
             
         if item != None and item.type_modifier == "active":

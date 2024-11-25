@@ -69,7 +69,9 @@ JET_ENGINES = pygame.image.load(os.path.join("assets", "jet_engines.png"))
 BIGGER_GUNS = pygame.image.load(os.path.join("assets", "bigger_guns.png"))
 GOLDEN_SHOT = pygame.image.load(os.path.join("assets", "golden_shot.png"))
 CONCENTRATED_BEAM = pygame.image.load(os.path.join("assets", "concentrated_beam.png"))
-ITEMS_PNG = [LUCKY_COIN, BETTER_LASERS, JET_ENGINES, BIGGER_GUNS, GOLDEN_SHOT, CONCENTRATED_BEAM, MULTISHOT]
+BOOSTERS = pygame.image.load(os.path.join("assets", "checkmark.png"))
+FREEZE = pygame.image.load(os.path.join("assets", "checkmark.png"))
+ITEMS_PNG = [LUCKY_COIN, BETTER_LASERS, JET_ENGINES, BIGGER_GUNS, GOLDEN_SHOT, CONCENTRATED_BEAM, MULTISHOT, BOOSTERS, FREEZE]
 
 # Abilities PNG
 
@@ -82,7 +84,9 @@ ITEM_TO_PNG = {
     'Bigger Guns' : BIGGER_GUNS, 
     'Golden Shot' : GOLDEN_SHOT, 
     'Concentrated Beam' : CONCENTRATED_BEAM, 
-    'Multishot' : MULTISHOT
+    'Multishot' : MULTISHOT,
+    'Boosters' : BOOSTERS, 
+    'Freeze' : FREEZE,
 }
 
 ### SFX

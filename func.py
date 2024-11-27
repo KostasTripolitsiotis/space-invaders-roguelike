@@ -235,6 +235,11 @@ def upgrade(spaceship:str, stat:str) -> int | float:
         return None
     elif spaceship_stats[stat] <= stats_max[stat] and stat == "cooldown": # if stat is max do nothing
         return None
+    else: # if player doenst have enough cash do nothing, else reduce cash
+        player_cash = get_savefile()['cash']
+        cost = get_upgrade_cost(stat)
+        if player_cash - cost < 0: return None
+        else: save_onExit(cash=player_cash-cost)
     
     if stat != "cooldown":
         spaceship_stats[stat] += (stats_max[stat]-stats_min[stat])/step # Increase by an amount so this*step = max

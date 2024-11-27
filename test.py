@@ -19,6 +19,6 @@
 # 
 
 from const import OPTIONS
-from func import get_upgrade_cost
+from func import get_savefile
 
-print(get_upgrade_cost("dmg"))
+print(get_savefile()['cash'])

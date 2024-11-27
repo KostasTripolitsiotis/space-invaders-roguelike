@@ -29,6 +29,7 @@ def hangar():
     back_btn = Button(WIDTH - WIDTH/10 + OFFSET - 10, HEIGHT - HEIGHT/20 - 10, WIDTH/10, HEIGHT/20, name='BACK')
     selected_spaceship = 'yellow'
     selected_stats = getShipStats(selected_spaceship)
+    cash_label = stats_font.render("Cash: " + str(int(get_savefile()['cash'])), 1, C_WHITE)
     
     # Upgrade buttons
     vel_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, name=str(get_upgrade_cost("vel")), fontsize=stats_font.get_linesize())
@@ -66,10 +67,11 @@ def hangar():
         try:
             draw_static_bg()
             WIN.blit(BG, (0+OFFSET,0))
-            WIN.blit(title_label, (SWIDTH/2-title_label.get_width()/2, title_label.get_height()))            
+            WIN.blit(title_label, (SWIDTH/2-title_label.get_width()/2, title_label.get_height()))       
             pygame.draw.rect(WIN, (255, 255, 255), (OFFSET-1, 0, 1, HEIGHT))
             pygame.draw.rect(WIN, (255, 255, 255), (SWIDTH-OFFSET, 0, 1, HEIGHT))
             back_btn.draw(WIN)
+            WIN.blit(cash_label, (OFFSET/2-cash_label.get_width()/2, 10))
             
             # Stats labels 
             stats_max = MAX_STATS
@@ -181,6 +183,7 @@ def hangar():
                             if button[0].rect.collidepoint(event.pos):
                                 stat = upgrade(selected_spaceship, button[1])
                                 button[0].setLabel(str(get_upgrade_cost(button[1])))
+                                cash_label = stats_font.render("Cash: " + str(int(get_savefile()['cash'])), 1, C_WHITE)
                                 if stat != None:
                                     selected_stats[button[1]] = stat
                                 

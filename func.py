@@ -9,24 +9,34 @@ def collide(obj1, obj2):
     offset_y = obj2.y - obj1.y
     return obj1.mask.overlap(obj2.mask, (offset_x, offset_y)) != None
 
-def spawn_enemy(color, player):
+def spawn_enemy(color, player, level):
     from player import Player
     from enemy import Enemy
     from stats import blue, green, red
     player:Player = player
+    level_mod = 1+((level-1) * 0.05)
+    mod = {
+        "cooldown" : player.enemy_modifiers["cooldown"],
+        "vel": player.enemy_modifiers["vel"]*level_mod,
+        "health": player.enemy_modifiers["health"]*level_mod,
+        "cooldown": player.enemy_modifiers["cooldown"]*(1/level_mod),
+        "dmg": player.enemy_modifiers["dmg"]*level_mod,
+        "critchance": player.enemy_modifiers["critchance"]*int(level_mod),
+        "critdmg": player.enemy_modifiers["critdmg"]*level_mod
+    }
     match color:
         case "red":
-            enemy = Enemy(random.randrange(50+OFFSET, WIDTH-100), random.randrange(-100, -50), color, 4*player.enemy_modifiers["cooldown"], red["vel"], 
-                          red["laser_vel"], red["health"]*player.enemy_modifiers["health"], red["cooldown"]*player.enemy_modifiers["cooldown"], red["worth"],
-                          red["dmg"]*player.enemy_modifiers["dmg"], red["critchance"]*player.enemy_modifiers["critchance"], red["critdmg"]*player.enemy_modifiers["critdmg"])
+            enemy = Enemy(random.randrange(50+OFFSET, WIDTH-100), random.randrange(-100, -50), color, 4*mod["cooldown"], red["vel"]*level_mod, 
+                          red["laser_vel"], red["health"]*mod["health"], red["cooldown"]*mod["cooldown"], red["worth"],
+                          red["dmg"]*mod["dmg"], red["critchance"]*mod["critchance"], red["critdmg"]*mod["critdmg"])
         case "blue":
-            enemy = Enemy(random.randrange(50+OFFSET, WIDTH-100), random.randrange(-100, -50), color, 4*player.enemy_modifiers["cooldown"], blue["vel"], 
-                          blue["laser_vel"], blue["health"]*player.enemy_modifiers["health"], blue["cooldown"]*player.enemy_modifiers["cooldown"], blue["worth"],
-                          blue["dmg"]*player.enemy_modifiers["dmg"], blue["critchance"]+player.enemy_modifiers["critchance"], blue["critdmg"]*player.enemy_modifiers["critdmg"])
+            enemy = Enemy(random.randrange(50+OFFSET, WIDTH-100), random.randrange(-100, -50), color, 4*mod["cooldown"], blue["vel"]*level_mod, 
+                          blue["laser_vel"], blue["health"]*mod["health"], blue["cooldown"]*mod["cooldown"], blue["worth"],
+                          blue["dmg"]*mod["dmg"], blue["critchance"]*mod["critchance"], blue["critdmg"]*mod["critdmg"])
         case "green":
-            enemy = Enemy(random.randrange(50+OFFSET, WIDTH-100), random.randrange(-100, -50), color, 4*player.enemy_modifiers["cooldown"], green["vel"], 
-                          green["laser_vel"], green["health"]*player.enemy_modifiers["health"], green["cooldown"]*player.enemy_modifiers["cooldown"], green["worth"],
-                          green["dmg"]*player.enemy_modifiers["dmg"], green["critchance"]*player.enemy_modifiers["critchance"], green["critdmg"]*player.enemy_modifiers["critdmg"])
+            enemy = Enemy(random.randrange(50+OFFSET, WIDTH-100), random.randrange(-100, -50), color, 4*mod["cooldown"], green["vel"]*level_mod, 
+                          green["laser_vel"], green["health"]*mod["health"], green["cooldown"]*mod["cooldown"], green["worth"],
+                          green["dmg"]*mod["dmg"], green["critchance"]*mod["critchance"], green["critdmg"]*mod["critdmg"])
     
     
     return enemy

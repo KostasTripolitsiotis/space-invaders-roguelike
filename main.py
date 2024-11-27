@@ -157,7 +157,7 @@ def main():
                 elif len(timers) != 0:
                     enemy_timer = timers.pop(0)
                     if wave[0] != "":
-                        enemies.append(spawn_enemy(wave[0], player))
+                        enemies.append(spawn_enemy(wave[0], player, level))
                     wave.pop(0)
             elif pause == False: enemy_timer -= 1
             

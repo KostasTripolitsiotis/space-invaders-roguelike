@@ -31,12 +31,12 @@ def hangar():
     selected_stats = getShipStats(selected_spaceship)
     
     # Upgrade buttons
-    vel_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, name='Upgrade', fontsize=stats_font.get_linesize())
-    dmg_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, name='Upgrade', fontsize=stats_font.get_linesize())
-    health_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, name='Upgrade', fontsize=stats_font.get_linesize())
-    cooldown_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, name='Upgrade', fontsize=stats_font.get_linesize())
-    critchance_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, name='Upgrade', fontsize=stats_font.get_linesize())
-    critdmg_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, name='Upgrade', fontsize=stats_font.get_linesize())
+    vel_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, name=str(get_upgrade_cost("vel")), fontsize=stats_font.get_linesize())
+    dmg_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, name=str(get_upgrade_cost("dmg")), fontsize=stats_font.get_linesize())
+    health_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, name=str(get_upgrade_cost("health")), fontsize=stats_font.get_linesize())
+    cooldown_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, name=str(get_upgrade_cost("cooldown")), fontsize=stats_font.get_linesize())
+    critchance_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, name=str(get_upgrade_cost("critchance")), fontsize=stats_font.get_linesize())
+    critdmg_upgrade_btn = Button(0, 0, stats_font.get_linesize()*4, stats_font.get_linesize()-1, name=str(get_upgrade_cost("critdmg")), fontsize=stats_font.get_linesize())
     upgrade_buttons = [(vel_upgrade_btn, "vel"), (dmg_upgrade_btn, "dmg"), (health_upgrade_btn, "health"), 
                        (cooldown_upgrade_btn, "cooldown"), (critchance_upgrade_btn, "critchance"), (critdmg_upgrade_btn, "critdmg")]
     
@@ -180,6 +180,7 @@ def hangar():
                         for button in upgrade_buttons: # Check all upgrade buttons
                             if button[0].rect.collidepoint(event.pos):
                                 stat = upgrade(selected_spaceship, button[1])
+                                button[0].setLabel(str(get_upgrade_cost(button[1])))
                                 if stat != None:
                                     selected_stats[button[1]] = stat
                                 

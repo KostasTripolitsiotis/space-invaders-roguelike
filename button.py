@@ -15,8 +15,8 @@ class Button():
         self.height = height
         self.rect = pygame.Rect(x, y, width, height)
         self.name = name
-        font = pygame.font.SysFont("lucidaconsole", fontsize)
-        self.label = font.render(name, 1, C_WHITE)
+        self.font = pygame.font.SysFont("lucidaconsole", fontsize)
+        self.label = self.font.render(name, 1, C_WHITE)
         self.fontsize = fontsize
         self.img = img
         if self.img != None:
@@ -46,11 +46,14 @@ class Button():
         if self.rect.collidepoint(mouse_pos):
             draw_border(surface, (self.x, self.y), (self.x+self.width, self.y+self.height), self.border_thic_active, self.border_color_active)
             if self.img != None:
-                surface.blit(self.label, (mouse_pos[0], mouse_pos[1]-15))
-            
+                surface.blit(self.label, (mouse_pos[0], mouse_pos[1]-15)) 
             
     def updateRect(self):
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        
+    def setLabel(self, text:str):
+        self.name = text
+        self.label = self.font.render(text, 1, C_WHITE)
 
 
 class CheckButton(Button):
@@ -80,3 +83,4 @@ class CheckButton(Button):
             draw_border(surface, (self.x, self.y), (self.x+self.width, self.y+self.height), self.border_thic_active, self.border_color_active)
             if self.img != None:
                 surface.blit(self.label, (mouse_pos[0], mouse_pos[1]-15))
+                

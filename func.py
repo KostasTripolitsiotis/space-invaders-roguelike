@@ -280,14 +280,20 @@ def get_upgrade_cost(stat_name:str) -> int:
     stat = get_savefile()["yellow"][stat_name]
     stat_max = YELLOW_MAX[stat_name]
     stat_min = YELLOW_MIN[stat_name]
+    
+    if stat == stat_max: 
+        return 0
+    
     if stat_name != "cooldown":
         step = (stat_max-stat_min)/5
-    else: step = (stat_min-stat_max)/5
-    
-    if stat == stat_max: cost = 0
-    else:
         while ((stat+step) != stat_max):
             stat += step
+            cost -= 100
+        
+    else: 
+        step = (stat_min-stat_max)/5
+        while ((stat-step) != stat_max):
+            stat -= step
             cost -= 100
     
     return cost

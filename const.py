@@ -69,13 +69,13 @@ JET_ENGINES = pygame.image.load(os.path.join("assets", "jet_engines.png"))
 BIGGER_GUNS = pygame.image.load(os.path.join("assets", "bigger_guns.png"))
 GOLDEN_SHOT = pygame.image.load(os.path.join("assets", "golden_shot.png"))
 CONCENTRATED_BEAM = pygame.image.load(os.path.join("assets", "concentrated_beam.png"))
-BOOSTERS = pygame.image.load(os.path.join("assets", "checkmark.png"))
-FREEZE = pygame.image.load(os.path.join("assets", "checkmark.png"))
+BOOSTERS = pygame.image.load(os.path.join("assets", "booster.png"))
+FREEZE = pygame.image.load(os.path.join("assets", "freeze.png"))
 ITEMS_PNG = [LUCKY_COIN, BETTER_LASERS, JET_ENGINES, BIGGER_GUNS, GOLDEN_SHOT, CONCENTRATED_BEAM, MULTISHOT, BOOSTERS, FREEZE]
 
 # Abilities PNG
 
-ABILITIES_PNG = []
+ABILITIES_PNG = [BOOSTERS, FREEZE]
 
 ITEM_TO_PNG = {
     'Lucky Coin' : LUCKY_COIN, 
@@ -100,7 +100,7 @@ LEVELS = {
     2: [["red", 6], ["", 3], ["green", 4]],
     3: [["red", 10], ["", 3], ["green", 5]],
     4: [["red", 3], ["", 2], ["green", 3], ["red", 4], ["", 2], ["green", 4], ["red", 5], ["", 2], ["green", 5]],
-    5:[["blue", 4], ["", 3], ['red', 5], ["", 2], ["green", 5], ["", 3], ["blue", 4]]
+    5: [["blue", 4], ["", 3], ['red', 5], ["", 2], ["green", 5], ["", 3], ["blue", 4]]
 }
 
 YELLOW_MIN = {

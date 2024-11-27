@@ -1,6 +1,6 @@
 import pygame
 from const import *
-font = pygame.font.SysFont("lucidaconsole", OPTIONS['fontsize'])
+font = pygame.font.SysFont("lucidaconsole", int(OPTIONS['fontsize']/2))
 
 class OptionBox():
   

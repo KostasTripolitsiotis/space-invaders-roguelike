@@ -14,10 +14,10 @@ def options():
     res_label = font.render("Resolution", 0, C_WHITE)
     ###Buttons
     back_button = Button(SWIDTH - SWIDTH/10 - 10, HEIGHT - HEIGHT/20 - 10, SWIDTH/10, HEIGHT/20, name="BACK")
-    fullscreen_button = CheckButton(SWIDTH-SWIDTH/4, 100, 50, 50, img=CHECKMARK, clicked=True)
+    fullscreen_button = CheckButton(SWIDTH-SWIDTH/3 - 50/2, 100-50/2, 50, 50, img=CHECKMARK, clicked=True)
 
     ### Dropbar
-    res_optionbar = OptionBox(SWIDTH - OFFSET +50, 500 - res_label.get_height(), 200, 
+    res_optionbar = OptionBox(SWIDTH - SWIDTH/3 - 200/2, fullscreen_button.y + 100, 200, 
                               res_label.get_height(), OPTIONS['res_list'], not(fullscreen_button.clicked))
     ### TODO res (dropdown bar with pygame.display.list_modes()), volume (slider bar or dropdown), 
 
@@ -29,11 +29,11 @@ def options():
 
         ### Draw Options
         # Fullscreen
-        WIN.blit(fullscreen_label, (OFFSET, 100-fullscreen_label.get_height()))
+        WIN.blit(fullscreen_label, (OFFSET+OFFSET/2, fullscreen_button.y))
         fullscreen_button.draw(WIN)
 
         # Resolutions
-        WIN.blit(res_label, (OFFSET, res_optionbar.get_y()))
+        WIN.blit(res_label, (OFFSET+OFFSET/2, res_optionbar.get_y()))
         res_optionbar.draw(WIN)
         
         
@@ -42,11 +42,13 @@ def options():
             
             keys = pygame.key.get_pressed()
             
-            ### Optionbar
             
             for event in pygame.event.get():
+                # If new res is clicked change it
                 pos = res_optionbar.update(event)
-                res = res_optionbar.option_list[pos if pos !=-1 else 0]
+                if pos != -1:
+                    res = res_optionbar.option_list[pos]
+                    update_res(res)
                 
                 if event.type == pygame.QUIT or keys[pygame.K_ESCAPE]:
                     run = False

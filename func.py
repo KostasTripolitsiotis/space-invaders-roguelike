@@ -56,6 +56,12 @@ def save_onExit(cash= None, options = None) -> None:
             f['options'] = options
     player['cash'] = cash
 
+def update_res(res):
+    pygame.display.set_mode(res)
+    f = get_savefile()
+    f['options']['res'] = res
+    save_onExit(options=f['options'])
+
 def print_savefile() -> None:
     with shelve.open('savefile/savefile') as f:
         for item in f:

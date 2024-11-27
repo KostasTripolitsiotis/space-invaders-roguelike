@@ -259,3 +259,35 @@ def resetYellow() -> dict:
     }
     saveStats('yellow', player)
     return player
+
+def get_item_cost(item_name:str) -> int:
+    cost = 0
+    match item_name:
+        case 'Better Lasers': cost = 200
+        case 'Jet Engines': cost = 200
+        case 'Bigger Guns': cost = 200
+        case 'Lucky Coin': cost = 200
+        case 'Golden Shot': cost = 200
+        case 'Concentrated Beam': cost = 200
+        case 'Multishot' : cost = 200
+        case 'Boosters' : cost = 200
+        case 'Freeze' : cost = 200
+        case _: print("No such item")
+    return cost
+
+def get_upgrade_cost(stat_name:str) -> int:
+    cost = 500
+    stat = get_savefile()["yellow"][stat_name]
+    stat_max = YELLOW_MAX[stat_name]
+    stat_min = YELLOW_MIN[stat_name]
+    if stat_name != "cooldown":
+        step = (stat_max-stat_min)/5
+    else: step = (stat_min-stat_max)/5
+    
+    if stat == stat_max: cost = 0
+    else:
+        while ((stat+step) != stat_max):
+            stat += step
+            cost -= 100
+    
+    return cost

@@ -19,14 +19,6 @@
 # 
 
 from const import OPTIONS
-from func import get_savefile, save_onExit
+from func import get_upgrade_cost
 
-
-
-# save_onExit(options=OPTIONS)
-
-# f = get_savefile()
-# for item in f:
-#     print(item, ": ", f[item])
-
-print(get_savefile()['options'])
+print(get_upgrade_cost("dmg"))

@@ -60,9 +60,15 @@ def hangar():
         except:
             ability_buttons.append(Button(ability_button_pos[i][0], ability_button_pos[i][1], OFFSET/4, OFFSET/4, name=ABILITIES[i], fontsize=item_font.get_linesize()))
 
+    ### Equiped items
     equiped_items = getSavedItems('equiped')
     for button in item_buttons: 
-        if button.label in equiped_items: button.clicked = True
+        if button.name in equiped_items: button.clicked = True
+
+    ### Locked items
+    unlocked_items = getSavedItems('unlocked')
+    
+    
     def redraw_win():
         try:
             draw_static_bg()

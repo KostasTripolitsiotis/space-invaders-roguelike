@@ -29,6 +29,7 @@ class Button():
         self.border_color_active  = border_color_active
         self.clicked = clicked
         self.color = color
+        self.isClickable = isClickable
         
     def draw(self, surface:pygame.Surface):
         temp_color = self.color
@@ -44,12 +45,12 @@ class Button():
             draw_basic_button(self.rect, self.name, self.fontsize, self.border_thic, self.border_color, temp_color)
         
         mouse_pos = pygame.mouse.get_pos()
-        if self.rect.collidepoint(mouse_pos) and isClickable:
+        if self.rect.collidepoint(mouse_pos) and self.isClickable:
             draw_border(surface, (self.x, self.y), (self.x+self.width, self.y+self.height), self.border_thic_active, self.border_color_active)
             if self.img != None:
                 surface.blit(self.label, (mouse_pos[0], mouse_pos[1]-15)) 
-        elif not(isClickable):
-            x_icon = pygame.transform.scale(XMARK, (width, height))
+        elif not(self.isClickable):
+            x_icon = pygame.transform.scale(XMARK, (self.width, self.height))
             surface.blit(x_icon, (self.x, self.y))
             
     def updateRect(self):

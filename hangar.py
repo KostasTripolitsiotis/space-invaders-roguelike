@@ -181,6 +181,14 @@ def hangar():
                     run = False
                 if keys[pygame.K_r]: # Reset spaceship stats to original
                     selected_stats = resetYellow()
+                # 'L' to lock all items
+                if keys[pygame.K_l]:
+                    for item in unlocked_items:
+                        editItems(item, 'rm') #TODO add lock/unlock func
+                # 'U' to unlock all items
+                if keys[pygame.K_u]:
+                    for item in ITEMS:
+                        editItems(item, 'add') #TODO add lock/unlock func
                     
                 if event.type == pygame.MOUSEBUTTONDOWN: # Check for mouseclick
                     if event.button == 1:

@@ -43,15 +43,18 @@ class Button():
             surface.blit(self.img, (self.x, self.y))
         else:
             draw_basic_button(self.rect, self.name, self.fontsize, self.border_thic, self.border_color, temp_color)
-        
-        mouse_pos = pygame.mouse.get_pos()
-        if self.rect.collidepoint(mouse_pos) and self.isClickable:
-            draw_border(surface, (self.x, self.y), (self.x+self.width, self.y+self.height), self.border_thic_active, self.border_color_active)
-            if self.img != None:
-                surface.blit(self.label, (mouse_pos[0], mouse_pos[1]-15)) 
-        elif not(self.isClickable):
+
+        # if is not clickable draw an X mark
+        if not(self.isClickable):
             x_icon = pygame.transform.scale(XMARK, (self.width, self.height))
             surface.blit(x_icon, (self.x, self.y))
+            
+        mouse_pos = pygame.mouse.get_pos()
+        if self.rect.collidepoint(mouse_pos):
+            if not(self.isClickable):
+                draw_border(surface, (self.x, self.y), (self.x+self.width, self.y+self.height), self.border_thic_active, self.border_color_active)
+            if self.img != None:
+                surface.blit(self.label, (mouse_pos[0], mouse_pos[1]-15)) 
             
     def updateRect(self):
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)

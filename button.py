@@ -8,7 +8,8 @@ class Button():
     def __init__(self, x:int, y:int, width:int, height:int, *, name:str = "", img:pygame.Surface = None, 
                  border:bool = True, border_thic:int = 1, border_color:tuple[int, int, int] = C_WHITE, 
                  border_thic_active:int = 3, border_color_active:tuple[int, int, int] = (100, 100, 100),
-                 clicked:bool = False, fontsize:int = OPTIONS['fontsize'], color:tuple[int, int, int] = (29, 27, 27)):
+                 clicked:bool = False, fontsize:int = OPTIONS['fontsize'], color:tuple[int, int, int] = (29, 27, 27),
+                 isClickable:bool = True):
         self.x = x
         self.y = y
         self.width = width
@@ -43,10 +44,13 @@ class Button():
             draw_basic_button(self.rect, self.name, self.fontsize, self.border_thic, self.border_color, temp_color)
         
         mouse_pos = pygame.mouse.get_pos()
-        if self.rect.collidepoint(mouse_pos):
+        if self.rect.collidepoint(mouse_pos) and isClickable:
             draw_border(surface, (self.x, self.y), (self.x+self.width, self.y+self.height), self.border_thic_active, self.border_color_active)
             if self.img != None:
                 surface.blit(self.label, (mouse_pos[0], mouse_pos[1]-15)) 
+        elif not(isClickable):
+            x_icon = pygame.transform.scale(XMARK, (width, height))
+            surface.blit(x_icon, (self.x, self.y))
             
     def updateRect(self):
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)

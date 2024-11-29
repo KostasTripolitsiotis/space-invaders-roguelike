@@ -62,12 +62,13 @@ def hangar():
 
     ### Equiped items
     equiped_items = getSavedItems('equiped')
-    for button in item_buttons: 
+    for button in item_buttons, ability_buttons: 
         if button.name in equiped_items: button.clicked = True
 
     ### Locked items
     unlocked_items = getSavedItems('unlocked')
-    
+    for button in item_buttons, ablility_buttons:
+        if button.name not(in unlocked_items): button isClickable = False
     
     def redraw_win():
         try:
@@ -194,13 +195,13 @@ def hangar():
                                     selected_stats[button[1]] = stat
                                 
                         for button in item_buttons: # Check all items
-                            if button.rect.collidepoint(event.pos):
+                            if button.rect.collidepoint(event.pos) and button.isClickable:
                                 button.clicked = not(button.clicked) # Stay selected/de-selected
                                 if button.clicked == True:
                                     editItems(button.name, 'add') # Add or remove selected item from player
                                 else: editItems(button.name, 'rm')
                                 
-                        for button in ability_buttons: # Check all abilities
+                        for button in ability_buttons and button.isClickable: # Check all abilities
                             if button.rect.collidepoint(event.pos):
                                 button.clicked = not(button.clicked) # Stay selected/de-selected
                                 if button.clicked == True:

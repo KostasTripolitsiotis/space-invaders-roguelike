@@ -51,7 +51,7 @@ class Button():
             
         mouse_pos = pygame.mouse.get_pos()
         if self.rect.collidepoint(mouse_pos):
-            if not(self.isClickable):
+            if self.isClickable:
                 draw_border(surface, (self.x, self.y), (self.x+self.width, self.y+self.height), self.border_thic_active, self.border_color_active)
             if self.img != None:
                 surface.blit(self.label, (mouse_pos[0], mouse_pos[1]-15)) 

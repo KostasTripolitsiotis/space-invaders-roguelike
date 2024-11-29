@@ -3,6 +3,7 @@ import sys, os
 from const import *
 from func import *
 from button import Button
+import itertools
 
 def getItemButtonPos(items:list[str]) -> list[tuple[int, int]]:
     pos_list:list[tuple[int, int]] = []
@@ -62,13 +63,13 @@ def hangar():
 
     ### Equiped items
     equiped_items = getSavedItems('equiped')
-    for button in item_buttons, ability_buttons: 
+    for button in itertools.chain(item_buttons, ability_buttons): 
         if button.name in equiped_items: button.clicked = True
 
     ### Locked items
     unlocked_items = getSavedItems('unlocked')
-    for button in item_buttons, ablility_buttons:
-        if button.name not(in unlocked_items): button isClickable = False
+    for button in itertools.chain(item_buttons, ablility_buttons):
+        if not(button.name in unlocked_items): button.isClickable = False
     
     def redraw_win():
         try:

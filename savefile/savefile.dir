@@ -1,6 +1,6 @@
 'yellow', (0, 156)
 'cash', (512, 21)
 'color', (1024, 21)
-'items_unlocked', (1536, 119)
-'items_selected', (2048, 26)
+'items_unlocked', (1536, 139)
+'items_selected', (2048, 5)
 'options', (2560, 233)

@@ -83,6 +83,13 @@ def get_savefile():
         for item in f:
             file[item] = f[item]
         return file
+ 
+def savefile_toString():
+    f = get_savefile()
+    savefile = ""
+    for item in f:
+        savefile += str(item)+": "+ str(f[item]) +"\n"
+    return savefile
             
 def getShipStats(color:str) ->dict:
     with shelve.open('savefile/savefile') as f:
@@ -96,18 +103,29 @@ def saveStats(color, stats):
         player[stat] = stats[stat]
         
 def editItems(item:str, op='add'):
-    """op = add | rm
+    """op = add | rm to add or romove form ulnocked items
+    lock | unlock to modify locked/unlocked
     Returns from savefile"""
     with shelve.open('savefile/savefile') as f:
         temp:list = []
-        if op == 'add' and not(item in f['items_selected']):
-            temp = f['items_selected']
-            temp.append(item)
-            f['items_selected'] = temp
-        elif op == 'rm' and item in f['items_selected']:
-            temp = f['items_selected']
-            temp.remove(item)
-            f['items_selected'] = temp
+        if item in f['items_unlocked']: # add/rm/lock - if item exists in ulocked items
+            if op == 'add' and not(item in f['items_selected']):
+                temp = f['items_selected']
+                temp.append(item)
+                f['items_selected'] = temp
+            elif op == 'rm' and item in f['items_selected']:
+                temp = f['items_selected']
+                temp.remove(item)
+                f['items_selected'] = temp
+            elif op == 'lock':
+                temp = f['items_unlocked']
+                temp.remove(item)
+                f["items_unlocked"] = temp
+        else: # unlock
+            if op == 'unlock' and not(item in f['items_unlocked']):
+                temp = f["items_unlocked"]
+                temp.append(item)
+                f["items_unlocked"] = temp
             
 def getSavedItems(op='equiped') -> list[str]:
     """op = equiped | unlocked

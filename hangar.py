@@ -184,11 +184,11 @@ def hangar():
                 # 'L' to lock all items
                 if keys[pygame.K_l]:
                     for item in unlocked_items:
-                        editItems(item, 'rm') #TODO add lock/unlock func
+                        editItems(item, 'lock') #TODO add lock/unlock func
                 # 'U' to unlock all items
                 if keys[pygame.K_u]:
-                    for item in ITEMS:
-                        editItems(item, 'add') #TODO add lock/unlock func
+                    for item in itertools.chain(ITEMS, ABILITIES):
+                        editItems(item, 'unlock') #TODO add lock/unlock func
                     
                 if event.type == pygame.MOUSEBUTTONDOWN: # Check for mouseclick
                     if event.button == 1:

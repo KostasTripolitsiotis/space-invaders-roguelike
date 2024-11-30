@@ -19,6 +19,6 @@
 # 
 
 from const import OPTIONS
-from func import get_savefile
+from func import get_savefile, savefile_toString
 
-print(get_savefile()['cash'])
+print(savefile_toString())

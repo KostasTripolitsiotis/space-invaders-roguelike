@@ -59,7 +59,7 @@ COLOR_MAP = {
 LEVELUP_CHOICES = ['+5 Speed', '-10% Cooldown', '+3 Damage', '+10 Health', '+1 Life', '+5% Crit', '+20% Crit Dmg']
 
 ### Items
-ITEMS = ['Lucky Coin', 'Better Lasers', 'Jet Engines', 'Bigger Guns', 'Golden Shot', 'Concentrated Beam', 'Multishot'] #, 'Boosters', 'Freeze'
+ITEMS = ['Lucky Coin', 'Better Lasers', 'Jet Engines', 'Bigger Guns', 'Golden Shot', 'Concentrated Beam', 'Multishot'] 
 ABILITIES = ['Boosters', 'Freeze']
 # Items PNG
 LUCKY_COIN = pygame.image.load(os.path.join("assets", "golden coin.png"))

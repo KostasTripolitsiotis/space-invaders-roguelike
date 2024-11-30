@@ -55,7 +55,7 @@ def main():
         ###  draw text for stats
         lives_label = main_font.render(f"Lives: {player.lives}", 1, (255,255,255))
         level_label = main_font.render(f"Level: {level}", 1, (255, 255, 255))
-        if player.cash.is_integer:
+        if player.cash.is_integer():
             cash_label = main_font.render(f"Cash: {int(player.cash)}", 1, (255, 255, 255))
         else:
             cash_label = main_font.render(f"Cash: {player.cash}", 1, (255, 255, 255))
@@ -196,10 +196,11 @@ def main():
                 add_to_active_slot()
             if keys[pygame.K_m]: # return to menu
                 run = False
+                save_onExit(player.cash)
             if keys[pygame.K_0]: # 0 cash
-                player.cash = 0
+                player.cash = 0.0
             if keys[pygame.K_9]: # 9999 cash
-                player.cash = 9999
+                player.cash = 99999.0
             if keys[pygame.K_p]:
                 if pause_cooldown <= 0:
                     pause = not(pause)

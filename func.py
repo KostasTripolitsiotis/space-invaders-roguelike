@@ -103,8 +103,8 @@ def saveStats(color, stats):
         player[stat] = stats[stat]
         
 def editItems(item:str, op='add'):
-    """op = add | rm to add or romove form ulnocked items
-    lock | unlock to modify locked/unlocked
+    """op = 'add' | 'rm' to add or remove from unlocked items\n
+    'lock' | 'unlock' to modify locked/unlocked\n
     Returns from savefile"""
     with shelve.open('savefile/savefile') as f:
         temp:list = []
@@ -320,3 +320,14 @@ def get_upgrade_cost(stat_name:str) -> int:
             cost -= 100
     
     return cost
+
+def unlockItem(item_name):
+    player_cash = get_savefile()['cash']
+    item_cost = get_item_cost(item_name)
+    
+    if(item_cost > player_cash):
+        return False
+    else:
+        save_onExit(player_cash-item_cost)
+        editItems(item_name, "unlock")
+        return True

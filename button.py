@@ -17,7 +17,7 @@ class Button():
         self.rect = pygame.Rect(x, y, width, height)
         self.name = name
         self.font = pygame.font.SysFont("lucidaconsole", fontsize)
-        self.label = self.font.render(name, 1, C_WHITE)
+        self.label = self.font.render(name, 1, C_GRAY)
         self.fontsize = fontsize
         self.img = img
         if self.img != None:
@@ -54,7 +54,9 @@ class Button():
             if self.isClickable:
                 draw_border(surface, (self.x, self.y), (self.x+self.width, self.y+self.height), self.border_thic_active, self.border_color_active)
             if self.img != None:
-                surface.blit(self.label, (mouse_pos[0], mouse_pos[1]-15)) 
+                x = self.x + self.width/2 - self.label.get_width()/2
+                y = self.y + self.height + 2
+                surface.blit(self.label, (x, y)) 
             
     def updateRect(self):
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
@@ -68,10 +70,12 @@ class CheckButton(Button):
     def __init__(self, x: int, y: int, width: int, height: int, *, name: str = "", img: pygame.Surface = None, 
                  border: bool = True, border_thic: int = 1, border_color: tuple[int, int, int] = C_WHITE, 
                  border_thic_active: int = 3, border_color_active: tuple[int, int, int] = (100, 100, 100), 
-                 clicked: bool = False, fontsize: int = OPTIONS['fontsize'], color: tuple[int, int, int] = (29, 27, 27)):
+                 clicked: bool = False, fontsize: int = OPTIONS['fontsize'], color: tuple[int, int, int] = (29, 27, 27),
+                 isClickable:bool = True):
         super().__init__(x, y, width, height, name=name, img=img, border=border, border_thic=border_thic, 
                          border_color=border_color, border_thic_active=border_thic_active, 
-                         border_color_active=border_color_active, clicked=clicked, fontsize=fontsize, color=color)
+                         border_color_active=border_color_active, clicked=clicked, fontsize=fontsize, color=color,
+                         isClickable=isClickable)
         
     def draw(self, surface:pygame.Surface):
         temp_color = self.color

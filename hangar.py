@@ -70,6 +70,11 @@ def hangar():
     unlocked_items = getSavedItems('unlocked')
     for button in itertools.chain(item_buttons, ability_buttons):
         if not(button.name in unlocked_items): button.isClickable = False
+        
+    cash_buttons:list[tuple[Button, str]] = []
+    for button in itertools.chain(item_buttons, ability_buttons):
+        if button.isClickable == False:
+            cash_buttons.append((Button(button.x, button.y, button.width, button.height, name=str(get_item_cost(button.name)), fontsize=stats_font.get_linesize()), button.name))
     
     def redraw_win():
         try:
@@ -166,6 +171,11 @@ def hangar():
             # Abilities
             for button in ability_buttons:
                 button.draw(WIN)
+                
+            # Cash buttons to unlock items/abilities
+            for button in cash_buttons:
+                # print(button[1])
+                button[0].draw(WIN)
             
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -203,19 +213,22 @@ def hangar():
                                 if stat != None:
                                     selected_stats[button[1]] = stat
                                 
-                        for button in item_buttons: # Check all items
+                        for button in itertools.chain(item_buttons, ability_buttons): # Check all items
                             if button.rect.collidepoint(event.pos) and button.isClickable:
                                 button.clicked = not(button.clicked) # Stay selected/de-selected
                                 if button.clicked == True:
                                     editItems(button.name, 'add') # Add or remove selected item from player
                                 else: editItems(button.name, 'rm')
-                                
-                        for button in ability_buttons: # Check all abilities
-                            if button.rect.collidepoint(event.pos) and button.isClickable:
-                                button.clicked = not(button.clicked) # Stay selected/de-selected
-                                if button.clicked == True:
-                                    editItems(button.name, 'add') # Add or remove selected item from player
-                                else: editItems(button.name, 'rm')
+                            
+                        for button in cash_buttons[:]: # check buttons to unlock items
+                            if button[0].rect.collidepoint(event.pos):
+                                button[0].clicked = unlockItem(button[1])
+                                if button[0].clicked == True:
+                                    cash_buttons.remove(button)
+                                    
+                                    for item in itertools.chain(item_buttons, ability_buttons):
+                                        if item.name == button[1]:
+                                            item.isClickable = True
             
             redraw_win()
             pygame.display.update()

@@ -17,7 +17,7 @@ def main():
     pause = False
     pause_cooldown = 10
     level = 0
-    main_font = pygame.font.SysFont("lucidaconsole", OPTIONS['fontsize']-5)
+    main_font = pygame.font.SysFont("lucidaconsole", OPTIONS['fontsize']-13)
     lost_font = pygame.font.SysFont("comicsans", 100)
     
     enemies:list[Enemy] = []

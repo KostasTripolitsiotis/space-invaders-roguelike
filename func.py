@@ -103,7 +103,7 @@ def saveStats(color, stats):
         player[stat] = stats[stat]
         
 def editItems(item:str, op='add'):
-    """op = 'add' | 'rm' to add or remove from unlocked items\n
+    """op = 'add' | 'rm' to add or remove from selected items\n
     'lock' | 'unlock' to modify locked/unlocked\n
     Returns from savefile"""
     with shelve.open('savefile/savefile') as f:
@@ -121,6 +121,8 @@ def editItems(item:str, op='add'):
                 temp = f['items_unlocked']
                 temp.remove(item)
                 f["items_unlocked"] = temp
+                if item in f['items_selected']: # if it was seletcted -> de-select it
+                    editItems(item, 'rm')
         else: # unlock
             if op == 'unlock' and not(item in f['items_unlocked']):
                 temp = f["items_unlocked"]

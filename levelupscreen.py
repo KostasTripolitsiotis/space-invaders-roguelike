@@ -10,7 +10,7 @@ def levelupscreen(player, level, remaining_items):
     run = True
     main_font = pygame.font.SysFont("lucidaconsole", 12)
     choice_type:str
-    if level % 5 ==0:
+    if level % 5 ==0 and remaining_items:
         choices = remaining_items
         choice_type = "item"
     else:

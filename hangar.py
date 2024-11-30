@@ -68,7 +68,7 @@ def hangar():
 
     ### Locked items
     unlocked_items = getSavedItems('unlocked')
-    for button in itertools.chain(item_buttons, ablility_buttons):
+    for button in itertools.chain(item_buttons, ability_buttons):
         if not(button.name in unlocked_items): button.isClickable = False
     
     def redraw_win():
@@ -210,8 +210,8 @@ def hangar():
                                     editItems(button.name, 'add') # Add or remove selected item from player
                                 else: editItems(button.name, 'rm')
                                 
-                        for button in ability_buttons and button.isClickable: # Check all abilities
-                            if button.rect.collidepoint(event.pos):
+                        for button in ability_buttons: # Check all abilities
+                            if button.rect.collidepoint(event.pos) and button.isClickable:
                                 button.clicked = not(button.clicked) # Stay selected/de-selected
                                 if button.clicked == True:
                                     editItems(button.name, 'add') # Add or remove selected item from player
